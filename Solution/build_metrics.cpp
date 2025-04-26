@@ -11,9 +11,9 @@ std::ofstream table_output;
 
 std::ofstream total_table_output;
 
-void call(const std::string &map_name, const std::string &plan_algo, uint32_t test_id) {
+void call(const std::string &map_name, const std::string &algo_name, uint32_t test_id) {
     json data;
-    std::ifstream input("Data_" + map_name + "/" + plan_algo + "/test" + std::to_string(test_id) + ".json");
+    std::ifstream input("Data_" + map_name + "/" + algo_name + "/test" + std::to_string(test_id) + ".json");
     if (!input) {
         std::cout << "unable ";
         return;
@@ -32,35 +32,8 @@ void call(const std::string &map_name, const std::string &plan_algo, uint32_t te
         avg_step_time = static_cast<uint32_t>(std::accumulate(times.begin(), times.end(), 0.0) * 1000 / steps_num);
         agents_num = data["teamSize"];
 
-        double CI_left = 0;
-        double CI_right = 0;
-        {
-            double avgx = avg_step_time;
-            double sigma = std::sqrt(std::accumulate(times.begin(), times.end(), 0, [&](double sum, double x) {
-                                         return sum + (x - avgx) * (x - avgx);
-                                     }) /
-                                     (times.size() - 1));
-
-            double z = 1.96;
-            double sem = sigma / std::sqrt(times.size());
-            CI_left = avgx - z * sem;
-            CI_right = avgx + z * sem;
-        }
-
-        auto kek = [&](double x) {
-            std::stringstream ss;
-            ss << x;
-            std::string str = ss.str();
-            for (char &c: str) {
-                if (c == '.') {
-                    c = ',';
-                }
-            }
-            return str;
-        };
-
-        table_output << test_id << ";" << plan_algo << ";" << agents_num << ";" << steps_num << ";" << task_finished << ";" << kek(throughput) << ";" << avg_step_time << ";" << CI_left << ";" << CI_right << std::endl;
-        total_table_output << test_id << ";" << plan_algo << ";" << agents_num << ";" << steps_num << ";" << task_finished << ";" << kek(throughput) << ";" << avg_step_time << ";" << CI_left << ";" << CI_right << std::endl;
+        table_output << test_id << ";" << algo_name << ";" << agents_num << ";" << steps_num << ";" << task_finished << ";" << throughput << ";" << avg_step_time << std::endl;
+        total_table_output << test_id << ";" << algo_name << ";" << agents_num << ";" << steps_num << ";" << task_finished << ";" << throughput << ";" << avg_step_time << std::endl;
 
         if (data["numEntryTimeouts"] != 0) {
             std::cerr << "\nENTRY TIMEOUT\n";
@@ -74,7 +47,7 @@ void call(const std::string &map_name, const std::string &plan_algo, uint32_t te
 
     } catch (const json::parse_error &error) {
         std::cerr << "Failed at: "
-                  << "Data_" + map_name + "/" + plan_algo + "/test" + std::to_string(test_id) + ".json" << std::endl;
+                  << "Data_" + map_name + "/" + algo_name + "/test" + std::to_string(test_id) + ".json" << std::endl;
         std::cerr << "Message: " << error.what() << std::endl;
     }
 
@@ -95,24 +68,32 @@ int main() {
 
     std::vector<std::string> plan_algos = {
             "pibt",
-            "pibt_tf",
             "epibt",
-            "epibt_lns",
+            //"pibt_tf",
+            //"epibt_lns",
             "pepibt_lns",
-            "wppl",
+            //"wppl",
+    };
+
+    std::vector<std::string> graph_guidance_types = {
+            "enable",
+            "disable",
     };
 
     for (const auto &map_name: maps_name) {
         total_table_output = std::ofstream("Data_" + map_name + "/total_metrics.csv");
-        total_table_output << "id;planner algo;agents num;steps num;num task finished;throughput;avg step time;CI left;CI right\n";
+        total_table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
         for (const auto &plan_algo: plan_algos) {
-            table_output = std::ofstream("Data_" + map_name + "/" + plan_algo + "/metrics.csv");
-            table_output << "id;planner algo;agents num;steps num;num task finished;throughput;avg step time;CI left;CI right\n";
-            for (uint32_t test_id = 0; test_id < 10; test_id++) {
-                ETimer timer;
-                std::cout << "call(" << map_name << ' ' << plan_algo << ' ' << test_id << "): " << std::flush;
-                call(map_name, plan_algo, test_id);
-                std::cout << timer << std::endl;
+            for (const auto &graph_guidance_type: graph_guidance_types) {
+                std::string algo_name = plan_algo + (graph_guidance_type == "enable" ? "+gg" : "");
+                table_output = std::ofstream("Data_" + map_name + "/" + algo_name + "/metrics.csv");
+                table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
+                for (uint32_t test_id = 0; test_id < 10; test_id++) {
+                    ETimer timer;
+                    std::cout << "call(" << map_name << ' ' << algo_name << ' ' << test_id << "): " << std::flush;
+                    call(map_name, algo_name, test_id);
+                    std::cout << timer << std::endl;
+                }
             }
         }
     }

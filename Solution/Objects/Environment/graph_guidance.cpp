@@ -167,27 +167,29 @@ void GraphGuidance::set_walls() {
 }
 
 GraphGuidance::GraphGuidance(uint32_t rows, uint32_t cols) : rows(rows), cols(cols), graph(rows * cols + 1) {
+    set_default();
+    set_walls();
 }
 
+// TODO: use constructor from GraphGuidance(uint32_t rows, uint32_t cols)
 GraphGuidance::GraphGuidance(SharedEnvironment &env) : rows(env.rows), cols(env.cols), graph(env.rows * env.cols + 1) {
     set_default();
 
-#ifdef ENABLE_GG
-    if (get_map_type() == MapType::WAREHOUSE) {
-        set_warehouse();
-    } else if (get_map_type() == MapType::SORTATION) {
-        set_sortation();
-    } else if (get_map_type() == MapType::GAME) {
-        set_game();
-    } else if (get_map_type() == MapType::CITY) {
-        set_city();
-    } else if (get_map_type() == MapType::RANDOM) {
-        FAILED_ASSERT("use guidance map");
-    } else {
-        FAILED_ASSERT("undefined map");
+    if (get_graph_guidance_type() == GraphGuidanceType::ENABLE) {
+        if (get_map_type() == MapType::WAREHOUSE) {
+            set_warehouse();
+        } else if (get_map_type() == MapType::SORTATION) {
+            set_sortation();
+        } else if (get_map_type() == MapType::GAME) {
+            set_game();
+        } else if (get_map_type() == MapType::CITY) {
+            set_city();
+        } else if (get_map_type() == MapType::RANDOM) {
+            FAILED_ASSERT("use guidance map");
+        } else {
+            FAILED_ASSERT("undefined map");
+        }
     }
-#endif
-
     set_walls();
 
     /*{
@@ -199,103 +201,102 @@ GraphGuidance::GraphGuidance(SharedEnvironment &env) : rows(env.rows), cols(env.
 
 GraphGuidance::GraphGuidance(const GuidanceMap &gmap)
     : rows(gmap.get_rows()), cols(gmap.get_cols()), graph(gmap.get_rows() * gmap.get_cols() + 1) {
-
     set_default();
 
-#ifdef ENABLE_GG
-    for (uint32_t x = 0; x < rows; x++) {
-        for (uint32_t y = 0; y < cols; y++) {
-            if (gmap.get(x, y) == '@') {
-                continue;
+    if (get_graph_guidance_type() == GraphGuidanceType::ENABLE) {
+        for (uint32_t x = 0; x < rows; x++) {
+            for (uint32_t y = 0; y < cols; y++) {
+                if (gmap.get(x, y) == '@') {
+                    continue;
+                }
+                uint32_t pos = x * cols + y + 1;
+
+                constexpr uint32_t w1 = 2;
+                constexpr uint32_t w2 = 4;
+                constexpr uint32_t w3 = 6;
+
+                uint32_t dir = 0;
+                if (gmap.get(x, y) == '>') {
+                    dir = 0;
+                } else if (gmap.get(x, y) == 'v') {
+                    dir = 1;
+                } else if (gmap.get(x, y) == '<') {
+                    dir = 2;
+                } else if (gmap.get(x, y) == '^') {
+                    dir = 3;
+                } else {
+
+                    graph[pos][dir][0] = w1;
+                    graph[pos][dir][1] = w1;
+                    graph[pos][dir][2] = w1;
+                    graph[pos][dir][3] = w1;
+
+                    dir = (dir + 1) % 4;
+
+                    graph[pos][dir][0] = w1;
+                    graph[pos][dir][1] = w1;
+                    graph[pos][dir][2] = w1;
+                    graph[pos][dir][3] = w1;
+
+                    dir = (dir + 1) % 4;
+
+                    graph[pos][dir][0] = w1;
+                    graph[pos][dir][1] = w1;
+                    graph[pos][dir][2] = w1;
+                    graph[pos][dir][3] = w1;
+
+                    dir = (dir + 1) % 4;
+
+                    graph[pos][dir][0] = w1;
+                    graph[pos][dir][1] = w1;
+                    graph[pos][dir][2] = w1;
+                    graph[pos][dir][3] = w1;
+                    continue;
+                }
+
+                // 0:east  >
+                // 1:south v
+                // 2:west  <
+                // 3:north ^
+
+                //FW:  0
+                //CR:  1
+                //CCR: 2
+                //W:   3
+
+                // смотрит в нужное направление
+                // >
+                graph[pos][dir][0] = w1;// FW
+                graph[pos][dir][1] = w1;// CR
+                graph[pos][dir][2] = w1;// CCR
+                graph[pos][dir][3] = w1;// W
+
+                dir = (dir + 1) % 4;
+
+                // v
+                graph[pos][dir][0] = w3;// FW
+                graph[pos][dir][1] = w1;// CR
+                graph[pos][dir][2] = w1;// CCR
+                graph[pos][dir][3] = w1;// W
+
+                dir = (dir + 1) % 4;
+
+                // <
+                graph[pos][dir][0] = w3;// FW
+                graph[pos][dir][1] = w1;// CR
+                graph[pos][dir][2] = w1;// CCR
+                graph[pos][dir][3] = w1;// W
+
+                dir = (dir + 1) % 4;
+
+                // ^
+                graph[pos][dir][0] = w3;// FW
+                graph[pos][dir][1] = w1;// CR
+                graph[pos][dir][2] = w1;// CCR
+                graph[pos][dir][3] = w1;// W
             }
-            uint32_t pos = x * cols + y + 1;
-
-            constexpr uint32_t w1 = 2;
-            constexpr uint32_t w2 = 4;
-            constexpr uint32_t w3 = 6;
-
-            uint32_t dir = 0;
-            if (gmap.get(x, y) == '>') {
-                dir = 0;
-            } else if (gmap.get(x, y) == 'v') {
-                dir = 1;
-            } else if (gmap.get(x, y) == '<') {
-                dir = 2;
-            } else if (gmap.get(x, y) == '^') {
-                dir = 3;
-            } else {
-
-                graph[pos][dir][0] = w1;
-                graph[pos][dir][1] = w1;
-                graph[pos][dir][2] = w1;
-                graph[pos][dir][3] = w1;
-
-                dir = (dir + 1) % 4;
-
-                graph[pos][dir][0] = w1;
-                graph[pos][dir][1] = w1;
-                graph[pos][dir][2] = w1;
-                graph[pos][dir][3] = w1;
-
-                dir = (dir + 1) % 4;
-
-                graph[pos][dir][0] = w1;
-                graph[pos][dir][1] = w1;
-                graph[pos][dir][2] = w1;
-                graph[pos][dir][3] = w1;
-
-                dir = (dir + 1) % 4;
-
-                graph[pos][dir][0] = w1;
-                graph[pos][dir][1] = w1;
-                graph[pos][dir][2] = w1;
-                graph[pos][dir][3] = w1;
-                continue;
-            }
-
-            // 0:east  >
-            // 1:south v
-            // 2:west  <
-            // 3:north ^
-
-            //FW:  0
-            //CR:  1
-            //CCR: 2
-            //W:   3
-
-            // смотрит в нужное направление
-            // >
-            graph[pos][dir][0] = w1;// FW
-            graph[pos][dir][1] = w1;// CR
-            graph[pos][dir][2] = w1;// CCR
-            graph[pos][dir][3] = w1;// W
-
-            dir = (dir + 1) % 4;
-
-            // v
-            graph[pos][dir][0] = w3;// FW
-            graph[pos][dir][1] = w1;// CR
-            graph[pos][dir][2] = w1;// CCR
-            graph[pos][dir][3] = w1;// W
-
-            dir = (dir + 1) % 4;
-
-            // <
-            graph[pos][dir][0] = w3;// FW
-            graph[pos][dir][1] = w1;// CR
-            graph[pos][dir][2] = w1;// CCR
-            graph[pos][dir][3] = w1;// W
-
-            dir = (dir + 1) % 4;
-
-            // ^
-            graph[pos][dir][0] = w3;// FW
-            graph[pos][dir][1] = w1;// CR
-            graph[pos][dir][2] = w1;// CCR
-            graph[pos][dir][3] = w1;// W
         }
     }
-#endif
 
     set_walls();
 

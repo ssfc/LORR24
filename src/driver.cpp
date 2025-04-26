@@ -46,6 +46,7 @@ int main(int argc, char **argv) {
     desc.add_options()("help", "produce help message")                                                                                                                                                                                        //
             ("unique_id,u", po::value<uint32_t>()->default_value(0), "my unique id for unique launch")                                                                                                                                        //
             ("planner_algo", po::value<string>()->required(), "planner algo")                                                                                                                                                                 //
+            ("graph_guidance", po::value<string>()->required(), "graph guidance: enable or disable")                                                                                                                                          //
             ("inputFile,i", po::value<std::string>()->required(), "input file name")                                                                                                                                                          //
             ("output,o", po::value<std::string>()->default_value("./output.json"), "output results from the evaluation into a JSON formated file. If no file specified, the default name is 'output.json'")                                   //
             ("outputScreen,c", po::value<int>()->default_value(1), "the level of details in the output file, 1--showing all the output, 2--ignore the events and tasks, 3--ignore the events, tasks, errors, planner times, starts and paths")//
@@ -60,6 +61,10 @@ int main(int argc, char **argv) {
     clock_t start_time = clock();
     po::store(po::parse_command_line(argc, argv, desc), vm);
 
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 1;
+    }
 
     get_unique_id() = vm["unique_id"].as<uint32_t>();
     PRINT(Printer() << "unique_id: " << get_unique_id() << '\n';);
@@ -83,9 +88,15 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (vm.count("help")) {
-        std::cout << desc << std::endl;
-        return 1;
+    std::string graph_guidance_type = vm["graph_guidance"].as<std::string>();
+    {
+        if (graph_guidance_type == "enable") {
+            get_graph_guidance_type() = GraphGuidanceType::ENABLE;
+        } else if (graph_guidance_type == "disable") {
+            get_graph_guidance_type() = GraphGuidanceType::DISABLE;
+        } else {
+            FAILED_ASSERT("undefined graph guidance type");
+        }
     }
 
     po::notify(vm);
@@ -186,8 +197,9 @@ int main(int argc, char **argv) {
 
 #ifdef BUILD_META_INFO
     //build_meta_info("test.json", "usage.txt");
-    build_meta_info("Tmp/" + plan_algo + "/test" + std::to_string(get_unique_id()) + ".json",
-                    "Tmp/" + plan_algo + "/usage" + std::to_string(get_unique_id()) + ".txt");
+    graph_guidance_type = graph_guidance_type == "enable" ? "+gg" : "";
+    build_meta_info("Tmp/" + plan_algo + graph_guidance_type + "/test" + std::to_string(get_unique_id()) + ".json",
+                    "Tmp/" + plan_algo + graph_guidance_type + "/usage" + std::to_string(get_unique_id()) + ".txt");
 #endif
     Printer().get().flush();
 

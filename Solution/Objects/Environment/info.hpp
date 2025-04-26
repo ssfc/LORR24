@@ -1,6 +1,8 @@
 #pragma once
 
-#include <array>
+#include <cstdint>
+
+uint32_t &get_unique_id();
 
 enum class MapType {
     RANDOM,
@@ -29,3 +31,10 @@ enum class PlannerType {
 };
 
 PlannerType &get_planner_type();
+
+enum class GraphGuidanceType {
+    ENABLE,
+    DISABLE
+};
+
+GraphGuidanceType &get_graph_guidance_type();
