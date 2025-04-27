@@ -11,11 +11,16 @@ MapType &get_map_type() {
 }
 
 PlannerType &get_planner_type() {
-    static PlannerType type = PlannerType::NONE;
+    static PlannerType type = PlannerType::EPIBT;
     return type;
 }
 
 GraphGuidanceType &get_graph_guidance_type() {
     static GraphGuidanceType type = GraphGuidanceType::ENABLE;
+    return type;
+}
+
+SchedulerType &get_scheduler_type() {
+    static SchedulerType type = SchedulerType::GREEDY;
     return type;
 }

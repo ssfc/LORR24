@@ -1,14 +1,16 @@
 #include <nlohmann/json.hpp>
 
-//#include <Objects/Basic/assert.hpp>
+#include <Objects/Basic/assert.hpp>
 #include <Objects/Basic/time.hpp>
 
 #include <fstream>
 
 using json = nlohmann::json;
 
-void call(const std::string &test, int steps_num, const std::string &plan_algo, const std::string &graph_guidance_type, uint32_t test_id) {
-    const std::string algo_name = plan_algo + (graph_guidance_type == "enable" ? "+gg" : "");
+void call(const std::string &test, int steps_num, const std::string &plan_algo, const std::string &graph_guidance_type, const std::string &scheduler_algo, uint32_t test_id) {
+    const std::string algo_name = plan_algo +
+                                  (graph_guidance_type == "enable" ? "+gg" : "") +
+                                  (scheduler_algo == "greedy" ? "+gs" : (scheduler_algo == "hungarian" ? "+hs" : (FAILED_ASSERT("invalid scheduler_algo"), "")));
 
     std::cout << "call(" + std::to_string(test_id) + ", " << algo_name << "): " << std::flush;
     ETimer timer;
@@ -23,13 +25,14 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
              " --unique_id " + std::to_string(test_id) +                           //
              " --planner_algo " + plan_algo +                                      //
              " --graph_guidance " + graph_guidance_type +                          //
+             " --scheduler_algo " + scheduler_algo +                               //
              " > Tmp/" + algo_name + "/output" + std::to_string(test_id) + ".txt"  //
              )
                     .c_str());
 
     std::cout << timer << std::endl;
     if (ret_code != 0) {
-        call(test, steps_num, plan_algo, graph_guidance_type, test_id);
+        call(test, steps_num, plan_algo, graph_guidance_type, scheduler_algo, test_id);
     }
 }
 
@@ -45,15 +48,16 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"Data2023/game.domain/MR23-I-09.json", 5000},
         {"Data2023/warehouse.domain/MR23-I-10.json", 5000},*/
 
-        {"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_200.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_300.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_400.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_500.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_600.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_700.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},
+        {"example_problems/random.domain/random_32_32_20_100.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_200.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_300.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_400.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_500.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_600.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_700.json", 10, true},
+        {"example_problems/random.domain/random_32_32_20_800.json", 10, true},
 
+        // сейчас на сервере запущено это
         /*{"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, true},
         {"example_problems/warehouse.domain/warehouse_large_2000.json", 5000, true},
         {"example_problems/warehouse.domain/warehouse_large_3000.json", 5000, true},
@@ -79,11 +83,11 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
 
 int main() {
 
-    std::vector<std::string> plan_algos = {
-            "pibt",
-            "epibt",
+    std::vector<std::string> planner_algos = {
+            //"pibt",
+            //"epibt",
             //"epibt_lns",
-            "pepibt_lns",
+            //"pepibt_lns",
             //"wppl",
             //"pibt_tf",
     };
@@ -93,27 +97,38 @@ int main() {
             "disable",
     };
 
+    std::vector<std::string> scheduler_algos = {
+            "greedy",
+            "hungarian",
+    };
+
     if (!std::filesystem::exists("Tmp")) {
         std::filesystem::create_directories("Tmp");
     }
 
-    for (const auto &plan_algo: plan_algos) {
+    for (const auto &planner_algo: planner_algos) {
         for (const auto &graph_guidance_type: graph_guidance_types) {
-            std::string dirname = "Tmp/" + plan_algo + (graph_guidance_type == "enable" ? "+gg" : "");
-            if (!std::filesystem::exists(dirname)) {
-                std::filesystem::create_directories(dirname);
+            for (const auto &scheduler_algo: scheduler_algos) {
+                std::string dirname = "Tmp/" + planner_algo +
+                                      (graph_guidance_type == "enable" ? "+gg" : "") +
+                                      (scheduler_algo == "greedy" ? "+gs" : (scheduler_algo == "hungarian" ? "+hs" : (FAILED_ASSERT("invalid scheduler_algo"), "")));
+                if (!std::filesystem::exists(dirname)) {
+                    std::filesystem::create_directories(dirname);
+                }
             }
         }
     }
 
-    for (const auto &plan_algo: plan_algos) {
+    for (const auto &planner_algo: planner_algos) {
         for (const auto &graph_guidance_type: graph_guidance_types) {
-            uint32_t counter = 0;
-            for (auto [test, steps_num, need_to_call]: tests) {
-                if (need_to_call) {
-                    call(test, steps_num, plan_algo, graph_guidance_type, counter);
+            for (const auto &scheduler_algo: scheduler_algos) {
+                uint32_t counter = 0;
+                for (auto [test, steps_num, need_to_call]: tests) {
+                    if (need_to_call) {
+                        call(test, steps_num, planner_algo, graph_guidance_type, scheduler_algo, counter);
+                    }
+                    counter++;
                 }
-                counter++;
             }
         }
     }

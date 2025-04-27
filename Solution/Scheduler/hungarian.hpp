@@ -2,14 +2,14 @@
 
 #include <vector>
 
-namespace Hungarian{
+namespace Hungarian {
 
-const int INF = 20000000;
-const int FORBID = 10000000;
-const int UNWANTED = 100000;
+    const int INF = 20000000;
+    const int FORBID = 10000000;
+    const int UNWANTED = 100000;
 
-std::vector<int> DoHungarian(const std::vector<std::vector<int>> &a);
+    std::vector<int> DoHungarian(const std::vector<std::vector<int>> &a);
 
-bool CheckIfAssigmentCorrect(const std::vector<std::vector<int>> &a, const std::vector<int>& assigment);
+    bool CheckIfAssigmentCorrect(const std::vector<std::vector<int>> &a, const std::vector<int> &assigment);
 
-}
+}// namespace Hungarian

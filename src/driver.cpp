@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
             ("unique_id,u", po::value<uint32_t>()->default_value(0), "my unique id for unique launch")                                                                                                                                        //
             ("planner_algo", po::value<string>()->required(), "planner algo")                                                                                                                                                                 //
             ("graph_guidance", po::value<string>()->required(), "graph guidance: enable or disable")                                                                                                                                          //
+            ("scheduler_algo", po::value<string>()->required(), "scheduler algo: greedy or hungarian")                                                                                                                                        //
             ("inputFile,i", po::value<std::string>()->required(), "input file name")                                                                                                                                                          //
             ("output,o", po::value<std::string>()->default_value("./output.json"), "output results from the evaluation into a JSON formated file. If no file specified, the default name is 'output.json'")                                   //
             ("outputScreen,c", po::value<int>()->default_value(1), "the level of details in the output file, 1--showing all the output, 2--ignore the events and tasks, 3--ignore the events, tasks, errors, planner times, starts and paths")//
@@ -84,18 +85,33 @@ int main(int argc, char **argv) {
         } else if (plan_algo == "wppl") {
             get_planner_type() = PlannerType::WPPL;
         } else {
-            FAILED_ASSERT("undefined planner type");
+            FAILED_ASSERT("undefined planner algo");
         }
     }
 
     std::string graph_guidance_type = vm["graph_guidance"].as<std::string>();
     {
         if (graph_guidance_type == "enable") {
+            graph_guidance_type = "+gg";
             get_graph_guidance_type() = GraphGuidanceType::ENABLE;
         } else if (graph_guidance_type == "disable") {
+            graph_guidance_type = "";
             get_graph_guidance_type() = GraphGuidanceType::DISABLE;
         } else {
             FAILED_ASSERT("undefined graph guidance type");
+        }
+    }
+
+    std::string scheduler_algo = vm["scheduler_algo"].as<std::string>();
+    {
+        if (scheduler_algo == "greedy") {
+            scheduler_algo = "+gs";
+            get_scheduler_type() = SchedulerType::GREEDY;
+        } else if (scheduler_algo == "hungarian") {
+            scheduler_algo = "+hs";
+            get_scheduler_type() = SchedulerType::HUNGARIAN;
+        } else {
+            FAILED_ASSERT("undefined scheduler algo");
         }
     }
 
@@ -196,10 +212,8 @@ int main(int argc, char **argv) {
     delete logger;
 
 #ifdef BUILD_META_INFO
-    //build_meta_info("test.json", "usage.txt");
-    graph_guidance_type = graph_guidance_type == "enable" ? "+gg" : "";
-    build_meta_info("Tmp/" + plan_algo + graph_guidance_type + "/test" + std::to_string(get_unique_id()) + ".json",
-                    "Tmp/" + plan_algo + graph_guidance_type + "/usage" + std::to_string(get_unique_id()) + ".txt");
+    build_meta_info("Tmp/" + plan_algo + graph_guidance_type + scheduler_algo + "/test" + std::to_string(get_unique_id()) + ".json",
+                    "Tmp/" + plan_algo + graph_guidance_type + scheduler_algo + "/usage" + std::to_string(get_unique_id()) + ".txt");
 #endif
     Printer().get().flush();
 

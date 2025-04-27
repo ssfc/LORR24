@@ -23,13 +23,9 @@ int get_dist_to_start(uint32_t r, uint32_t t, SharedEnvironment *env) {
 }
 
 int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
-    uint32_t dist = 0;
     uint32_t source = get_graph().get_node(Position(env->curr_states[r].location + 1, env->curr_states[r].orientation));
-    for (int i = 0; i < env->task_pool[t].locations.size(); i++) {
-        int loc = env->task_pool[t].locations[i];
-        dist += get_hm().get(source, loc + 1);
-        source = get_graph().get_node(Position(loc + 1, env->curr_states[r].orientation));
-    }
+    uint32_t target = env->task_pool[t].locations[0];
+    uint32_t dist = get_hm().get(source, target + 1);
     return dist;
 }
 
@@ -41,26 +37,19 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
     proposed_schedule = solver.get_schedule();
 }
 
-int calc_full_distance(Task &task) {
-    auto &hm = get_hm();
-    int dist_sum = 0;
-    for (size_t i = 0; i + 1 < task.locations.size(); ++i) {
-        uint32_t from = task.locations[i] + 1;
-        uint32_t to = task.locations[i + 1] + 1;
-        FAILED_ASSERT("from must be graph node (INCORRECT), to must be map node (CORRECT)");
-        dist_sum += hm.get(from, to);
+uint32_t calc_full_distance(Task &task) {
+    uint32_t dist_sum = 0;
+    for (int i = 0; i + 1 < task.locations.size(); i++) {
+        int source = task.locations[i] + 1;
+        int target = task.locations[i + 1] + 1;
+        dist_sum += get_hm().get(get_graph().get_node(Position(source, 0)), target);
     }
     return dist_sum;
 }
 
-std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &schedule) {
+void MyScheduler::hungarian_schedule(TimePoint end_time, std::vector<int> &schedule) {
 
     ETimer timer;
-
-    std::vector<int> done_proposed_schedule = schedule;
-
-    TimePoint end_time = env->plan_start_time + std::chrono::milliseconds(time_limit);
-
 
     std::vector<uint32_t> free_robots, free_tasks;
 
@@ -99,7 +88,7 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
     if (free_robots.size() * free_robots.size() * free_tasks.size() < 40'000'000) {
         THREADS_TO_USE = 1;
     }
-    int DEVIDE_Y = sqrt(THREADS_TO_USE);
+    int DEVIDE_Y = std::sqrt(THREADS_TO_USE);
     int DEVIDE_X = DEVIDE_Y;
 
     PRINT(
@@ -134,7 +123,6 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
             }
         }
     }
-
 
     {
         const size_t X_PART_SIZE = (free_robots.size() + DEVIDE_X - 1) / DEVIDE_X;
@@ -208,8 +196,7 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
         devided_tasks[task_distrib[i].first][task_distrib[i].second].push_back(i);
     }
 
-
-    PRINT(
+    /*PRINT(
             for (size_t y = 0; y < DEVIDE_Y; y++) {
                 for (size_t x = 0; x < DEVIDE_X; x++) {
                     Printer() << "Quarant: y: " << y << " x: " << x << '\n';
@@ -219,7 +206,7 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
                               << '\n';
                     Printer() << "Tasks:  " << t_s << " (" << ((float) t_s) / (free_tasks.size()) * 100 << "%)" << '\n';
                 }
-            });
+            });*/
 
     std::vector<int> free_tasks_length(free_tasks.size());
     for (int i = 0; i < free_tasks.size(); ++i) {
@@ -235,9 +222,8 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
         std::vector<std::vector<int>> dist_matrix(rb + 1, std::vector<int>(tasks.size() + 1, 0));
         for (int i = 0; i < rb; i++) {
             for (int g = 0; g < tasks.size(); g++) {
-                dist_matrix[i + 1][g + 1] = (int) get_dist(free_robots[robots[i]], free_tasks[tasks[g]], env) +
+                dist_matrix[i + 1][g + 1] = (int) get_dist(free_robots[robots[i]], free_tasks[tasks[g]], env) * 5 +
                                             free_tasks_length[tasks[g]];
-                ;
             }
         }
         auto ans = Hungarian::DoHungarian(dist_matrix);
@@ -251,7 +237,6 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
         }
     };
 
-
     std::vector<std::thread> threads;
     for (size_t y = 0; y < DEVIDE_Y; y++) {
         for (size_t x = 0; x < DEVIDE_X; x++) {
@@ -262,20 +247,14 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
     for (auto &thr: threads) {
         thr.join();
     }
-
-    for (size_t r = 0; r < schedule.size(); r++) {
-        int task_id = schedule[r];
-        if (task_id != -1) {
-            if (get_dist_to_start(r, task_id, env) <= 3) {
-                done_proposed_schedule[r] = task_id;
-            }
-        }
-    }
-
-    return done_proposed_schedule;
 }
 
 void MyScheduler::plan(TimePoint end_time, std::vector<int> &proposed_schedule) {
-    solver_schedule(end_time, proposed_schedule);
-    //artem_schedule(end_time, proposed_schedule);
+    if (get_scheduler_type() == SchedulerType::GREEDY) {
+        solver_schedule(end_time, proposed_schedule);
+    } else if (get_scheduler_type() == SchedulerType::HUNGARIAN) {
+        hungarian_schedule(end_time, proposed_schedule);
+    } else {
+        FAILED_ASSERT("undefined scheduler type");
+    }
 }

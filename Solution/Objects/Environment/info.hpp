@@ -23,11 +23,6 @@ enum class PlannerType {
     EPIBT_LNS, // epibt + lns
     PEPIBT_LNS,// parallel epibt + lns
     WPPL,      // windowed parallel pibt + lns
-
-    //PIBT_LNS,  // pibt + lns
-    //P_PIBT_LNS,// parallel pibt + lns
-
-    NONE,
 };
 
 PlannerType &get_planner_type();
@@ -38,3 +33,10 @@ enum class GraphGuidanceType {
 };
 
 GraphGuidanceType &get_graph_guidance_type();
+
+enum class SchedulerType {
+    GREEDY,
+    HUNGARIAN,
+};
+
+SchedulerType &get_scheduler_type();

@@ -62,8 +62,8 @@ int main() {
 
     std::vector<std::string> maps_name = {
             "random",
-            "warehouse",
-            "game",
+            //"warehouse",
+            //"game",
     };
 
     std::vector<std::string> plan_algos = {
