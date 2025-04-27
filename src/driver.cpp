@@ -193,3 +193,8 @@ int main(int argc, char **argv) {
 
     _exit(0);
 }
+
+// Build on ubuntu platform:
+// cmake . ; make
+// Run on ubuntu platform:
+// ./bin/lifelong --inputFile ./example_problems/random.domain/random_32_32_20_100.json -o test.json --planner_algo pibt -s 5000 -t 1000
