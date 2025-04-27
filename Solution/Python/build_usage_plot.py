@@ -3,6 +3,8 @@ import numpy as np
 import sys
 import matplotlib.colors
 
+# количество шагов решения
+STEPS_NUM = 1000
 
 def read(filename):
     with open(filename) as f:
@@ -26,7 +28,7 @@ def read(filename):
                     for y in range(0, cols):
                         pos = x * cols + y + 1
                         if map[pos] != -1:
-                           map[pos] = float(map[pos]) / 5000
+                           map[pos] = float(map[pos]) / STEPS_NUM
                            mn = min(mn, map[pos])
                            mx = max(mx, map[pos])
                         data[-1].append(float(map[pos]))

@@ -92,8 +92,8 @@ void MyScheduler::hungarian_schedule(TimePoint end_time, std::vector<int> &sched
     int DEVIDE_X = DEVIDE_Y;
 
     PRINT(
-            Printer() << "free robots: " << free_robots.size() << '\n';
-            Printer() << "free tasks: " << free_tasks.size() << '\n';);
+            Printer() << "[Scheduler] free robots: " << free_robots.size() << '\n';
+            Printer() << "[Scheduler] free tasks: " << free_tasks.size() << '\n';);
 
 
     std::sort(xs.begin(), xs.end());

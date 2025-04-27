@@ -20,7 +20,7 @@
 
 #define ENABLE_SCHEDULER_CHANGE_TASK
 
-static constexpr uint32_t THREADS = 32;
+static constexpr uint32_t THREADS = 4;
 
 static constexpr uint32_t SCHEDULER_REBUILD_DP_TIME = 300;
 

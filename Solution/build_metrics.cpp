@@ -53,8 +53,8 @@ void call(const std::string &map_name, const std::string &algo_name, uint32_t te
 
     // build usage plots
     {
-        //int ret_code = std::system(("python3 Solution/Python/build_usage_plot.py Data_" + map_name + "/" + plan_algo + "/usage" + std::to_string(test_id) + ".txt Data_" + map_name + "/" + plan_algo + "/usage_plot" + std::to_string(test_id) + "_one.pdf Data_" + map_name + "/" + plan_algo + "/usage_plot" + std::to_string(test_id) + "_all.pdf").c_str());
-        //ASSERT(ret_code == 0, "invalid ret code");
+        int ret_code = std::system(("python3 Solution/Python/build_usage_plot.py Data_" + map_name + "/" + algo_name + "/usage" + std::to_string(test_id) + ".txt Data_" + map_name + "/" + algo_name + "/usage_plot" + std::to_string(test_id) + "_one.pdf Data_" + map_name + "/" + algo_name + "/usage_plot" + std::to_string(test_id) + "_all.pdf").c_str());
+        ASSERT(ret_code == 0, "invalid ret code");
     }
 }
 
@@ -67,17 +67,22 @@ int main() {
     };
 
     std::vector<std::string> plan_algos = {
-            "pibt",
+            //"pibt",
             "epibt",
             //"pibt_tf",
             //"epibt_lns",
-            "pepibt_lns",
+            //"pepibt_lns",
             //"wppl",
     };
 
     std::vector<std::string> graph_guidance_types = {
             "enable",
-            "disable",
+            //"disable",
+    };
+
+    std::vector<std::string> scheduler_algos = {
+            "greedy",
+            "hungarian",
     };
 
     for (const auto &map_name: maps_name) {
@@ -85,14 +90,18 @@ int main() {
         total_table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
         for (const auto &plan_algo: plan_algos) {
             for (const auto &graph_guidance_type: graph_guidance_types) {
-                std::string algo_name = plan_algo + (graph_guidance_type == "enable" ? "+gg" : "");
-                table_output = std::ofstream("Data_" + map_name + "/" + algo_name + "/metrics.csv");
-                table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
-                for (uint32_t test_id = 0; test_id < 10; test_id++) {
-                    ETimer timer;
-                    std::cout << "call(" << map_name << ' ' << algo_name << ' ' << test_id << "): " << std::flush;
-                    call(map_name, algo_name, test_id);
-                    std::cout << timer << std::endl;
+                for (const auto &scheduler_algo: scheduler_algos) {
+                    std::string algo_name = plan_algo +
+                                            (graph_guidance_type == "enable" ? "+gg" : "") +
+                                            (scheduler_algo == "greedy" ? "+gs" : (scheduler_algo == "hungarian" ? "+hs" : (FAILED_ASSERT("invalid scheduler_algo"), "")));
+                    table_output = std::ofstream("Data_" + map_name + "/" + algo_name + "/metrics.csv");
+                    table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
+                    for (uint32_t test_id = 0; test_id < 10; test_id++) {
+                        ETimer timer;
+                        std::cout << "call(" << map_name << ' ' << algo_name << ' ' << test_id << "): " << std::flush;
+                        call(map_name, algo_name, test_id);
+                        std::cout << timer << std::endl;
+                    }
                 }
             }
         }
