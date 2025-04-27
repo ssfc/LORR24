@@ -143,10 +143,7 @@ void SchedulerSolver::validate() {
 }
 
 SchedulerSolver::SchedulerSolver(SharedEnvironment *env)
-    : env(env), desires(env->num_of_agents, -1), task_to_robot(1'000'000, -1), dp(10'000, std::vector<std::pair<uint32_t, uint32_t>>(15'000)) {
-    for (auto &vec: dp) {
-        vec.clear();
-    }
+    : env(env), task_to_robot(1'000'000, -1), dp(10'000) {
 }
 
 void SchedulerSolver::update() {
@@ -216,6 +213,9 @@ void SchedulerSolver::update() {
     }
 
     for (uint32_t t: free_tasks) {
+        if (t >= task_to_robot.size()) {
+            task_to_robot.resize(t + 1, -1);
+        }
         task_to_robot[t] = -1;
     }
 
