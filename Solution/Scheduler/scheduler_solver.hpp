@@ -13,6 +13,7 @@ struct SchedulerSolver {
     double cur_score = 0;
 
     // desires[r] = task id
+    // desires是啥意思? 某个agent想要某个task?
     std::vector<uint32_t> desires;
 
     // task_to_robot[task] = robot id
