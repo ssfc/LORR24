@@ -215,6 +215,7 @@ void SchedulerSolver::update() {
         }
     }
 
+    // desire是agent分了哪个task, task_to_robot是task给了哪个agent
     for (uint32_t t: free_tasks) {
         task_to_robot[t] = -1;
     }
