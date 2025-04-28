@@ -44,6 +44,7 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
     proposed_schedule = solver.get_schedule();
 }
 
+// 计算某个任务的全程距离
 int calc_full_distance(Task &task) {
     auto &hm = get_hm();
     int dist_sum = 0;
