@@ -49,6 +49,7 @@ bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rn
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
 }
 
+// agent完成某个任务的打分: 任务长度 + 5 * |agent, pickup|
 uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
     if (t == -1) {
         return 1e6;
@@ -220,6 +221,7 @@ void SchedulerSolver::update() {
         task_to_robot[t] = -1;
     }
 
+    // 所有
     cur_score = 0;
     for (uint32_t r: free_robots) {
         desires[r] = -1;
