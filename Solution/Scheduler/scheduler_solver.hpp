@@ -31,10 +31,10 @@ struct SchedulerSolver {
     SharedEnvironment *env = nullptr;
 
     // task_metric[t]
-    std::vector<uint32_t> task_metric;
+    std::vector<uint32_t> task_metric; // 每个任务的完成距离
 
     // task_target[t] = цель задачи (pos)
-    std::vector<uint32_t> task_target;
+    std::vector<uint32_t> task_target; // 每个任务的取货点
 
     double temp = 1;
 
