@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 
     get_unique_id() = vm["unique_id"].as<uint32_t>();
     PRINT(Printer() << "unique_id: " << get_unique_id() << '\n';);
-
+    // 从这里的算法选择看, 这里是入口函数无疑了
     const std::string plan_algo = vm["planner_algo"].as<std::string>();
     {
         if (plan_algo == "pibt") {
@@ -193,3 +193,8 @@ int main(int argc, char **argv) {
 
     _exit(0);
 }
+
+// Build on ubuntu platform:
+// cmake . ; make
+// Run on ubuntu platform:
+// ./bin/lifelong --inputFile ./example_problems/random.domain/random_32_32_20_100.json -o test.json --planner_algo pibt -s 5000 -t 1000
