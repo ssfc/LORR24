@@ -23,6 +23,7 @@ int get_dist_to_start(uint32_t r, uint32_t t, SharedEnvironment *env) {
     return get_hm().get(source, loc);
 }
 
+// 计算agent r从其当前位置到完成任务t所需的总距离。
 int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
     uint32_t dist = 0;
     uint32_t source = get_graph().get_node(Position(env->curr_states[r].location + 1, env->curr_states[r].orientation));
