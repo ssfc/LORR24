@@ -13,7 +13,7 @@ struct SchedulerSolver {
     double cur_score = 0;
 
     // desires[r] = task id
-    // desires是啥意思? 某个agent想要某个task?
+    // 存储每个机器人当前的目标任务。初始值为 -1，表示机器人没有目标任务。
     std::vector<uint32_t> desires;
 
     // task_to_robot[task] = robot id
