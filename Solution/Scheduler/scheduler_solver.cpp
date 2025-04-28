@@ -161,15 +161,15 @@ void SchedulerSolver::update() {
     for (auto &[t, task]: env->task_pool) {
         int r = task.agent_assigned;
         if (
-                r == -1// нет агента
+                r == -1// нет агента 没有分配机器人
 #ifdef ENABLE_SCHEDULER_CHANGE_TASK
-                || task.idx_next_loc == 0// мы можем поменять задачу
+                || task.idx_next_loc == 0// мы можем поменять задачу 允许任务重新分配
 #endif
         ) {
 #ifdef ENABLE_SCHEDULER_CHANGE_TASK
-            task.agent_assigned = -1;// IMPORTANT! remove task agent assigned
+            task.agent_assigned = -1;// IMPORTANT! remove task agent assigned 清除任务当前的分配
 #endif
-            free_tasks.push_back(t);
+            free_tasks.push_back(t); // 将任务 `t` 加入空闲任务列表
         }
     }
 
