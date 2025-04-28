@@ -41,6 +41,7 @@ void TaskScheduler::initialize(int preprocess_time_limit) {
 
 void TaskScheduler::plan(int time_limit, std::vector<int> &proposed_schedule) {
     ETimer timer; // 总之就是个计时器
+    // 使用默认调度器
 #ifdef ENABLE_DEFAULT_SCHEDULER
     //give at most half of the entry time_limit to scheduler;
     //-SCHEDULER_TIMELIMIT_TOLERANCE for timing error tolerance
