@@ -15,6 +15,7 @@
 MyScheduler::MyScheduler(SharedEnvironment *env) : env(env), solver(env) {
 }
 
+// 计算agent r从当前位置到任务t取货位置的距离
 int get_dist_to_start(uint32_t r, uint32_t t, SharedEnvironment *env) {
     uint32_t source = get_graph().get_node(env->curr_states[r].location + 1, env->curr_states[r].orientation);
     ASSERT(env->task_pool[t].idx_next_loc == 0, "invalid idx next loc");
