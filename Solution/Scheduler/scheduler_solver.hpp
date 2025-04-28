@@ -39,6 +39,7 @@ struct SchedulerSolver {
 
     double temp = 1;
 
+    // 建立按升序排列的向量dp，其中每个元素是键值对 (dist, task_id)，分别表示距离（dist）和任务编号（task_id）。
     void rebuild_dp(uint32_t r);
 
     [[nodiscard]] bool compare(double cur_score, double old_score, Randomizer &rnd) const;

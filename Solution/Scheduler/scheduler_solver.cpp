@@ -8,6 +8,7 @@
 #include <thread>
 #include <unordered_set>
 
+// 建立按升序排列的向量dp，其中每个元素是键值对 (dist, task_id)，分别表示距离（dist）和任务编号（task_id）。
 void SchedulerSolver::rebuild_dp(uint32_t r) {
     dp[r].clear();
     for (uint32_t t: free_tasks) {
