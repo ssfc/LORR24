@@ -57,6 +57,7 @@ int calc_full_distance(Task &task) {
     return dist_sum;
 }
 
+// 作者没用这个
 std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &schedule) {
 
     ETimer timer;
