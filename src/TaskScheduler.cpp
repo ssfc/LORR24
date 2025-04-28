@@ -44,7 +44,7 @@ void TaskScheduler::plan(int time_limit, std::vector<int> &proposed_schedule) {
 #ifdef ENABLE_DEFAULT_SCHEDULER
     //give at most half of the entry time_limit to scheduler;
     //-SCHEDULER_TIMELIMIT_TOLERANCE for timing error tolerance
-    int limit = time_limit / 2 - DefaultPlanner::SCHEDULER_TIMELIMIT_TOLERANCE;
+    int limit = time_limit / 2 - DefaultPlanner::SCHEDULER_TIMELIMIT_TOLERANCE; // 默认调度器分配的最大时间（只有一半）。
     DefaultPlanner::schedule_plan(limit, proposed_schedule, env);
 
     PRINT(
