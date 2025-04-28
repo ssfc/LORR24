@@ -225,7 +225,7 @@ void SchedulerSolver::update() {
     cur_score = 0;
     for (uint32_t r: free_robots) {
         desires[r] = -1;
-        cur_score += get_dist(r, desires[r]);
+        cur_score += get_dist(r, desires[r]); // -1的话get_dist返回一个极大的值
     }
     validate(); // 空函数
 
