@@ -35,6 +35,7 @@ int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
     return dist;
 }
 
+// 就是MyScheduler::plan
 void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed_schedule) {
     solver.update();
     solver.rebuild_dp(std::min(end_time, get_now() + Milliseconds(SCHEDULER_REBUILD_DP_TIME)));
@@ -277,6 +278,7 @@ std::vector<int> MyScheduler::artem_schedule(int time_limit, std::vector<int> &s
     return done_proposed_schedule;
 }
 
+// 就是主程序中的my_scheduler.plan
 void MyScheduler::plan(TimePoint end_time, std::vector<int> &proposed_schedule) {
     solver_schedule(end_time, proposed_schedule);
     //artem_schedule(end_time, proposed_schedule);
