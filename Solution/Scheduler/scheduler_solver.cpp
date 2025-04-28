@@ -225,7 +225,7 @@ void SchedulerSolver::update() {
         desires[r] = -1;
         cur_score += get_dist(r, desires[r]);
     }
-    validate();
+    validate(); // 空函数
 
     PRINT(
             Printer() << "[Scheduler] free robots: " << free_robots.size() << '\n';
