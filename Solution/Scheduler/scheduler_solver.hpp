@@ -24,6 +24,7 @@ struct SchedulerSolver {
     std::vector<uint32_t> free_tasks;
 
     // dp[r] = отсортированный вектор (dist, task_id)
+    // 按升序排列的向量，其中每个元素是键值对 (dist, task_id)，分别表示距离（dist）和任务编号（task_id）。
     std::vector<std::vector<std::pair<uint32_t, uint32_t>>> dp;
 
     std::vector<int> timestep_updated;
