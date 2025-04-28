@@ -180,17 +180,17 @@ void SchedulerSolver::update() {
         // есть задача и она в процессе выполнения
         // не можем ее убрать
         if (env->task_pool.count(t) && env->task_pool.at(t).idx_next_loc != 0) {
-            desires[r] = t;
+            desires[r] = t; // 若agent有任务，且任务已经open，保留现状
             continue;
         }
         if (
                 // нет задачи
                 !env->task_pool.count(t)
 #ifdef ENABLE_SCHEDULER_CHANGE_TASK
-                || env->task_pool.at(t).idx_next_loc == 0
+                || env->task_pool.at(t).idx_next_loc == 0 // 当前任务允许重新分配
 #endif
         ) {
-            free_robots.push_back(r);
+            free_robots.push_back(r); // 将机器人加入空闲机器人的列表
         }
     }
 
