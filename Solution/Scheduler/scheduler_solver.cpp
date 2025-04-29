@@ -19,8 +19,10 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
 }
 
 void SchedulerSolver::rebuild_dp(TimePoint end_time) {
+    // 计时器初始化和任务准备
     ETimer timer;
     std::vector<uint32_t> order = free_robots;
+    // 排序空闲机器人，时间戳小的排在前面。
     std::stable_sort(order.begin(), order.end(), [&](uint32_t lhs, uint32_t rhs) {
         return timestep_updated[lhs] < timestep_updated[rhs];
     });
