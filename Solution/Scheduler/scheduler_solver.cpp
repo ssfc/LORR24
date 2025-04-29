@@ -27,6 +27,7 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
         return timestep_updated[lhs] < timestep_updated[rhs];
     });
 
+    // 多线程工作, 不停rebuild_dp
     std::atomic<uint32_t> counter{};
     auto do_work = [&](uint32_t thr) {
         for (uint32_t i = thr; i < order.size() && get_now() < end_time; i += THREADS) {
@@ -39,6 +40,7 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
     for (uint32_t thr = 0; thr < THREADS; thr++) {
         threads[thr] = std::thread(do_work, thr);
     }
+    // 等待线程完成
     for (uint32_t thr = 0; thr < THREADS; thr++) {
         threads[thr].join();
     }
