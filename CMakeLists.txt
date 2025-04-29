@@ -57,8 +57,8 @@ file(GLOB SOURCES
         Solution/Objects/Containers/*.cpp
         Solution/Objects/Environment/*.cpp
         Solution/Tools/tools.cpp
-        Solution/Planner/*.cpp
-        Solution/Scheduler/*.cpp
+        Solution/Planner/*.cpp  # 路径规划系列文件
+        Solution/Scheduler/*.cpp  # 任务分配系列文件
 
         Solution2/src/*.cpp
         Solution2/src/LaCAM2/*.cpp
