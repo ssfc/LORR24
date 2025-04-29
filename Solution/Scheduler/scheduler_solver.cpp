@@ -70,7 +70,7 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
     return dist;
 }
 
-// 负责移除调度器中对应于机器人 r 的任务，并更新相关数据结构的状态。
+// 负责移除调度器中对应于机器人 r 的任务，并减去分数。
 void SchedulerSolver::remove(uint32_t r) {
     ASSERT(0 <= r && r < desires.size(), "invalid r");
     uint32_t t = desires[r];
@@ -83,6 +83,7 @@ void SchedulerSolver::remove(uint32_t r) {
     desires[r] = -1;
 }
 
+// 负责移除调度器中对应于机器人 r 的任务t，并加上分数。
 void SchedulerSolver::add(uint32_t r, uint32_t t) {
     ASSERT(0 <= r && r < desires.size(), "invalid r");
     ASSERT(0 <= t && t < task_to_robot.size(), "invalid t");
