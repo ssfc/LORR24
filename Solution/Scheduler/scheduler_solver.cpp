@@ -50,6 +50,9 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
             Printer() << "[Scheduler] rebuild_dp: " << p << "%" << (p != 100 ? " bad," : ", ") << timer << '\n';);
 }
 
+// 这段代码体现了模拟退火算法的思想，核心是两个部分：
+//确定性选择: 当新状态更优时，总是选择它。
+//随机性选择: 当新状态不如旧状态时，依然有一定概率接受，这种概率由分数差和温度共同决定
 bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rnd) const {
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
 }
