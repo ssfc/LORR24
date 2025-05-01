@@ -186,18 +186,13 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
         desires[r] = desired;
         uint32_t to_r = get_used(r);
         if (to_r == -1) {
-            // отлично! там никого нет
             add_path(r);
             return true;
         } else if (to_r != -2) {
-            // о нет! там кто-то есть
-
-            if (counter > 10'000) {
-                continue;
-            }
-
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r: " + std::to_string(to_r));
-            if (desires[to_r] != 0) {
+
+            if (counter > 10'000 ||
+                desires[to_r] != 0) {
                 continue;
             }
             remove_path(to_r);

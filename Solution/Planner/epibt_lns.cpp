@@ -79,7 +79,7 @@ bool EPIBT_LNS::try_build(uint32_t r) {
 }
 
 EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counter) {
-    if (counter == -1 || (counter % 16 == 0 && get_now() >= end_time)) {
+    if (counter == -1 || (counter % 32 == 0 && get_now() >= end_time)) {
         counter = -1;
         return RetType::FAILED;
     }
@@ -100,16 +100,13 @@ EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counte
                 return RetType::REJECTED;
             }
         } else if (to_r != -2) {
-            if (counter > 3000 && depth >= 6) {
-                continue;
-            }
-
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
 
-            if (desires[to_r] != 0 && rnd.get_d() < 0.8) {
+            if (counter > 10'000 ||
+                visited[to_r] == visited_counter ||
+                (desires[to_r] != 0 && rnd.get_d() < 0.8)) {
                 continue;
             }
-
             remove_path(to_r);
             add_path(r);
 
