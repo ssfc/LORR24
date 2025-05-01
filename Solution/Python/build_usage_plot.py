@@ -3,8 +3,6 @@ import numpy as np
 import sys
 import matplotlib.colors
 
-# количество шагов решения
-STEPS_NUM = 1000
 
 def read(filename):
     with open(filename) as f:
@@ -28,9 +26,9 @@ def read(filename):
                     for y in range(0, cols):
                         pos = x * cols + y + 1
                         if map[pos] != -1:
-                           map[pos] = float(map[pos]) / STEPS_NUM
-                           mn = min(mn, map[pos])
-                           mx = max(mx, map[pos])
+                            map[pos] = float(map[pos]) / STEPS_NUM
+                            mn = min(mn, map[pos])
+                            mx = max(mx, map[pos])
                         data[-1].append(float(map[pos]))
 
                 result[-1].append(data)
@@ -40,9 +38,9 @@ def read(filename):
         return result, mn, mx
 
 
-dirs = ["E", "S", "W", "N", "A"]
+dirs = ["E", "S", "W", "N", "All"]
 
-acts = ["FW", "R", "CR", "W", "A"]
+acts = ["FW", "R", "CR", "W", "All"]
 
 
 def build(directory):
@@ -91,12 +89,18 @@ good_cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", [(0, '#00806
                                                                      (1, "#960064")])
 
 
-def paint_one(data, mn, mx, to_file):
-    fig, axes = plt.subplots(1, 1, figsize=(10, 10))
+def paint_one(data, mn, mx, to_file, dir, act):
+    if map_type == "random":
+        figsize = (11, 10)
+    elif map_type == "warehouse":
+        figsize = (11, 3)
+    elif map_type == "game":
+        figsize = (11, 10)
+    else:
+        assert False
+    fig, axes = plt.subplots(1, 1, figsize=figsize, constrained_layout=True)
     images = []
-    dir = 4
-    act = 4
-    map = np.array(data[dir][act])  # матрица
+    map = np.array(data[dir][act])
     ax = axes
 
     images.append(ax.imshow(map, cmap=good_cmap, vmin=mn, vmax=mx))
@@ -107,17 +111,28 @@ def paint_one(data, mn, mx, to_file):
         red_mask[mask] = [0, 0, 0, 1]
         ax.imshow(red_mask)
 
-    ax.set_title(dirs[dir] + " & " + acts[act])
     ax.axis('off')
-
     fig.colorbar(images[-1], ax=ax)
-
-    plt.savefig(to_file, format='pdf', dpi=800)
-    # plt.show()
+    plt.savefig(to_file + ".pdf", format='pdf', dpi=400, bbox_inches='tight')
+    plt.close()
 
 
 def paint_all(data, mn, mx, to_file):
-    fig, axes = plt.subplots(5, 5, figsize=(10, 10))
+    if map_type == "random":
+        figsize = (11, 10)
+    elif map_type == "warehouse":
+        figsize = (28, 8)
+    elif map_type == "game":
+        figsize = (36, 30)
+    else:
+        assert False
+    fig, axes = plt.subplots(5, 5, figsize=figsize, constrained_layout=True)
+
+    # Убираем все границы
+    for ax in axes.flat:
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+
     images = []
     for i in range(25):
         dir = i // 5
@@ -133,27 +148,46 @@ def paint_all(data, mn, mx, to_file):
             red_mask[mask] = [0, 0, 0, 1]
             ax.imshow(red_mask)
 
-        ax.set_title(dirs[dir] + " & " + acts[act])
-        ax.axis('off')
+    for i in range(5):
+        for j in range(5):
+            ax = axes[i, j]
+
+            ax.set_xticks([])
+            ax.set_yticks([])
+
+            if i == 0:
+                ax.set_title(acts[j], pad=10)
+
+            if j == 0:
+                ax.set_ylabel(dirs[i], rotation=0, labelpad=10)
 
     fig.colorbar(images[-1], ax=axes)
 
-    plt.savefig(to_file, format='pdf', dpi=800)
-    # plt.show()
+    plt.savefig(to_file + ".pdf", format='pdf', dpi=400, bbox_inches='tight')
+    plt.close()
 
 
 if __name__ == '__main__':
     assert len(sys.argv) == 4, "invalid arguments"
 
-    from_file = sys.argv[1]
-    to_file_one = sys.argv[2]
-    to_file_all = sys.argv[3]
+    input = sys.argv[1]
+    output_name = sys.argv[2]
+    map_type = sys.argv[3]
 
-    # print(from_file)
-    # print(to_file_one)
-    # print(to_file_all)
+    if map_type == "random":
+        STEPS_NUM = 1000
+    elif map_type == "warehouse":
+        STEPS_NUM = 5000
+    elif map_type == "game":
+        STEPS_NUM = 5000
+    else:
+        assert False
 
-    data, mn, mx = read(from_file)
+    data, mn, mx = read(input)
 
-    paint_all(data, mn, mx, to_file_all)
-    paint_one(data, mn, mx, to_file_one)
+    last_slash_index = input.rfind('/')
+    dir = input[:last_slash_index + 1]
+
+    paint_all(data, mn, mx, dir + output_name + "_full_mesh")
+    paint_one(data, mn, mx, dir + output_name + "_one_all", 4, 4)
+    paint_one(data, mn, mx, dir + output_name + "_one_wait", 4, 3)
