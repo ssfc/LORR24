@@ -48,26 +48,25 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"Data2023/game.domain/MR23-I-09.json", 5000},
         {"Data2023/warehouse.domain/MR23-I-10.json", 5000},*/
 
-        {"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
+        /*{"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_200.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_300.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_400.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_500.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_600.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_700.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},
+        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},*/
 
-        // сейчас на сервере запущено это
-        /*{"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_2000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_3000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_4000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_5000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_6000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_7000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_8000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_9000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},*/
+        {"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_2000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_3000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_4000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_5000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_6000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_7000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_8000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_9000.json", 5000, false},
+        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},
 
         /*{"example_problems/game.domain/brc202d_1000.json", 5000, true},
         {"example_problems/game.domain/brc202d_2000.json", 5000, true},
@@ -85,21 +84,21 @@ int main() {
 
     std::vector<std::string> planner_algos = {
             //"pibt",
-            "epibt",
+            //"epibt",
             //"epibt_lns",
-            //"pepibt_lns",
+            "pepibt_lns",
             //"wppl",
             //"pibt_tf",
     };
 
     std::vector<std::string> graph_guidance_types = {
+            "disable",
             "enable",
-            //"disable",
     };
 
     std::vector<std::string> scheduler_algos = {
             "greedy",
-            "hungarian",
+            //"hungarian",
     };
 
     if (!std::filesystem::exists("Tmp")) {

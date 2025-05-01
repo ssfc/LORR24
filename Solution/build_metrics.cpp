@@ -13,7 +13,7 @@ std::ofstream total_table_output;
 
 void call(const std::string &map_name, const std::string &algo_name, uint32_t test_id) {
     json data;
-    std::ifstream input("Data_" + map_name + "/" + algo_name + "/test" + std::to_string(test_id) + ".json");
+    std::ifstream input("Data/" + map_name + "/" + algo_name + "/test" + std::to_string(test_id) + ".json");
     if (!input) {
         std::cout << "unable ";
         return;
@@ -47,13 +47,15 @@ void call(const std::string &map_name, const std::string &algo_name, uint32_t te
 
     } catch (const json::parse_error &error) {
         std::cerr << "Failed at: "
-                  << "Data_" + map_name + "/" + algo_name + "/test" + std::to_string(test_id) + ".json" << std::endl;
+                  << "Data/" + map_name + "/" + algo_name + "/test" + std::to_string(test_id) + ".json" << std::endl;
         std::cerr << "Message: " << error.what() << std::endl;
     }
 
     // build usage plots
     {
-        int ret_code = std::system(("python3 Solution/Python/build_usage_plot.py Data_" + map_name + "/" + algo_name + "/usage" + std::to_string(test_id) + ".txt Data_" + map_name + "/" + algo_name + "/usage_plot" + std::to_string(test_id) + "_one.pdf Data_" + map_name + "/" + algo_name + "/usage_plot" + std::to_string(test_id) + "_all.pdf").c_str());
+        std::string launch_str = "python3 Solution/Python/build_usage_plot.py Data/" + map_name + "/" + algo_name + "/usage" + std::to_string(test_id) + ".txt heatmap" + std::to_string(test_id) + " " + map_name;
+        //std::cout << "\nlaunch_str: " << launch_str << std::endl;
+        int ret_code = std::system(launch_str.c_str());
         ASSERT(ret_code == 0, "invalid ret code");
     }
 }
@@ -62,39 +64,42 @@ int main() {
 
     std::vector<std::string> maps_name = {
             "random",
-            //"warehouse",
-            //"game",
+            "warehouse",
+            "game",
     };
 
     std::vector<std::string> plan_algos = {
-            //"pibt",
+            "pibt",
             "epibt",
-            //"pibt_tf",
-            //"epibt_lns",
-            //"pepibt_lns",
-            //"wppl",
+            "pibt_tf",
+            "pepibt_lns",
+            "wppl",
     };
 
     std::vector<std::string> graph_guidance_types = {
             "enable",
-            //"disable",
+            "disable",
     };
 
     std::vector<std::string> scheduler_algos = {
             "greedy",
-            "hungarian",
+            //"hungarian",
     };
 
     for (const auto &map_name: maps_name) {
-        total_table_output = std::ofstream("Data_" + map_name + "/total_metrics.csv");
+        total_table_output = std::ofstream("Data/" + map_name + "/total_metrics.csv");
         total_table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
         for (const auto &plan_algo: plan_algos) {
             for (const auto &graph_guidance_type: graph_guidance_types) {
                 for (const auto &scheduler_algo: scheduler_algos) {
                     std::string algo_name = plan_algo +
                                             (graph_guidance_type == "enable" ? "+gg" : "") +
-                                            (scheduler_algo == "greedy" ? "+gs" : (scheduler_algo == "hungarian" ? "+hs" : (FAILED_ASSERT("invalid scheduler_algo"), "")));
-                    table_output = std::ofstream("Data_" + map_name + "/" + algo_name + "/metrics.csv");
+                                            (scheduler_algo == "greedy" ? "+gs" : (scheduler_algo == "hungarian" ? "+hs" : "" /*(FAILED_ASSERT("invalid scheduler_algo"), "")*/));
+                    table_output = std::ofstream("Data/" + map_name + "/" + algo_name + "/metrics.csv");
+                    if (!table_output) {
+                        std::cout << "skipped: " << algo_name << std::endl;
+                        continue;
+                    }
                     table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
                     for (uint32_t test_id = 0; test_id < 10; test_id++) {
                         ETimer timer;
