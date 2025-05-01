@@ -92,8 +92,8 @@ int main() {
     };
 
     std::vector<std::string> graph_guidance_types = {
+            //"enable",
             "disable",
-            "enable",
     };
 
     std::vector<std::string> scheduler_algos = {

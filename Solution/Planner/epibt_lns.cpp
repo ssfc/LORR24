@@ -1,7 +1,6 @@
 #include <Planner/epibt_lns.hpp>
 
 #include <Objects/Basic/assert.hpp>
-#include <Objects/Environment/environment.hpp>
 #include <settings.hpp>
 
 bool EPIBT_LNS::consider() {
@@ -35,12 +34,12 @@ EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t &counter, uint32_t 
                 return RetType::REJECTED;
             }
         } else if (to_r != -2 && visited[to_r] != visited_counter) {
+            ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
+            ASSERT(visited[to_r] != visited_counter, "already visited");
+
             if (rnd.get_d() < 0.2) {
                 continue;
             }
-
-            ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
-            ASSERT(visited[to_r] != visited_counter, "already visited");
 
             remove_path(to_r);
             add_path(r);
@@ -104,7 +103,7 @@ EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counte
 
             if (counter > 10'000 ||
                 visited[to_r] == visited_counter ||
-                (desires[to_r] != 0 && rnd.get_d() < 0.8)) {
+                desires[to_r] != 0) {
                 continue;
             }
             remove_path(to_r);

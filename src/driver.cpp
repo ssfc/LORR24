@@ -8,6 +8,7 @@
 #include <memory>
 #include <signal.h>
 
+#include <Objects/Basic/assert.hpp>
 #include <Objects/Environment/info.hpp>
 #include <Tools/tools.hpp>
 #include <settings.hpp>
@@ -114,6 +115,9 @@ int main(int argc, char **argv) {
             FAILED_ASSERT("undefined scheduler algo");
         }
     }
+
+    ASSERT(get_planner_type() == PlannerType::WPPL && get_graph_guidance_type() == GraphGuidanceType::DISABLE, "unexpected configuration: only WPPL+GG");
+    ASSERT(get_planner_type() == PlannerType::PIBT_TF && get_graph_guidance_type() == GraphGuidanceType::ENABLE, "unexpected configuration: only PIBT+traffic flow without GG");
 
     po::notify(vm);
 
