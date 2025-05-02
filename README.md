@@ -42,6 +42,15 @@ An example of running a solution on a map `random-32-32-20` with `400` agents, l
 ./bin/lifelong -i ./example_problems/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa epibt --gg enable --sa greedy
 ```
 
+The program also includes self-written assertions. An example of the fall of such an assertion:
+```
+assert failed at /home/straple/LORR24/src/driver.cpp:119
+message: "I failed!"
+
+Process finished with exit code 100
+```
+
+Also see `Solution/settings.hpp` for global project settings: enabling asserts, outputting solution logs to `std::cout`, changing the number of threads, changing the time allocated to the task scheduler and others
 
 ## Experiments
 
