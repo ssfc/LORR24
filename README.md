@@ -23,6 +23,8 @@ This is a project of the No Man's Sky team. The team took first place in all fou
   - *EPIBT+LNS* - an add-on over *EPIBT* that adds an annealing simulation algorithm to iteratively improve the solution
   - *PEPIBT+LNS* - multithreaded launch of *EPIBT+LNS*
 
+![image](https://github.com/user-attachments/assets/b13368eb-dae7-4a36-8319-805637963a84)
+
 ## TODO
 1) Improve the pool of operations. It's not quite complete right now
 2) All attempts to make good multithreading failed. Now it's just using parallel launch
