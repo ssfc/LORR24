@@ -46,9 +46,9 @@ int main(int argc, char **argv) {
     po::options_description desc("Allowed options");
     desc.add_options()("help", "produce help message")                                                                                                                                                                                        //
             ("unique_id,u", po::value<uint32_t>()->default_value(0), "my unique id for unique launch")                                                                                                                                        //
-            ("planner_algo", po::value<string>()->required(), "planner algo")                                                                                                                                                                 //
-            ("graph_guidance", po::value<string>()->required(), "graph guidance: enable or disable")                                                                                                                                          //
-            ("scheduler_algo", po::value<string>()->required(), "scheduler algo: greedy or hungarian")                                                                                                                                        //
+            ("planner_algo,pa", po::value<string>()->required(), "planner algo")                                                                                                                                                                 //
+            ("graph_guidance,gg", po::value<string>()->required(), "graph guidance: enable or disable")                                                                                                                                          //
+            ("scheduler_algo,sa", po::value<string>()->required(), "scheduler algo: greedy or hungarian")                                                                                                                                        //
             ("inputFile,i", po::value<std::string>()->required(), "input file name")                                                                                                                                                          //
             ("output,o", po::value<std::string>()->default_value("./output.json"), "output results from the evaluation into a JSON formated file. If no file specified, the default name is 'output.json'")                                   //
             ("outputScreen,c", po::value<int>()->default_value(1), "the level of details in the output file, 1--showing all the output, 2--ignore the events and tasks, 3--ignore the events, tasks, errors, planner times, starts and paths")//
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
         } else if (plan_algo == "wppl") {
             get_planner_type() = PlannerType::WPPL;
         } else {
-            FAILED_ASSERT("undefined planner algo");
+            FAILED_ASSERT("unexpected planner algo");
         }
     }
 
@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
             graph_guidance_type = "";
             get_graph_guidance_type() = GraphGuidanceType::DISABLE;
         } else {
-            FAILED_ASSERT("undefined graph guidance type");
+            FAILED_ASSERT("unexpected graph guidance type");
         }
     }
 
@@ -112,12 +112,12 @@ int main(int argc, char **argv) {
             scheduler_algo = "+hs";
             get_scheduler_type() = SchedulerType::HUNGARIAN;
         } else {
-            FAILED_ASSERT("undefined scheduler algo");
+            FAILED_ASSERT("unexpected scheduler algo");
         }
     }
 
-    ASSERT(get_planner_type() == PlannerType::WPPL && get_graph_guidance_type() == GraphGuidanceType::DISABLE, "unexpected configuration: only WPPL+GG");
-    ASSERT(get_planner_type() == PlannerType::PIBT_TF && get_graph_guidance_type() == GraphGuidanceType::ENABLE, "unexpected configuration: only PIBT+traffic flow without GG");
+    ASSERT(!(get_planner_type() == PlannerType::WPPL && get_graph_guidance_type() == GraphGuidanceType::DISABLE), "unexpected configuration: only WPPL+GG");
+    ASSERT(!(get_planner_type() == PlannerType::PIBT_TF && get_graph_guidance_type() == GraphGuidanceType::ENABLE), "unexpected configuration: only PIBT+traffic flow without GG");
 
     po::notify(vm);
 

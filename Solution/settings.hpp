@@ -11,7 +11,7 @@
 
 #define ENABLE_ASSERT
 
-#define BUILD_META_INFO
+//#define BUILD_META_INFO
 
 #define PRINT(args...) \
     do { args } while (0)
