@@ -5,7 +5,6 @@ This is a project of the No Man's Sky team. The team took first place in all fou
 
 ## Project structure
 
-* The `experiments` are [here](https://github.com/Straple/LORR24_experiments)
 * The `readme` folder contains ***ADDITIONAL INFORMATION*** about project
 * The `Papers` folder contains our ***competition certificates***, a detailed report on the algorithm, and a presentation
 * The `Solution` folder contains our solution
@@ -36,6 +35,13 @@ For main information, see the `readme` folder. We also add additional arguments 
 | --scheduler_algo <br /> --sa | String <br /> "greedy" = the multithreaded greedy task scheduler <br /> "hungarian" = the multithreaded Hungarian algorithm ***(It is not recommended to use)***                     |
 
 This way you can run combinations of algorithms. But not all of them: ~~PIBT+traffic flow+GG~~ and ~~WPPL~~ are not supported
+
+
+An example of running a solution on a map `random-32-32-20` with `400` agents, log entry to the `test.json` file, `1000` steps, `300ms` time limit for one step, `30m` preprocessing time limit, planner: `EPIBT`, `enable` Graph Guidance, scheduler: `greedy`
+```
+./bin/lifelong -i ./example_problems/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa epibt --gg enable --sa greedy
+```
+
 
 ## Experiments
 
