@@ -23,6 +23,24 @@ This is a project of the No Man's Sky team. The team took first place in all fou
   - *EPIBT+LNS* - an add-on over *EPIBT* that adds an annealing simulation algorithm to iteratively improve the solution
   - *PEPIBT+LNS* - multithreaded launch of *EPIBT+LNS*
 
+## How to run
+
+You can compile a project using *CMakeLists.txt* it will create a `bin` folder with executable files. We are interested in *bin/lifelong*
+
+For main information, see the `readme` folder. We also add additional arguments to the *lifelong* program launch:
+
+| options                      |                                                                                                                                                                                      |
+|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --planner_algo <br /> --pa   | String <br /> "pibt" = PIBT <br /> "pibt_tf" = PIBT+traffic flow <br /> "epibt" = EPIBT <br /> "epibt_lns" = EPIBT+LNS <br /> "pepibt_lns" = Parallel EPIBT+LNS <br /> "wppl" = WPPL |
+| --graph_guidance <br /> --gg | String <br /> "enable" = enable Graph Guidance <br /> "disable" = disable Graph Guidance                                                                                             |
+| --scheduler_algo <br /> --sa | String <br /> "greedy" = the multithreaded greedy task scheduler <br /> "hungarian" = the multithreaded Hungarian algorithm ***(It is not recommended to use)***                     |
+
+This way you can run combinations of algorithms. But not all of them: ~~PIBT+traffic flow+GG~~ and ~~WPPL~~ are not supported
+
+## Experiments
+
+Experiments with all logs, plots, and heat maps are [here](https://github.com/Straple/LORR24_experiments)
+
 ![image](https://github.com/user-attachments/assets/b13368eb-dae7-4a36-8319-805637963a84)
 
 ## TODO
