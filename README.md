@@ -5,9 +5,9 @@ This is a project of the No Man's Sky team. The team took first place in all fou
 
 ## Project structure
 
+* The `experiments` are [here](https://github.com/Straple/LORR24_experiments)
 * The `readme` folder contains ***ADDITIONAL INFORMATION*** about project
-* The `Papers` folder contains our competition certificates, a detailed report on the algorithm, and a presentation
-* The `Data` folder contains our tests and their logs. Inside the folder is a metrics_plot.pdf, which shows a comparison of the algorithms on these tests. The folder is divided into random, game, and warehouse tests. Each test stores information about 6 algorithms. Each algorithm stores the solution log, program output, metrics, and plots on each test
+* The `Papers` folder contains our ***competition certificates***, a detailed report on the algorithm, and a presentation
 * The `Solution` folder contains our solution
 * The `Solution2` folder contains the solution of last year's winning team with their *WPPL* algorithm
 * The `PlanViz` folder contains visualizer
