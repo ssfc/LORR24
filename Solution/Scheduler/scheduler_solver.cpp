@@ -35,7 +35,7 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
     PRINT(
             uint32_t p = counter * 100 / order.size();
             ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
-            Printer() << "[Scheduler] rebuild_dp: " << p << "%" << (p != 100 ? " bad," : ", ") << timer << '\n';);
+            Printer() << "[Scheduler] rebuild_dp: " << p << "%" << (p != 100 ? " bad, " : ", ") << timer << '\n';);
 }
 
 bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rnd) const {

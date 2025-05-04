@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
             ("logFile,l", po::value<std::string>()->default_value(""), "redirect stdout messages into the specified log file")                                                                                                                //
             ("logDetailLevel,d", po::value<int>()->default_value(1), "the minimum severity level of log messages to display, 1--showing all the messages, 2--showing warnings and fatal errors, 3--showing fatal errors only");
 
-    clock_t start_time = clock();
     po::store(po::parse_command_line(argc, argv, desc), vm);
 
     if (vm.count("help")) {
@@ -69,7 +68,7 @@ int main(int argc, char **argv) {
     }
 
     get_unique_id() = vm["unique_id"].as<uint32_t>();
-    //PRINT(Printer() << "unique_id: " << get_unique_id() << '\n';);
+    // PRINT(Printer() << "unique_id: " << get_unique_id() << '\n';);
 
     const std::string plan_algo = vm["planner_algo"].as<std::string>();
     {

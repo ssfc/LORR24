@@ -77,36 +77,61 @@ int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
 
     const uint32_t target = robots[r].target;
 
-    int64_t dist = get_hm().get(path.back(), target);
+    auto get_op_penalty = [&](Operation op) {
+        int64_t s = 0;
+        for (uint32_t d = 0; d < op.size(); d++) {
+            s -= (op[d] == Action::FW) * (op.size() - d) * 10;
+            s += (op[d] == Action::W) * (op.size() - d) * 1;
+            s += (op[d] == Action::CR) * (op.size() - d) * 2;
+            s += (op[d] == Action::CCR) * (op.size() - d) * 2;
+        }
+        return s;
+    };
+
+    int64_t dist = get_hm().get(path.back(), target) * 1000 + get_op_penalty(op);
 
     if (op.back() == Action::W) {
         uint32_t node = path[path.size() - 2];
         {
             uint32_t to = get_graph().get_to_node(node, 1);
-            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
+            auto copy_op = op;
+            copy_op[op.back() - 1] = Action::CR;
+            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target) * 1000 + get_op_penalty(copy_op)));
         }
         {
             uint32_t to = get_graph().get_to_node(node, 2);
-            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
+            auto copy_op = op;
+            copy_op[op.back() - 1] = Action::CCR;
+            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target) * 1000 + get_op_penalty(copy_op)));
         }
 
         if (op[op.size() - 2] == Action::W) {
             uint32_t to = node;
             to = get_graph().get_to_node(to, 1);
             to = get_graph().get_to_node(to, 1);
-            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
+            auto copy_op = op;
+            copy_op[op.back() - 2] = Action::CR;
+            copy_op[op.back() - 1] = Action::CR;
+            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target) * 1000 + get_op_penalty(copy_op)));
         }
     }
 
-    // [KEK]: если мы проходим по таргету, то мы должны это делать как можно раньше. 7200 -> 7297
-    for (uint32_t d = 0; d < DEPTH; d++) {
-        if (get_graph().get_pos(path[d]).get_pos() == target) {
-            dist = d;
-            dist = -dist;
+    // [KEK]: если мы проходим по таргету, то мы должны это делать как можно раньше
+    {
+        bool find = false;
+        for (uint32_t d = 0; d < DEPTH; d++) {
+            if (get_graph().get_pos(path[d]).get_pos() == target) {
+                find = true;
+                dist += d;
+                break;
+            }
+        }
+        if (!find) {
+            dist += 100;
         }
     }
 
-    dist = dist * 50 - desired;
+    //dist = dist - desired;
 
     // стой и никому не мешай
     if (robots[r].is_disable()) {
@@ -121,7 +146,7 @@ int64_t EPIBT::get_smart_dist(uint32_t r, uint32_t desired) const {
 }
 
 void EPIBT::update_score(uint32_t r, uint32_t desired, int sign) {
-    int32_t diff = get_smart_dist(r, 0) - get_smart_dist(r, desired);
+    int64_t diff = get_smart_dist(r, 0) - get_smart_dist(r, desired);
     cur_score += sign * diff * robot_power[r];
 }
 
@@ -230,7 +255,7 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
         int32_t max_weight = robots.size() + 1;
 
         robot_power.resize(robots.size());
-        const double workload = robots.size() * 1.0 / get_map().get_count_free();
+        // const double workload = robots.size() * 1.0 / get_map().get_count_free();
         for (uint32_t r = 0; r < robots.size(); r++) {
             double power = (max_weight - weight[r]) * 1.0 / max_weight;
             if (robots[r].is_disable()) {
@@ -319,7 +344,7 @@ void EPIBT::solve() {
     }
     PRINT(uint32_t p = cnt_completed * 100 / order.size();
           ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
-          Printer() << "[EPIBT] progress: " << p << "%" << (p != 100 ? " bad\n" : "\n"););
+          Printer() << "[EPIBT] solve: " << p << "%" << (p != 100 ? " bad\n" : "\n"););
 }
 
 double EPIBT::get_score() const {

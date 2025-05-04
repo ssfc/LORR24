@@ -5,13 +5,15 @@
 
 #include <fstream>
 
-bool verify_lol(const Operation &op) {
+bool verify_operation(const Operation &op) {
     // не нужно, чтобы на конце операции были повороты
+    // грамотный подсчет веса операции это увидит
     for (int i = op.size() - 1; i >= 0 && op[i] != Action::FW; i--) {
         if (op[i] == Action::CR || op[i] == Action::CCR) {
             return false;
         }
     }
+    // операции вида CWR плохие, потому что мы повернулись, прошло пашу шагов и мы повернулись обратно
     for (int i = 0; i < op.size(); i++) {
         for (int j = i + 1; j < op.size() && op[j] != Action::FW; j++) {
             if (op[i] == Action::CR && op[j] == Action::CCR) {
@@ -22,6 +24,7 @@ bool verify_lol(const Operation &op) {
             }
         }
     }
+    // операции вида RRR плохие, потому что мы 3 раза крутимся, когда могли 1: CWW
     for (int i = 0; i < op.size(); i++) {
         for (int j = i + 1; j < op.size() && op[j] != Action::FW; j++) {
             for (int k = j + 1; k < op.size() && op[k] != Action::FW; k++) {
@@ -36,7 +39,7 @@ bool verify_lol(const Operation &op) {
 
 void OperationsGenerator::generate(Operation &op, uint32_t i) {
     if (i == DEPTH) {
-        if (verify_lol(op)) {
+        if (verify_operation(op)) {
             pool.push_back(op);
         }
     } else {
@@ -56,39 +59,55 @@ std::vector<Operation> OperationsGenerator::get() {
         //std::ifstream input("Tmp/actions" + std::to_string(get_unique_id()) + ".txt");
         std::stringstream input(
 
-                // "17 WWW CWF RWF WWF WFF FWF WFW RRF CFF RFF CFW RFW FCF FRF FWW FFW FFF"\
+                // 3972, 5s
+                // "17 WWW CWF RWF WWF WFF FWF WFW RRF CFF RFF CFW RFW FCF FRF FWW FFW FFF"
 
-                "45 WWWW WWWF RRWF RRFW CWWF RWWF RWFW RRFF CWFW RFWW CFWW RWFF CWFF RFRF CFCF RFWF CFWF WFWW WWFW WWFF WFRF WFCF CFFW RFFW FRWF FCWF FWWW WFWF RFFF CFFF FRFW FCFW WFFW FWWF FCFF FRFF WFFF FWFW FWFF FFWW FFCF FFRF FFWF FFFW FFFF"
+                // 3811, 5s
+                // "17 WWW WWF CWF RWF WFW RRF CFW RFW WFF FWW CFF RFF FWF FCF FRF FFW FFF"
 
-                // good
+                // 3943 5s
+                // "20 WWW WWF WRF WCF RWF CWF RRF CCF WFW RFW CFW FWW WFF RFF CFF FWF FRF FCF FFW FFF"
+
+                // 4000, 5s
+                "20 WWW RRF CCF RWF CWF WRF WCF WWF RFW CFW WFW RFF CFF FWW WFF FRF FCF FWF FFW FFF"
+
+                // 3683, 8s
+                // "45 WWWW WWWF RRWF RRFW CWWF RWWF RWFW RRFF CWFW RFWW CFWW RWFF CWFF RFRF CFCF RFWF CFWF WFWW WWFW WWFF WFRF WFCF CFFW RFFW FRWF FCWF FWWW WFWF RFFF CFFF FRFW FCFW WFFW FWWF FCFF FRFF WFFF FWFW FWFF FFWW FFCF FFRF FFWF FFFW FFFF"
+
+                // 3827, 8s
+                // "66 WWWW RRWF CCWF RWRF CWCF WRRF WCCF RWWF CWWF WRWF WCWF WWRF WWCF WWWF RRFW CCFW RWFW CWFW WRFW WCFW WWFW RRFF CCFF RFWW RWFF CFWW CWFF WRFF WCFF WFWW WWFF RFRF RFCF CFRF CFCF RFWF CFWF WFRF WFCF FWWW WFWF FRRF FCCF RFFW CFFW FRWF FCWF FWRF FWCF FWWF WFFW RFFF CFFF FRFW FCFW FWFW WFFF FRFF FCFF FFWW FWFF FFRF FFCF FFWF FFFW FFFF"
+
+                // 3600, 13s
                 // "129 WWWWW RRWWF RRWFW RWWWF CWWWF RRFWW RRWFF RRFRF RRFCF RWWFW CWWFW RRFWF WWWWF RWFWW RWWFF CWFWW CWWFF RWFRF RWFCF CWFRF CWFCF RRFFW WWWFW RFRWF RFCWF RFWWW RWFWF CFRWF CFCWF CFWWW CWFWF RRFFF WWFWW WWWFF RFRFW RFCFW RFWWF RWFFW CFRFW CFCFW CFWWF CWFFW WWFRF WWFCF WFRWF WFCWF WFWWW WWFWF RFRFF RFCFF RFWFW RWFFF CFRFF CFCFF CFWFW CWFFF FRWWF FCWWF FWWWW WFRFW WFCFW WFWWF WWFFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW RFFRF RFFCF CFFRF CFFCF FWWWF WFRFF WFCFF WFWFW WWFFF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF FRFRF FRFCF FCFRF FCFCF FWWFW WFFWW WFWFF RFFFW CFFFW WFFRF WFFCF FRFWF FCFWF FWFWW FWWFF WFFWF FWFRF FWFCF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWWW FWFWF WFFFW FRFFF FCFFF FFRFW FFCFW FFWWF FWFFW WFFFF FFRFF FFCFF FFWFW FWFFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF"
 
+                // 3611, 28s
+                // "216 WWWWW RRWWF CCWWF RWRWF CWCWF RWWRF CWWCF WRRWF WCCWF WRWRF WCWCF RWWWF CWWWF WWRRF WWCCF WRWWF WCWWF WWRWF WWCWF WWWRF WWWCF WWWWF RRWFW CCWFW RWRFW CWCFW WRRFW WCCFW RWWFW CWWFW WRWFW WCWFW WWRFW WWCFW WWWFW RRFWW RRWFF CCFWW CCWFF RWRFF CWCFF WRRFF WCCFF RWFWW RWWFF CWFWW CWWFF WRFWW WRWFF WCFWW WCWFF WWRFF WWCFF RRFRF RRFCF CCFRF CCFCF WWFWW WWWFF RRFWF CCFWF RWFRF RWFCF CWFRF CWFCF WRFRF WRFCF WCFRF WCFCF RFWWW RWFWF CFWWW CWFWF WRFWF WCFWF WWFRF WWFCF WFWWW WWFWF RFRRF RFCCF CFRRF CFCCF RRFFW CCFFW RFRWF RFCWF CFRWF CFCWF RFWRF RFWCF CFWRF CFWCF RFWWF RWFFW CFWWF CWFFW WFRRF WFCCF WRFFW WCFFW WFRWF WFCWF WFWRF WFWCF FWWWW WFWWF WWFFW RRFFF CCFFF RFRFW RFCFW CFRFW CFCFW FRRWF FCCWF FRWRF FCWCF FWRRF FWCCF RFWFW RWFFF CFWFW CWFFF FRWWF FCWWF WRFFF WCFFF FWRWF FWCWF WFRFW WFCFW FWWRF FWWCF FWWWF WFWFW WWFFF RFRFF RFCFF CFRFF CFCFF FRRFW FCCFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW FWRFW FWCFW WFRFF WFCFF FWWFW WFFWW WFWFF FRRFF FCCFF RFFRF RFFCF CFFRF CFFCF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF FWRFF FWCFF WFFRF WFFCF FWFWW FWWFF WFFWF FRFRF FRFCF FCFRF FCFCF RFFFW CFFFW FRFWF FCFWF FWFRF FWFCF FFWWW FWFWF WFFFW FFRRF FFCCF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWRF FFWCF FFWWF FWFFW WFFFF FRFFF FCFFF FFRFW FFCFW FFWFW FWFFF FFRFF FFCFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF"
         );
         uint32_t num;
         input >> num;
         for (uint32_t i = 0; i < num; i++) {
-            std::string line;
-            input >> line;
+            std::string str;
+            input >> str;
             Operation op;
-            ASSERT(line.size() == op.size(), "does not match sizes: >" + line + "<, " + std::to_string(op.size()));
-            std::stringstream ss(line);
+            ASSERT(str.size() == op.size(), "does not match sizes: >" + str + "<, " + std::to_string(op.size()));
+            std::stringstream ss(str);
             ss >> op;
             pool.push_back(op);
         }
     }
 
-    /*auto kek = [&](Operation op) {
+    auto get_operation_weight = [&](Operation op) {
         double s = 0;
         for (uint32_t d = 0; d < op.size(); d++) {
-            s += (op[d] == Action::FW) * (op.size() - d) * 3;
-            s -= (op[d] == Action::W) * (op.size() - d) * 2;
-            s -= (op[d] == Action::CR) * (op.size() - d);
-            s -= (op[d] == Action::CCR) * (op.size() - d);
+            s += (op[d] == Action::FW) * (op.size() - d) * 10;
+            s -= (op[d] == Action::W) * (op.size() - d) * 1;
+            s -= (op[d] == Action::CR) * (op.size() - d) * 2;
+            s -= (op[d] == Action::CCR) * (op.size() - d) * 2;
         }
         return s;
     };
     std::stable_sort(pool.begin(), pool.end(), [&](auto lhs, auto rhs) {
-        return kek(lhs) < kek(rhs);
+        return get_operation_weight(lhs) < get_operation_weight(rhs);
     });
 
     // add WWW
@@ -102,7 +121,7 @@ std::vector<Operation> OperationsGenerator::get() {
             pool.erase(it);
         }
         pool.insert(pool.begin(), op);
-    }*/
+    }
 
     std::vector<Operation> result = pool;
 
