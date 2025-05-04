@@ -78,7 +78,7 @@ bool EPIBT_LNS::try_build(uint32_t r) {
 }
 
 EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counter) {
-    if (counter == -1 || (counter % 32 == 0 && get_now() >= end_time)) {
+    if (counter == -1 || (counter % 16 == 0 && get_now() >= end_time)) {
         counter = -1;
         return RetType::FAILED;
     }
@@ -91,13 +91,7 @@ EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counte
         uint32_t to_r = get_used(r);
         if (to_r == -1) {
             add_path(r);
-            if (consider()) {
-                return RetType::ACCEPTED;
-            } else {
-                remove_path(r);
-                desires[r] = old_desired;
-                return RetType::REJECTED;
-            }
+            return RetType::ACCEPTED;
         } else if (to_r != -2) {
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
 
@@ -111,11 +105,6 @@ EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counte
 
             RetType res = build(to_r, depth + 1, ++counter);
             if (res == RetType::ACCEPTED) {
-                return res;
-            } else if (res == RetType::REJECTED) {
-                remove_path(r);
-                add_path(to_r);
-                desires[r] = old_desired;
                 return res;
             }
 
@@ -131,7 +120,6 @@ EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counte
 
 bool EPIBT_LNS::build(uint32_t r) {
     ++visited_counter;
-    old_score = cur_score;
     remove_path(r);
     uint32_t counter = 0;
     RetType res = build(r, 0, counter);
@@ -149,7 +137,6 @@ EPIBT_LNS::EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time)
 void EPIBT_LNS::solve(uint64_t seed) {
     rnd = Randomizer(seed);
 
-    temp = 0;
     for (uint32_t r: order) {
         if (get_now() >= end_time) {
             break;
@@ -162,7 +149,6 @@ void EPIBT_LNS::solve(uint64_t seed) {
     }
 
     temp = 0.001;
-
     for (; get_now() < end_time; pibt_step++) {
         uint32_t r = rnd.get(0, robots.size() - 1);
         try_build(r);
