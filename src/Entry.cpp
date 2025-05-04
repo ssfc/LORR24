@@ -8,7 +8,7 @@
 
 // The initialize function will be called by competition system at the preprocessing stage.
 // Implement the initialize functions of the planner and scheduler to load or compute auxiliary data.
-// Note that, this function runs untill preprocess_time_limit (in milliseconds) is reached.
+// Note that, this function runs until preprocess_time_limit (in milliseconds) is reached.
 // This is an offline step, after it completes then evaluation begins.
 void Entry::initialize(int preprocess_time_limit) {
     scheduler->initialize(preprocess_time_limit);
@@ -21,8 +21,6 @@ void Entry::initialize(int preprocess_time_limit) {
 //  2. a next action that specifies how each agent should move in the next timestep.
 //NB: the parameter time_limit is specified in milliseconds.
 void Entry::compute(int time_limit, std::vector<Action> &plan, std::vector<int> &proposed_schedule) {
-    time_limit = 1000;
-
     static ETimer total_timer;
     ETimer timer;
     PRINT(
