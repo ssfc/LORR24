@@ -3,9 +3,9 @@
 #include <Objects/Basic/assert.hpp>
 #include <Objects/Basic/time.hpp>
 #include <Objects/Environment/environment.hpp>
+#include <Tools/tools.hpp>
 
 #include <atomic>
-#include <thread>
 #include <unordered_set>
 
 void SchedulerSolver::rebuild_dp(uint32_t r) {
@@ -25,20 +25,13 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
     });
 
     std::atomic<uint32_t> counter{};
-    auto do_work = [&](uint32_t thr) {
+    launch_threads(THREADS, [&](uint32_t thr) {
         for (uint32_t i = thr; i < order.size() && get_now() < end_time; i += THREADS) {
             rebuild_dp(order[i]);
             ++counter;
         }
-    };
+    });
 
-    std::vector<std::thread> threads(THREADS);
-    for (uint32_t thr = 0; thr < THREADS; thr++) {
-        threads[thr] = std::thread(do_work, thr);
-    }
-    for (uint32_t thr = 0; thr < THREADS; thr++) {
-        threads[thr].join();
-    }
     PRINT(
             uint32_t p = counter * 100 / order.size();
             ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));

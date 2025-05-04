@@ -2,9 +2,8 @@
 
 #include <Objects/Basic/assert.hpp>
 #include <Objects/Basic/time.hpp>
+#include <Tools/tools.hpp>
 #include <settings.hpp>
-
-#include <thread>
 
 void HeuristicMatrix::build(uint32_t source, const Graph &graph) {
     auto &dists = matrix[source];
@@ -61,21 +60,13 @@ HeuristicMatrix::HeuristicMatrix(const Graph &graph) {
     ETimer timer;
     matrix.resize(get_map().get_size());
 
-    auto do_work = [&](uint32_t thr) {
+    launch_threads(THREADS, [&](uint32_t thr) {
         for (uint32_t pos = thr + 1; pos < matrix.size(); pos += THREADS) {
             if (Position(pos, 0).is_valid()) {
                 build(pos, graph);
             }
         }
-    };
-
-    std::vector<std::thread> threads(THREADS);
-    for (uint32_t thr = 0; thr < THREADS; thr++) {
-        threads[thr] = std::thread(do_work, thr);
-    }
-    for (uint32_t thr = 0; thr < THREADS; thr++) {
-        threads[thr].join();
-    }
+    });
 
     PRINT(Printer() << "[HM] build: " << timer << '\n';);
 }

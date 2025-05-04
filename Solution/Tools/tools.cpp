@@ -36,9 +36,6 @@ void build_meta_info(const std::string &from, const std::string &to) {
         Position pos = starts[id];
         for (int i = 0; i < path.size(); i += 2) {
             char c = path[i];
-            if (c != 'F' && c != 'R' && c != 'C' && c != 'W') {
-                //std::cout << "invalid action: " << c << std::endl;
-            }
             Action act = c == 'F' ? Action::FW : (c == 'R' ? Action::CR : (c == 'C' ? Action::CCR : Action::W));
 
             dp[pos.get_pos()][pos.get_dir()][static_cast<uint32_t>(act)]++;

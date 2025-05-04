@@ -3,8 +3,7 @@
 #include <Objects/Basic/assert.hpp>
 #include <Objects/Environment/heuristic_matrix.hpp>
 #include <Objects/Environment/operations_map.hpp>
-
-#include <thread>
+#include <Tools/tools.hpp>
 
 bool EPIBT::validate_path(uint32_t r, uint32_t desired) const {
     ASSERT(0 <= r && r < robots.size(), "invalid r");
@@ -260,7 +259,7 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
     {
         smart_dist_dp.resize(robots.size(), std::vector<int64_t>(get_operations().size()));
 
-        auto do_work = [&](uint32_t thr) {
+        launch_threads(THREADS, [&](uint32_t thr) {
             for (uint32_t r = thr; r < robots.size(); r += THREADS) {
                 for (uint32_t desired = 0; desired < get_operations().size(); desired++) {
                     if (!validate_path(r, desired)) {
@@ -269,22 +268,14 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
                     smart_dist_dp[r][desired] = get_smart_dist_IMPL(r, desired);
                 }
             }
-        };
-
-        std::vector<std::thread> threads(THREADS);
-        for (uint32_t thr = 0; thr < THREADS; thr++) {
-            threads[thr] = std::thread(do_work, thr);
-        }
-        for (uint32_t thr = 0; thr < THREADS; thr++) {
-            threads[thr].join();
-        }
+        });
     }
 
     // init robot_desires
     {
         robot_desires.resize(robots.size());
 
-        auto do_work = [&](uint32_t thr) {
+        launch_threads(THREADS, [&](uint32_t thr) {
             for (uint32_t r = thr; r < robots.size(); r += THREADS) {
                 // (priority, desired)
                 std::vector<std::pair<int64_t, uint32_t>> steps;
@@ -301,15 +292,7 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
                     robot_desires[r].push_back(desired);
                 }
             }
-        };
-
-        std::vector<std::thread> threads(THREADS);
-        for (uint32_t thr = 0; thr < THREADS; thr++) {
-            threads[thr] = std::thread(do_work, thr);
-        }
-        for (uint32_t thr = 0; thr < THREADS; thr++) {
-            threads[thr].join();
-        }
+        });
     }
 
     for (uint32_t r = 0; r < robots.size(); r++) {

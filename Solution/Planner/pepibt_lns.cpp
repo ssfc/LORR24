@@ -1,8 +1,7 @@
 #include <Planner/pepibt_lns.hpp>
 
 #include <Planner/epibt_lns.hpp>
-
-#include <thread>
+#include <Tools/tools.hpp>
 
 PEPIBT_LNS::PEPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time) : robots(robots), end_time(end_time), actions(robots.size(), Action::W) {
 }
@@ -16,22 +15,14 @@ void PEPIBT_LNS::solve(uint64_t seed) {
     constexpr uint32_t THR = THREADS;
     std::vector<std::vector<ItemType>> results_pack(THR);
 
-    auto do_work = [&](uint32_t thr, uint64_t seed) {
+    launch_threads(THR, [&](uint32_t thr) {
+        uint64_t random_seed = seed * (thr + 1) + 426136423;
         ETimer timer;
         EPIBT_LNS pibt = main_pibt;
-        pibt.solve(seed);
+        pibt.solve(random_seed);
         auto time = timer.get_ms();
         results_pack[thr].emplace_back(pibt.get_score(), pibt.get_actions(), time, pibt.get_step());
-    };
-
-    Randomizer rnd(seed);
-    std::vector<std::thread> threads(THR);
-    for (uint32_t thr = 0; thr < THR; thr++) {
-        threads[thr] = std::thread(do_work, thr, rnd.get());
-    }
-    for (uint32_t thr = 0; thr < THR; thr++) {
-        threads[thr].join();
-    }
+    });
 
     std::vector<ItemType> results;
     for (uint32_t thr = 0; thr < THR; thr++) {
