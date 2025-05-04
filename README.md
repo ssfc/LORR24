@@ -28,11 +28,11 @@ You can compile a project using *CMakeLists.txt* it will create a `bin` folder w
 
 For main information, see the `readme` folder. We also add additional arguments to the *lifelong* program launch:
 
-| options                      |                                                                                                                                                                                      |
-|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| --planner_algo <br /> --pa   | String <br /> "pibt" = PIBT <br /> "pibt_tf" = PIBT+traffic flow <br /> "epibt" = EPIBT <br /> "epibt_lns" = EPIBT+LNS <br /> "pepibt_lns" = Parallel EPIBT+LNS <br /> "wppl" = WPPL |
-| --graph_guidance <br /> --gg | String <br /> "enable" = enable Graph Guidance <br /> "disable" = disable Graph Guidance                                                                                             |
-| --scheduler_algo <br /> --sa | String <br /> "greedy" = the multithreaded greedy task scheduler <br /> "hungarian" = the multithreaded Hungarian algorithm ***(It is not recommended to use)***                     |
+| options                        |                                                                                                                                                                                      |
+|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --planner_algo <br /> --pa     | String <br /> "pibt" = PIBT <br /> "pibt_tf" = PIBT+traffic flow <br /> "epibt" = EPIBT <br /> "epibt_lns" = EPIBT+LNS <br /> "pepibt_lns" = Parallel EPIBT+LNS <br /> "wppl" = WPPL |
+| --graph_guidance <br /> --gg   | String <br /> "enable" = enable Graph Guidance <br /> "disable" = disable Graph Guidance                                                                                             |
+| --scheduler_algo <br /> --sa   | String <br /> "greedy" = the multithreaded greedy task scheduler <br /> "hungarian" = the multithreaded Hungarian algorithm <br /> ***(hungarian is not recommended to use)***                     |
 
 This way you can run combinations of algorithms. But not all of them: ~~PIBT+traffic flow+GG~~ and ~~WPPL~~ are not supported
 
