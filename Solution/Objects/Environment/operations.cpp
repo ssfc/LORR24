@@ -58,30 +58,14 @@ std::vector<Operation> OperationsGenerator::get() {
     {
         //std::ifstream input("Tmp/actions" + std::to_string(get_unique_id()) + ".txt");
         std::stringstream input(
+                // 3926 and 6016
+                "17 WWW RRF RWF CWF WWF RFW CFW WFW RFF CFF FWW WFF FRF FCF FWF FFW FFF"
 
-                // 3972, 5s
-                // "17 WWW CWF RWF WWF WFF FWF WFW RRF CFF RFF CFW RFW FCF FRF FWW FFW FFF"
+                // 3689 and 6303
+                //"48 WWWW RRWF RWWF CWWF WWWF RRFW RWFW CWFW WWFW RRFF RFWW RWFF CFWW CWFF WFWW WWFF RFRF RFCF CFRF CFCF RFWF CFWF WFRF WFCF FWWW WFWF FRRF RFFW CFFW FRWF FCWF FWWF WFFW RFFF CFFF FRFW FCFW FWFW WFFF FRFF FCFF FFWW FWFF FFRF FFCF FFWF FFFW FFFF"
 
-                // 3811, 5s
-                // "17 WWW WWF CWF RWF WFW RRF CFW RFW WFF FWW CFF RFF FWF FCF FRF FFW FFF"
-
-                // 3943 5s
-                // "20 WWW WWF WRF WCF RWF CWF RRF CCF WFW RFW CFW FWW WFF RFF CFF FWF FRF FCF FFW FFF"
-
-                // 4000, 5s
-                "20 WWW RRF CCF RWF CWF WRF WCF WWF RFW CFW WFW RFF CFF FWW WFF FRF FCF FWF FFW FFF"
-
-                // 3683, 8s
-                // "45 WWWW WWWF RRWF RRFW CWWF RWWF RWFW RRFF CWFW RFWW CFWW RWFF CWFF RFRF CFCF RFWF CFWF WFWW WWFW WWFF WFRF WFCF CFFW RFFW FRWF FCWF FWWW WFWF RFFF CFFF FRFW FCFW WFFW FWWF FCFF FRFF WFFF FWFW FWFF FFWW FFCF FFRF FFWF FFFW FFFF"
-
-                // 3827, 8s
-                // "66 WWWW RRWF CCWF RWRF CWCF WRRF WCCF RWWF CWWF WRWF WCWF WWRF WWCF WWWF RRFW CCFW RWFW CWFW WRFW WCFW WWFW RRFF CCFF RFWW RWFF CFWW CWFF WRFF WCFF WFWW WWFF RFRF RFCF CFRF CFCF RFWF CFWF WFRF WFCF FWWW WFWF FRRF FCCF RFFW CFFW FRWF FCWF FWRF FWCF FWWF WFFW RFFF CFFF FRFW FCFW FWFW WFFF FRFF FCFF FFWW FWFF FFRF FFCF FFWF FFFW FFFF"
-
-                // 3600, 13s
-                // "129 WWWWW RRWWF RRWFW RWWWF CWWWF RRFWW RRWFF RRFRF RRFCF RWWFW CWWFW RRFWF WWWWF RWFWW RWWFF CWFWW CWWFF RWFRF RWFCF CWFRF CWFCF RRFFW WWWFW RFRWF RFCWF RFWWW RWFWF CFRWF CFCWF CFWWW CWFWF RRFFF WWFWW WWWFF RFRFW RFCFW RFWWF RWFFW CFRFW CFCFW CFWWF CWFFW WWFRF WWFCF WFRWF WFCWF WFWWW WWFWF RFRFF RFCFF RFWFW RWFFF CFRFF CFCFF CFWFW CWFFF FRWWF FCWWF FWWWW WFRFW WFCFW WFWWF WWFFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW RFFRF RFFCF CFFRF CFFCF FWWWF WFRFF WFCFF WFWFW WWFFF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF FRFRF FRFCF FCFRF FCFCF FWWFW WFFWW WFWFF RFFFW CFFFW WFFRF WFFCF FRFWF FCFWF FWFWW FWWFF WFFWF FWFRF FWFCF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWWW FWFWF WFFFW FRFFF FCFFF FFRFW FFCFW FFWWF FWFFW WFFFF FFRFF FFCFF FFWFW FWFFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF"
-
-                // 3611, 28s
-                // "216 WWWWW RRWWF CCWWF RWRWF CWCWF RWWRF CWWCF WRRWF WCCWF WRWRF WCWCF RWWWF CWWWF WWRRF WWCCF WRWWF WCWWF WWRWF WWCWF WWWRF WWWCF WWWWF RRWFW CCWFW RWRFW CWCFW WRRFW WCCFW RWWFW CWWFW WRWFW WCWFW WWRFW WWCFW WWWFW RRFWW RRWFF CCFWW CCWFF RWRFF CWCFF WRRFF WCCFF RWFWW RWWFF CWFWW CWWFF WRFWW WRWFF WCFWW WCWFF WWRFF WWCFF RRFRF RRFCF CCFRF CCFCF WWFWW WWWFF RRFWF CCFWF RWFRF RWFCF CWFRF CWFCF WRFRF WRFCF WCFRF WCFCF RFWWW RWFWF CFWWW CWFWF WRFWF WCFWF WWFRF WWFCF WFWWW WWFWF RFRRF RFCCF CFRRF CFCCF RRFFW CCFFW RFRWF RFCWF CFRWF CFCWF RFWRF RFWCF CFWRF CFWCF RFWWF RWFFW CFWWF CWFFW WFRRF WFCCF WRFFW WCFFW WFRWF WFCWF WFWRF WFWCF FWWWW WFWWF WWFFW RRFFF CCFFF RFRFW RFCFW CFRFW CFCFW FRRWF FCCWF FRWRF FCWCF FWRRF FWCCF RFWFW RWFFF CFWFW CWFFF FRWWF FCWWF WRFFF WCFFF FWRWF FWCWF WFRFW WFCFW FWWRF FWWCF FWWWF WFWFW WWFFF RFRFF RFCFF CFRFF CFCFF FRRFW FCCFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW FWRFW FWCFW WFRFF WFCFF FWWFW WFFWW WFWFF FRRFF FCCFF RFFRF RFFCF CFFRF CFFCF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF FWRFF FWCFF WFFRF WFFCF FWFWW FWWFF WFFWF FRFRF FRFCF FCFRF FCFCF RFFFW CFFFW FRFWF FCFWF FWFRF FWFCF FFWWW FWFWF WFFFW FFRRF FFCCF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWRF FFWCF FFWWF FWFFW WFFFF FRFFF FCFFF FFRFW FFCFW FFWFW FWFFF FFRFF FFCFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF"
+                // 3633 and 6274
+                //"136 WWWWW CCWWF RWWWF CWWWF WWWWF RRWFW RWWFW CWWFW WWWFW RRFWW RRWFF RWFWW RWWFF CWFWW CWWFF RRFRF RRFCF WWFWW WWWFF RRFWF RWFRF RWFCF CWFRF CWFCF RFWWW RWFWF CFWWW CWFWF WWFRF WWFCF WFWWW WWFWF RFRRF CFRRF RRFFW RFRWF RFCWF CFRWF CFCWF RFWWF RWFFW CFWWF CWFFW WFRRF WFRWF WFCWF FWWWW WFWWF WWFFW RRFFF RFRFW RFCFW CFRFW CFCFW FRRWF RFWFW RWFFF CFWFW CWFFF FRWWF FCWWF WFRFW WFCFW FWWWF WFWFW WWFFF RFRFF RFCFF CFRFF CFCFF FRRFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW WFRFF WFCFF FWWFW WFFWW WFWFF FRRFF RFFRF RFFCF CFFRF CFFCF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF WFFRF WFFCF FWFWW FWWFF WFFWF FRFRF FRFCF FCFRF FCFCF RFFFW CFFFW FRFWF FCFWF FWFRF FWFCF FFWWW FWFWF WFFFW FFRRF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWWF FWFFW WFFFF FRFFF FCFFF FFRFW FFCFW FFWFW FWFFF FFRFF FFCFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF"
         );
         uint32_t num;
         input >> num;
@@ -96,7 +80,7 @@ std::vector<Operation> OperationsGenerator::get() {
         }
     }
 
-    auto get_operation_weight = [&](Operation op) {
+    /*auto get_operation_weight = [&](Operation op) {
         double s = 0;
         for (uint32_t d = 0; d < op.size(); d++) {
             s += (op[d] == Action::FW) * (op.size() - d) * 10;
@@ -108,7 +92,7 @@ std::vector<Operation> OperationsGenerator::get() {
     };
     std::stable_sort(pool.begin(), pool.end(), [&](auto lhs, auto rhs) {
         return get_operation_weight(lhs) < get_operation_weight(rhs);
-    });
+    });*/
 
     // add WWW
     {
@@ -131,17 +115,13 @@ std::vector<Operation> OperationsGenerator::get() {
         Position p;
         std::set<std::pair<uint32_t, uint32_t>> visited_poses;
         visited_poses.insert({p.get_x(), p.get_y()});
-        bool ok = true;
         for (uint32_t d = 0; d < DEPTH; d++) {
             p = p.simulate_action(operation[d]);
             positions[d] = {p.get_x(), p.get_y()};
-            if (operation[d] == Action::FW && visited_poses.count(positions[d])) {
-                ok = false;
-            }
             visited_poses.insert(positions[d]);
         }
         std::tuple<uint32_t, std::array<std::pair<uint32_t, uint32_t>, DEPTH>> kek = {p.get_dir(), positions};
-        if (!visited.count(kek) && ok) {
+        if (!visited.count(kek)) {
             visited.insert(kek);
             result.push_back(operation);
         }
@@ -164,7 +144,7 @@ std::vector<Operation> &get_operations() {
     return operations;
 }
 
-static inline std::vector<uint32_t> operation_depth;
+/*static inline std::vector<uint32_t> operation_depth;
 
 uint32_t get_operation_depth(uint32_t index) {
     ASSERT(0 <= index && index < operation_depth.size(), "invalid index");
@@ -176,12 +156,12 @@ std::vector<uint32_t> &get_operations_ids(uint32_t d) {
     static std::array<std::vector<uint32_t>, DEPTH + 1> data;
     ASSERT(3 <= d && d <= 5, "invalid d");
     return data[d];
-}
+}*/
 
 void init_operations() {
     get_operations() = OperationsGenerator().get();
 
-    auto get_operation_depth = [&](const Operation &op) {
+    /*auto get_operation_depth = [&](const Operation &op) {
         uint32_t d = op.size();
         for (; d > 0 && op[d - 1] == Action::W; d--) {
         }
@@ -203,7 +183,7 @@ void init_operations() {
         } else {
             FAILED_ASSERT("unexpected depth");
         }
-    }
+    }*/
 }
 
 std::ostream &operator<<(std::ostream &output, const Operation &op) {
