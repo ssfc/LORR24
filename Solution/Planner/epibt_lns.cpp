@@ -77,59 +77,6 @@ bool EPIBT_LNS::try_build(uint32_t r) {
     return true;
 }
 
-EPIBT_LNS::RetType EPIBT_LNS::build(uint32_t r, uint32_t depth, uint32_t &counter) {
-    if (counter == -1 || (counter % 16 == 0 && get_now() >= end_time)) {
-        counter = -1;
-        return RetType::FAILED;
-    }
-
-    visited[r] = visited_counter;
-    uint32_t old_desired = desires[r];
-
-    for (uint32_t desired: robot_desires[r]) {
-        desires[r] = desired;
-        uint32_t to_r = get_used(r);
-        if (to_r == -1) {
-            add_path(r);
-            return RetType::ACCEPTED;
-        } else if (to_r != -2) {
-            ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
-
-            if (counter > 10'000 ||
-                visited[to_r] == visited_counter ||
-                desires[to_r] != 0) {
-                continue;
-            }
-            remove_path(to_r);
-            add_path(r);
-
-            RetType res = build(to_r, depth + 1, ++counter);
-            if (res == RetType::ACCEPTED) {
-                return res;
-            }
-
-            remove_path(r);
-            add_path(to_r);
-        }
-    }
-
-    visited[r] = 0;
-    desires[r] = old_desired;
-    return RetType::FAILED;
-}
-
-bool EPIBT_LNS::build(uint32_t r) {
-    ++visited_counter;
-    remove_path(r);
-    uint32_t counter = 0;
-    RetType res = build(r, 0, counter);
-    if (res != RetType::ACCEPTED) {
-        add_path(r);
-        return false;
-    }
-    return true;
-}
-
 EPIBT_LNS::EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time)
     : EPIBT(robots, end_time), visited(robots.size()) {
 }
@@ -137,16 +84,7 @@ EPIBT_LNS::EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time)
 void EPIBT_LNS::solve(uint64_t seed) {
     rnd = Randomizer(seed);
 
-    for (uint32_t r: order) {
-        if (get_now() >= end_time) {
-            break;
-        }
-        pibt_step++;
-        if (desires[r] != 0) {
-            continue;
-        }
-        build(r);
-    }
+    EPIBT::solve();
 
     temp = 0.001;
     for (; get_now() < end_time; pibt_step++) {
@@ -154,8 +92,4 @@ void EPIBT_LNS::solve(uint64_t seed) {
         try_build(r);
         temp *= 0.999;
     }
-}
-
-uint32_t EPIBT_LNS::get_step() const {
-    return pibt_step;
 }

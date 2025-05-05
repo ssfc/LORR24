@@ -56,14 +56,16 @@ void MAPFPlanner::plan(int time_limit, vector<Action> &actions) {
         EPIBT pibt(get_robots_handler().get_robots(), end_time);
         pibt.solve();
         actions = pibt.get_actions();
-        PRINT(Printer() << "[EPIBT] time: " << timer << '\n';);
+        PRINT(uint32_t p = pibt.get_step() * 100 / get_robots_handler().get_robots().size();
+              ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
+              Printer() << "[EPIBT] solve: " << p << "%" << (p != 100 ? " bad" : "") << ", time: " << timer << '\n';);
     } else if (get_planner_type() == PlannerType::EPIBT_LNS) {
         EPIBT_LNS pibt(get_robots_handler().get_robots(), end_time);
         pibt.solve(42);
         actions = pibt.get_actions();
         PRINT(Printer() << "[EPIBT_LNS] score: " << pibt.get_score() << '\n';
-              Printer() << "[EPIBT_LNS] step: " << std::min((uint32_t) actions.size(), pibt.get_step()) << "+" << std::max(0, (int) (pibt.get_step()) - (int) actions.size()) << '\n';
-              Printer() << "[EPIBT_LNS] time: " << timer << '\n';);
+              Printer() << "[EPIBT_LNS] step:  " << std::min((uint32_t) actions.size(), pibt.get_step()) << "+" << std::max(0, (int) (pibt.get_step()) - (int) actions.size()) << '\n';
+              Printer() << "[EPIBT_LNS] time:  " << timer << '\n';);
     } else if (get_planner_type() == PlannerType::PEPIBT_LNS) {
         PEPIBT_LNS pibt(get_robots_handler().get_robots(), end_time);
         pibt.solve(42);

@@ -12,36 +12,6 @@ bool EPIBT::validate_path(uint32_t r, uint32_t desired) const {
     return get_omap().get_poses_path(node, desired)[0] > 0;
 }
 
-bool EPIBT::is_free_path(uint32_t r) const {
-    ASSERT(0 <= r && r < robots.size(), "invalid r");
-    ASSERT(0 <= desires[r] && desires[r] < get_operations().size(), "invalid desired");
-    ASSERT(validate_path(r, desires[r]), "invalid path");
-
-    const auto &poses_path = get_omap().get_poses_path(robots[r].node, desires[r]);
-    for (uint32_t depth = 0; depth < DEPTH; depth++) {
-        if (used_pos[poses_path[depth]][depth] != -1) {
-            ASSERT(used_pos[poses_path[depth]][depth] != r, "invalid used_node");
-            return false;
-        }
-    }
-    const auto &edges_path = get_omap().get_edges_path(robots[r].node, desires[r]);
-    for (uint32_t depth = 0; depth < DEPTH; depth++) {
-        if (used_edge[edges_path[depth]][depth] != -1) {
-            ASSERT(used_edge[edges_path[depth]][depth] != r, "invalid used_edge");
-            return false;
-        }
-    }
-    return true;
-}
-
-const EPath &EPIBT::get_path(uint32_t r, uint32_t desired) const {
-    ASSERT(0 <= r && r < robots.size(), "invalid r");
-    ASSERT(0 <= desired && desired < get_operations().size(), "invalid desired");
-    ASSERT(validate_path(r, desired), "invalid path");
-
-    return get_omap().get_nodes_path(robots[r].node, desired);
-}
-
 uint32_t EPIBT::get_used(uint32_t r) const {
     uint32_t answer = -1;
 
@@ -216,6 +186,14 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
     return false;
 }
 
+void EPIBT::build(uint32_t r) {
+    remove_path(r);
+    uint32_t counter = 0;
+    if (!build(r, 0, counter)) {
+        add_path(r);
+    }
+}
+
 EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
     : robots(robots), end_time(end_time), desires(robots.size()) {
 
@@ -309,23 +287,16 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
 }
 
 void EPIBT::solve() {
-    uint32_t cnt_completed = 0;
+    ETimer timer;
     for (uint32_t r: order) {
         if (get_now() > end_time) {
             break;
         }
-        cnt_completed++;
+        pibt_step++;
         if (desires[r] == 0) {
-            remove_path(r);
-            uint32_t counter = 0;
-            if (!build(r, 0, counter)) {
-                add_path(r);
-            }
+            build(r);
         }
     }
-    PRINT(uint32_t p = cnt_completed * 100 / order.size();
-          ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
-          Printer() << "[EPIBT] solve: " << p << "%" << (p != 100 ? " bad\n" : "\n"););
 }
 
 double EPIBT::get_score() const {
@@ -377,4 +348,8 @@ std::vector<Action> EPIBT::get_actions() const {
 #endif
     }
     return answer;
+}
+
+uint32_t EPIBT::get_step() const {
+    return pibt_step;
 }

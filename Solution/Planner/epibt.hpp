@@ -11,6 +11,8 @@ protected:
 
     double cur_score = 0;
 
+    uint32_t pibt_step = 0;
+
     const std::vector<Robot> &robots;
 
     std::vector<uint32_t> desires;
@@ -33,10 +35,6 @@ protected:
 
     [[nodiscard]] bool validate_path(uint32_t r, uint32_t desired) const;
 
-    [[nodiscard]] bool is_free_path(uint32_t r) const;
-
-    [[nodiscard]] const EPath &get_path(uint32_t r, uint32_t desired) const;
-
     [[nodiscard]] uint32_t get_used(uint32_t r) const;
 
     [[nodiscard]] int64_t get_smart_dist_IMPL(uint32_t r, uint32_t desired) const;
@@ -51,6 +49,8 @@ protected:
 
     bool build(uint32_t r, uint32_t depth, uint32_t &counter);
 
+    void build(uint32_t r);
+
 public:
     EPIBT(const std::vector<Robot> &robots, TimePoint end_time);
 
@@ -59,4 +59,6 @@ public:
     [[nodiscard]] double get_score() const;
 
     [[nodiscard]] std::vector<Action> get_actions() const;
+
+    [[nodiscard]] uint32_t get_step() const;
 };

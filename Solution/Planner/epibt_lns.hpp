@@ -14,8 +14,6 @@ class EPIBT_LNS : public EPIBT {
 
     std::vector<uint32_t> visited;
 
-    uint32_t pibt_step = 0;
-
     Randomizer rnd;
 
     bool consider();
@@ -30,14 +28,8 @@ class EPIBT_LNS : public EPIBT {
 
     bool try_build(uint32_t r);
 
-    RetType build(uint32_t r, uint32_t depth, uint32_t &counter);
-
-    bool build(uint32_t r);
-
 public:
     EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time);
 
     void solve(uint64_t seed);
-
-    [[nodiscard]] uint32_t get_step() const;
 };

@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <vector>
 
-static constexpr inline uint32_t DEPTH = 3;
+static constexpr inline uint32_t DEPTH = 4;
 
 using Operation = std::array<Action, DEPTH>;
 
@@ -23,9 +23,9 @@ public:
 
 std::vector<Operation> &get_operations();
 
-uint32_t get_operation_depth(uint32_t index);
+//uint32_t get_operation_depth(uint32_t index);
 
-std::vector<uint32_t> &get_operations_ids(uint32_t d);
+//std::vector<uint32_t> &get_operations_ids(uint32_t d);
 
 void init_operations();
 
