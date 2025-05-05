@@ -398,21 +398,46 @@ double EPIBT::get_score() const {
 std::vector<Action> EPIBT::get_actions() const {
     std::vector<Action> answer(robots.size());
     for (uint32_t r = 0; r < robots.size(); r++) {
-        answer[r] = get_operations()[desires[r]][0];
-        if (desires[r] == 0) {
-            auto dist_r = get_hm().get(get_graph().get_to_node(robots[r].node, 1), robots[r].target);
-            auto dist_c = get_hm().get(get_graph().get_to_node(robots[r].node, 2), robots[r].target);
-            auto dist_w = get_hm().get(get_graph().get_to_node(robots[r].node, 3), robots[r].target);
-            auto dist = std::min({dist_r, dist_c, dist_w});
-            if (dist == dist_r) {
-                answer[r] = Action::CR;
-            } else if (dist == dist_c) {
-                answer[r] = Action::CCR;
-            } else {
-                ASSERT(dist == dist_w, "invalid dist");
-                answer[r] = Action::W;
+        const auto &op = get_operations()[desires[r]];
+        answer[r] = op[0];
+
+#ifdef ENABLE_SMART_OPERATION_EXECUTION
+
+        // перебирает набор действий и выбирает лучшее по расстоянию до цели
+        auto update_answer = [&](const std::vector<Action> &actions) {
+            ASSERT(!actions.empty(), "is empty");
+            std::vector<uint32_t> dists;
+            for (auto action: actions) {
+                dists.push_back(get_hm().get(get_graph().get_to_node(robots[r].node, action), robots[r].target));
             }
+            uint32_t best_i = 0;
+            for (uint32_t i = 0; i < actions.size(); i++) {
+                if (dists[i] < dists[best_i]) {
+                    best_i = i;
+                }
+            }
+            answer[r] = actions[best_i];
+        };
+
+        // не меняя траекторию мы попробуем другие повороты или ожидание
+        if (op[0] == Action::CR || op[0] == Action::CCR) {
+            if (op[0] == op[1]) {
+                if (op[2] == Action::W) {
+                    // CCW, RRW
+                    update_answer({Action::W, Action::CR, Action::CCR});
+                } else {
+                    // CC, RR
+                    update_answer({Action::CR, Action::CCR});
+                }
+            } else if (op[1] == Action::W) {
+                // CW, RW
+                update_answer({Action::W, op[0]});
+            }
+        } else if (desires[r] == 0) {
+            // WWW
+            update_answer({Action::W, Action::CR, Action::CCR});
         }
+#endif
     }
     return answer;
 }

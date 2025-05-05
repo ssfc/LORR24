@@ -11,6 +11,8 @@
 
 #define ENABLE_ASSERT
 
+#define ENABLE_SMART_OPERATION_EXECUTION
+
 //#define BUILD_META_INFO
 
 #define PRINT(args...) \
