@@ -74,115 +74,52 @@ uint32_t EPIBT::get_used(uint32_t r) const {
 int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
     ASSERT(!robots[r].is_disable(), "disable agent is deprecated");
 
-    if constexpr (true) {
-        const auto &op = get_operations()[desired];
-        const auto &path = get_omap().get_nodes_path(robots[r].node, desired);
+    const auto &op = get_operations()[desired];
+    const auto &path = get_omap().get_nodes_path(robots[r].node, desired);
 
-        const uint32_t target = robots[r].target;
+    const uint32_t target = robots[r].target;
 
-        int64_t dist = get_hm().get(path.back(), target);
+    int64_t dist = get_hm().get(path.back(), target);
 
-        if (op.back() == Action::W) {
-            uint32_t node = path[path.size() - 2];
-            {
-                uint32_t to = get_graph().get_to_node(node, 1);
-                dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
-            }
-            {
-                uint32_t to = get_graph().get_to_node(node, 2);
-                dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
-            }
-
-            if (op[op.size() - 2] == Action::W) {
-                uint32_t to = node;
-                to = get_graph().get_to_node(to, 1);
-                to = get_graph().get_to_node(to, 1);
-                dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
-            }
-        }
-
-        dist *= 1000;
-
-        // [KEK]: если мы проходим по таргету, то мы должны это делать как можно раньше. 7200 -> 7297
+    if (op.back() == Action::W) {
+        uint32_t node = path[path.size() - 2];
         {
-            bool find = false;
-            for (uint32_t d = 0; d < DEPTH; d++) {
-                if (get_graph().get_pos(path[d]).get_pos() == target) {
-                    find = true;
-                    dist += d;
-                    break;
-                }
-            }
-            if (!find) {
-                dist += 100;
-            }
+            uint32_t to = get_graph().get_to_node(node, 1);
+            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
         }
-
-        dist -= desired;
-        ASSERT(dist > -1'000'000'000, "maybe overflow");
-        return dist;
-    } else {
-        const auto &op = get_operations()[desired];
-        const auto &path = get_omap().get_nodes_path(robots[r].node, desired);
-
-        const uint32_t target = robots[r].target;
-
-        auto get_op_penalty = [&](Operation op) {
-            int64_t s = 0;
-            for (uint32_t d = 0; d < op.size(); d++) {
-                s -= (op[d] == Action::FW) * (op.size() - d) * 10;
-                s += (op[d] == Action::W) * (op.size() - d) * 1;
-                s += (op[d] == Action::CR) * (op.size() - d) * 2;
-                s += (op[d] == Action::CCR) * (op.size() - d) * 2;
-            }
-            return s;
-        };
-
-        int64_t dist = get_hm().get(path.back(), target) * 1000 + get_op_penalty(op);
-
-        if (op.back() == Action::W) {
-            uint32_t node = path[path.size() - 2];
-            {
-                uint32_t to = get_graph().get_to_node(node, 1);
-                auto copy_op = op;
-                copy_op[op.back() - 1] = Action::CR;
-                dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target) * 1000 + get_op_penalty(copy_op)));
-            }
-            {
-                uint32_t to = get_graph().get_to_node(node, 2);
-                auto copy_op = op;
-                copy_op[op.back() - 1] = Action::CCR;
-                dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target) * 1000 + get_op_penalty(copy_op)));
-            }
-
-            if (op[op.size() - 2] == Action::W) {
-                uint32_t to = node;
-                to = get_graph().get_to_node(to, 1);
-                to = get_graph().get_to_node(to, 1);
-                auto copy_op = op;
-                copy_op[op.back() - 2] = Action::CR;
-                copy_op[op.back() - 1] = Action::CR;
-                dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target) * 1000 + get_op_penalty(copy_op)));
-            }
-        }
-
-        // [KEK]: если мы проходим по таргету, то мы должны это делать как можно раньше
         {
-            bool find = false;
-            for (uint32_t d = 0; d < DEPTH; d++) {
-                if (get_graph().get_pos(path[d]).get_pos() == target) {
-                    find = true;
-                    dist += d;
-                    break;
-                }
-            }
-            if (!find) {
-                dist += 100;
-            }
+            uint32_t to = get_graph().get_to_node(node, 2);
+            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
         }
-        ASSERT(dist > -1'000'000'000, "maybe overflow");
-        return dist;
+
+        if (op[op.size() - 2] == Action::W) {
+            uint32_t to = node;
+            to = get_graph().get_to_node(to, 1);
+            to = get_graph().get_to_node(to, 1);
+            dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
+        }
     }
+
+    dist *= 1000;
+
+    // если мы проходим по таргету, то мы должны это делать как можно раньше
+    {
+        bool find = false;
+        for (uint32_t d = 0; d < DEPTH; d++) {
+            if (get_graph().get_pos(path[d]).get_pos() == target) {
+                find = true;
+                dist += d;
+                break;
+            }
+        }
+        if (!find) {
+            dist += 100;
+        }
+    }
+
+    dist -= desired;
+    ASSERT(dist > -1'000'000'000, "maybe overflow");
+    return dist;
 }
 
 int64_t EPIBT::get_smart_dist(uint32_t r, uint32_t desired) const {

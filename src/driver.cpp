@@ -5,8 +5,8 @@
 #include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
 #include <climits>
+#include <csignal>
 #include <memory>
-#include <signal.h>
 
 #include <Objects/Basic/assert.hpp>
 #include <Objects/Environment/info.hpp>
@@ -47,8 +47,8 @@ int main(int argc, char **argv) {
     desc.add_options()("help", "produce help message")                                                                                                                                                                                        //
             ("unique_id,u", po::value<uint32_t>()->default_value(0), "my unique id for unique launch")                                                                                                                                        //
             ("planner_algo,pa", po::value<string>()->required(), "planner algo")                                                                                                                                                              //
-            ("graph_guidance,gg", po::value<string>()->required(), "graph guidance")                                                                                                                                       //
-            ("scheduler_algo,sa", po::value<string>()->required(), "scheduler algo")                                                                                                                                     //
+            ("graph_guidance,gg", po::value<string>()->required(), "graph guidance")                                                                                                                                                          //
+            ("scheduler_algo,sa", po::value<string>()->required(), "scheduler algo")                                                                                                                                                          //
             ("inputFile,i", po::value<std::string>()->required(), "input file name")                                                                                                                                                          //
             ("output,o", po::value<std::string>()->default_value("./output.json"), "output results from the evaluation into a JSON formated file. If no file specified, the default name is 'output.json'")                                   //
             ("outputScreen,c", po::value<int>()->default_value(1), "the level of details in the output file, 1--showing all the output, 2--ignore the events and tasks, 3--ignore the events, tasks, errors, planner times, starts and paths")//
