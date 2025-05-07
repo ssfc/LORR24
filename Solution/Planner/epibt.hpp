@@ -19,10 +19,10 @@ protected:
 
     std::vector<uint32_t> order;
 
+    std::vector<double> robot_power;
+
     // smart_dist_dp[r][desired] = get_smart_dist_IMPL(r, desired)
     std::vector<std::vector<int64_t>> smart_dist_dp;
-
-    std::vector<double> robot_power;
 
     // robot_desires[r] = { desired }
     std::vector<std::vector<uint32_t>> robot_desires;

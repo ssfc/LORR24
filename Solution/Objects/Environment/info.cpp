@@ -24,3 +24,8 @@ SchedulerType &get_scheduler_type() {
     static SchedulerType type = SchedulerType::GREEDY;
     return type;
 }
+
+uint32_t &get_epibt_operation_depth() {
+    static uint32_t depth = 0;
+    return depth;
+}

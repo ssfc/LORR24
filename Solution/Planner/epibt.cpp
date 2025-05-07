@@ -51,8 +51,8 @@ int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
 
     int64_t dist = get_hm().get(path.back(), target);
 
-    if (op.back() == Action::W) {
-        uint32_t node = path[path.size() - 2];
+    if (op[get_epibt_operation_depth() - 1] == Action::W) {
+        uint32_t node = path[get_epibt_operation_depth() - 2];
         {
             uint32_t to = get_graph().get_to_node(node, 1);
             dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
@@ -62,7 +62,7 @@ int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
             dist = std::min(dist, static_cast<int64_t>(get_hm().get(to, target)));
         }
 
-        if (op[op.size() - 2] == Action::W) {
+        if (op[get_epibt_operation_depth() - 2] == Action::W) {
             uint32_t to = node;
             to = get_graph().get_to_node(to, 1);
             to = get_graph().get_to_node(to, 1);

@@ -2,6 +2,7 @@
 
 #include <Objects/Basic/assert.hpp>
 #include <Objects/Basic/position.hpp>
+#include <Objects/Environment/info.hpp>
 
 #include <fstream>
 
@@ -59,26 +60,26 @@ std::vector<Operation> OperationsGenerator::get() {
 
     // read pool
     {
-        //std::ifstream input("Tmp/actions" + std::to_string(get_unique_id()) + ".txt");
-        std::stringstream input(
+        std::vector<std::string> operations_pool_strs = {
                 // вообще тут получилось 3951->4108, но там немного стремная логика
-                // 3833->3951 and 5954->6080
-                //"17 WWW RRF RWF CWF WWF RFW CFW WFW RFF CFF FWW WFF FRF FCF FWF FFW FFF"
+                // 3951 and 6080
+                "17 WWW RRF RWF CWF WWF RFW CFW WFW RFF CFF FWW WFF FRF FCF FWF FFW FFF",
 
-                // 3628->3831 and 6248->6290
-                "48 WWWW RRWF RWWF CWWF WWWF RRFW RWFW CWFW WWFW RRFF RFWW RWFF CFWW CWFF WFWW WWFF RFRF RFCF CFRF CFCF RFWF CFWF WFRF WFCF FWWW WFWF FRRF RFFW CFFW FRWF FCWF FWWF WFFW RFFF CFFF FRFW FCFW FWFW WFFF FRFF FCFF FFWW FWFF FFRF FFCF FFWF FFFW FFFF"
+                // 3831 and 6373
+                "48 WWWW RRWF RWWF CWWF WWWF RRFW RWFW CWFW WWFW RRFF RFWW RWFF CFWW CWFF WFWW WWFF RFRF RFCF CFRF CFCF RFWF CFWF WFRF WFCF FWWW WFWF FRRF RFFW CFFW FRWF FCWF FWWF WFFW RFFF CFFF FRFW FCFW FWFW WFFF FRFF FCFF FFWW FWFF FFRF FFCF FFWF FFFW FFFF",
 
-                // 3422->3670 and 6102->6148
-                // "136 WWWWW CCWWF RWWWF CWWWF WWWWF RRWFW RWWFW CWWFW WWWFW RRFWW RRWFF RWFWW RWWFF CWFWW CWWFF RRFRF RRFCF WWFWW WWWFF RRFWF RWFRF RWFCF CWFRF CWFCF RFWWW RWFWF CFWWW CWFWF WWFRF WWFCF WFWWW WWFWF RFRRF CFRRF RRFFW RFRWF RFCWF CFRWF CFCWF RFWWF RWFFW CFWWF CWFFW WFRRF WFRWF WFCWF FWWWW WFWWF WWFFW RRFFF RFRFW RFCFW CFRFW CFCFW FRRWF RFWFW RWFFF CFWFW CWFFF FRWWF FCWWF WFRFW WFCFW FWWWF WFWFW WWFFF RFRFF RFCFF CFRFF CFCFF FRRFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW WFRFF WFCFF FWWFW WFFWW WFWFF FRRFF RFFRF RFFCF CFFRF CFFCF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF WFFRF WFFCF FWFWW FWWFF WFFWF FRFRF FRFCF FCFRF FCFCF RFFFW CFFFW FRFWF FCFWF FWFRF FWFCF FFWWW FWFWF WFFFW FFRRF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWWF FWFFW WFFFF FRFFF FCFFF FFRFW FFCFW FFWFW FWFFF FFRFF FFCFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF"
-
-        );
+                // 3670 and 6153
+                "136 WWWWW CCWWF RWWWF CWWWF WWWWF RRWFW RWWFW CWWFW WWWFW RRFWW RRWFF RWFWW RWWFF CWFWW CWWFF RRFRF RRFCF WWFWW WWWFF RRFWF RWFRF RWFCF CWFRF CWFCF RFWWW RWFWF CFWWW CWFWF WWFRF WWFCF WFWWW WWFWF RFRRF CFRRF RRFFW RFRWF RFCWF CFRWF CFCWF RFWWF RWFFW CFWWF CWFFW WFRRF WFRWF WFCWF FWWWW WFWWF WWFFW RRFFF RFRFW RFCFW CFRFW CFCFW FRRWF RFWFW RWFFF CFWFW CWFFF FRWWF FCWWF WFRFW WFCFW FWWWF WFWFW WWFFF RFRFF RFCFF CFRFF CFCFF FRRFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW WFRFF WFCFF FWWFW WFFWW WFWFF FRRFF RFFRF RFFCF CFFRF CFFCF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF WFFRF WFFCF FWFWW FWWFF WFFWF FRFRF FRFCF FCFRF FCFCF RFFFW CFFFW FRFWF FCFWF FWFRF FWFCF FFWWW FWFWF WFFFW FFRRF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWWF FWFFW WFFFF FRFFF FCFFF FFRFW FFCFW FFWFW FWFFF FFRFF FFCFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF",
+        };
+        std::stringstream input(operations_pool_strs.at(get_epibt_operation_depth() - 3));
         uint32_t num;
         input >> num;
         for (uint32_t i = 0; i < num; i++) {
             std::string str;
             input >> str;
             Operation op;
-            ASSERT(str.size() == op.size(), "does not match sizes: >" + str + "<, " + std::to_string(op.size()));
+            str.resize(DEPTH, 'W');
+            //ASSERT(str.size() == op.size(), "does not match sizes: >" + str + "<, " + std::to_string(op.size()));
             std::stringstream ss(str);
             ss >> op;
             pool.push_back(op);
@@ -100,7 +101,7 @@ std::vector<Operation> OperationsGenerator::get() {
     });*/
 
     // add WWW
-    {
+    /*{
         Operation op;
         for (uint32_t i = 0; i < op.size(); i++) {
             op[i] = Action::W;
@@ -110,7 +111,7 @@ std::vector<Operation> OperationsGenerator::get() {
             pool.erase(it);
         }
         pool.insert(pool.begin(), op);
-    }
+    }*/
 
     std::vector<Operation> result = pool;
 

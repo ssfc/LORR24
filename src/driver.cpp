@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
     desc.add_options()("help", "produce help message")                                                                                                                                                                                        //
             ("unique_id,u", po::value<uint32_t>()->default_value(0), "my unique id for unique launch")                                                                                                                                        //
             ("planner_algo,pa", po::value<string>()->required(), "planner algo")                                                                                                                                                              //
+            ("epibt_depth", po::value<uint32_t>()->default_value(0), "EPIBT operation depth")                                                                                                                                                 //
             ("graph_guidance,gg", po::value<string>()->required(), "graph guidance")                                                                                                                                                          //
             ("scheduler_algo,sa", po::value<string>()->required(), "scheduler algo")                                                                                                                                                          //
             ("inputFile,i", po::value<std::string>()->required(), "input file name")                                                                                                                                                          //
@@ -86,6 +87,20 @@ int main(int argc, char **argv) {
             get_planner_type() = PlannerType::WPPL;
         } else {
             FAILED_ASSERT("unexpected planner algo");
+        }
+    }
+
+    const uint32_t epibt_depth = vm["epibt_depth"].as<uint32_t>();
+    {
+        if (get_planner_type() == PlannerType::EPIBT ||
+            get_planner_type() == PlannerType::EPIBT_LNS ||
+            get_planner_type() == PlannerType::PEPIBT_LNS) {
+
+            ASSERT(3 <= epibt_depth && epibt_depth <= 5, "invalid EPIBT operation depth");
+
+            get_epibt_operation_depth() = epibt_depth;
+        } else {
+            ASSERT(epibt_depth == 0, "epibt_depth does not affect the planning algorithms not EPIBT");
         }
     }
 
