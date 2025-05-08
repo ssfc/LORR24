@@ -15,24 +15,25 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
     std::cout << "call(" + std::to_string(test_id) + ", " << algo_name << "): " << std::flush;
     ETimer timer;
 
-    int ret_code = std::system(
-            (std::string("./bin/lifelong") +                                       //
-             " -i " + test +                                                       //
-             " -o Tmp/" + algo_name + "/test" + std::to_string(test_id) + ".json" +//
-             " -s " + std::to_string(steps_num) +                                  //
-             " -t 2000 " +                                                         //
-             " -p 1000000000" +                                                    //
-             " --unique_id " + std::to_string(test_id) +                           //
-             " --planner_algo " + plan_algo +                                      //
-             " --graph_guidance " + graph_guidance_type +                          //
-             " --scheduler_algo " + scheduler_algo +                               //
-             " > Tmp/" + algo_name + "/output" + std::to_string(test_id) + ".txt"  //
-             )
-                    .c_str());
+    std::string call_str = std::string("./bin/lifelong") +                                         //
+                           " -i " + test +                                                         //
+                           " -o 'Tmp/" + algo_name + "/test" + std::to_string(test_id) + ".json'" +//
+                           " -s " + std::to_string(steps_num) +                                    //
+                           " -t 2000 " +                                                           //
+                           " -p 1000000000" +                                                      //
+                           " --unique_id " + std::to_string(test_id) +                             //
+                           " --planner_algo '" + plan_algo + "'" +                                 //
+                           " --graph_guidance " + graph_guidance_type +                            //
+                           " --scheduler_algo " + scheduler_algo +                                 //
+                           " > 'Tmp/" + algo_name + "/output" + std::to_string(test_id) + ".txt'";
+
+    //std::cout << "\n>" << call_str << "<" << std::endl;
+    int ret_code = std::system(call_str.c_str());
 
     std::cout << timer << std::endl;
+    ASSERT(ret_code == 0, "invalid ret code");
     if (ret_code != 0) {
-        call(test, steps_num, plan_algo, graph_guidance_type, scheduler_algo, test_id);
+        //call(test, steps_num, plan_algo, graph_guidance_type, scheduler_algo, test_id);
     }
 }
 
@@ -57,7 +58,7 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"example_problems/random.domain/random_32_32_20_700.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},*/
 
-        {"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, false},
+        /*{"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, false},
         {"example_problems/warehouse.domain/warehouse_large_2000.json", 5000, false},
         {"example_problems/warehouse.domain/warehouse_large_3000.json", 5000, false},
         {"example_problems/warehouse.domain/warehouse_large_4000.json", 5000, false},
@@ -66,7 +67,7 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"example_problems/warehouse.domain/warehouse_large_7000.json", 5000, false},
         {"example_problems/warehouse.domain/warehouse_large_8000.json", 5000, false},
         {"example_problems/warehouse.domain/warehouse_large_9000.json", 5000, false},
-        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},
+        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},*/
 
         /*{"example_problems/game.domain/brc202d_1000.json", 5000, true},
         {"example_problems/game.domain/brc202d_2000.json", 5000, true},
@@ -78,21 +79,31 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"example_problems/game.domain/brc202d_8000.json", 5000, true},
         {"example_problems/game.domain/brc202d_9000.json", 5000, true},
         {"example_problems/game.domain/brc202d_10000.json", 5000, true},*/
+
+        // ~5h
+        {"example_problems/random.domain/random_32_32_20_400.json", 1000, true},
+        {"example_problems/random.domain/random_32_32_20_600.json", 1000, true},
+        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},
+        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},
+        {"example_problems/game.domain/brc202d_3000.json", 5000, true},
+        {"example_problems/game.domain/brc202d_4000.json", 5000, true},
 };
 
 int main() {
 
     std::vector<std::string> planner_algos = {
             //"pibt",
-            //"epibt",
+            "epibt(3)",
+            "epibt(4)",
+            "epibt(5)",
             //"epibt_lns",
-            "pepibt_lns",
+            //"pepibt_lns",
             //"wppl",
             //"pibt_tf",
     };
 
     std::vector<std::string> graph_guidance_types = {
-            //"enable",
+            "enable",
             "disable",
     };
 
