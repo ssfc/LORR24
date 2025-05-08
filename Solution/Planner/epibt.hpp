@@ -13,9 +13,15 @@ protected:
 
     uint32_t pibt_step = 0;
 
+    uint32_t available_operation_depth = 0;
+
+    uint32_t visited_counter = 1;
+
     const std::vector<Robot> &robots;
 
     std::vector<uint32_t> desires;
+
+    std::vector<uint32_t> visited;
 
     std::vector<uint32_t> order;
 

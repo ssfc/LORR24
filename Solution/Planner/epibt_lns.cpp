@@ -78,7 +78,7 @@ bool EPIBT_LNS::try_build(uint32_t r) {
 }
 
 EPIBT_LNS::EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time)
-    : EPIBT(robots, end_time), visited(robots.size()) {
+    : EPIBT(robots, end_time) {
 }
 
 void EPIBT_LNS::solve(uint64_t seed) {

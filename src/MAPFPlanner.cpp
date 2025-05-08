@@ -57,7 +57,7 @@ void MAPFPlanner::plan(int time_limit, vector<Action> &actions) {
         pibt.solve();
         actions = pibt.get_actions();
         PRINT(uint32_t p = pibt.get_step() * 100 / get_robots_handler().get_robots().size();
-              ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
+              //ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
               Printer() << "[EPIBT] solve: " << p << "%" << (p != 100 ? " bad" : "") << ", time: " << timer << '\n';);
     } else if (get_planner_type() == PlannerType::EPIBT_LNS) {
         EPIBT_LNS pibt(get_robots_handler().get_robots(), end_time);

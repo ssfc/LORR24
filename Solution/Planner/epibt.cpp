@@ -157,7 +157,12 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
 
     uint32_t old_desired = desires[r];
 
+    visited[r] = visited_counter;
+
     for (uint32_t desired: robot_desires[r]) {
+        if (get_operation_depth(desired) > available_operation_depth) {
+            continue;
+        }
         desires[r] = desired;
         uint32_t to_r = get_used(r);
         if (to_r == -1) {
@@ -167,7 +172,7 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r: " + std::to_string(to_r));
 
             if (counter > 10'000 ||
-                desires[to_r] != 0) {
+                visited[to_r] == visited_counter) {
                 continue;
             }
             remove_path(to_r);
@@ -182,6 +187,7 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
         }
     }
 
+    visited[r] = 0;
     desires[r] = old_desired;
     return false;
 }
@@ -195,7 +201,7 @@ void EPIBT::build(uint32_t r) {
 }
 
 EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
-    : robots(robots), end_time(end_time), desires(robots.size()) {
+    : robots(robots), end_time(end_time), desires(robots.size()), visited(robots.size()) {
 
     ETimer timer;
 
@@ -287,14 +293,22 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
 }
 
 void EPIBT::solve() {
-    ETimer timer;
-    for (uint32_t r: order) {
-        if (get_now() > end_time) {
-            break;
-        }
-        pibt_step++;
-        if (desires[r] == 0) {
-            build(r);
+    // get_epibt_operation_depth(): score
+    // 3: 3951 -> 4890
+    // 4: 3831 -> 5031
+    // 5: 3670 -> 5081
+    for (available_operation_depth = 3; available_operation_depth <= get_epibt_operation_depth() + 2; available_operation_depth++) {
+        for (int launch = 0; launch < 2; launch++) {
+            visited_counter++;
+            for (uint32_t r: order) {
+                if (get_now() > end_time) {
+                    break;
+                }
+                pibt_step++;
+                if (visited[r] != visited_counter) {
+                    build(r);
+                }
+            }
         }
     }
 }

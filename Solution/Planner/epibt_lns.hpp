@@ -10,10 +10,6 @@ class EPIBT_LNS : public EPIBT {
 
     double temp = 1;
 
-    uint32_t visited_counter = 1;
-
-    std::vector<uint32_t> visited;
-
     Randomizer rnd;
 
     bool consider();

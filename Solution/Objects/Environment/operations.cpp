@@ -150,7 +150,7 @@ std::vector<Operation> &get_operations() {
     return operations;
 }
 
-/*static inline std::vector<uint32_t> operation_depth;
+static inline std::vector<uint32_t> operation_depth;
 
 uint32_t get_operation_depth(uint32_t index) {
     ASSERT(0 <= index && index < operation_depth.size(), "invalid index");
@@ -162,12 +162,12 @@ std::vector<uint32_t> &get_operations_ids(uint32_t d) {
     static std::array<std::vector<uint32_t>, DEPTH + 1> data;
     ASSERT(3 <= d && d <= 5, "invalid d");
     return data[d];
-}*/
+}
 
 void init_operations() {
     get_operations() = OperationsGenerator().get();
 
-    /*auto get_operation_depth = [&](const Operation &op) {
+    auto get_operation_depth = [&](const Operation &op) {
         uint32_t d = op.size();
         for (; d > 0 && op[d - 1] == Action::W; d--) {
         }
@@ -189,7 +189,7 @@ void init_operations() {
         } else {
             FAILED_ASSERT("unexpected depth");
         }
-    }*/
+    }
 }
 
 std::ostream &operator<<(std::ostream &output, const Operation &op) {

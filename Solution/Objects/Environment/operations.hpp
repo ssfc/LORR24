@@ -23,9 +23,9 @@ public:
 
 std::vector<Operation> &get_operations();
 
-//uint32_t get_operation_depth(uint32_t index);
+uint32_t get_operation_depth(uint32_t index);
 
-//std::vector<uint32_t> &get_operations_ids(uint32_t d);
+std::vector<uint32_t> &get_operations_ids(uint32_t d);
 
 void init_operations();
 
