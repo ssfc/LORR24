@@ -7,10 +7,10 @@ PEPIBT_LNS::PEPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time) : r
 }
 
 void PEPIBT_LNS::solve(uint64_t seed) {
-    EPIBT_LNS main_pibt(get_robots_handler().get_robots(), end_time);
+    EPIBT_LNS main(get_robots_handler().get_robots(), end_time);
 
-    // (score, actions, time, step)
-    using ItemType = std::tuple<double, std::vector<Action>, int, int>;
+    // (score, actions, time, epibt_steps, lns_steps)
+    using ItemType = std::tuple<double, std::vector<Action>, uint32_t, uint32_t, uint32_t>;
 
     constexpr uint32_t THR = THREADS;
     std::vector<std::vector<ItemType>> results_pack(THR);
@@ -18,10 +18,10 @@ void PEPIBT_LNS::solve(uint64_t seed) {
     launch_threads(THR, [&](uint32_t thr) {
         uint64_t random_seed = seed * (thr + 1) + 426136423;
         ETimer timer;
-        EPIBT_LNS pibt = main_pibt;
-        pibt.solve(random_seed);
+        EPIBT_LNS solver = main;
+        solver.solve(random_seed);
         auto time = timer.get_ms();
-        results_pack[thr].emplace_back(pibt.get_score(), pibt.get_actions(), time, pibt.get_step());
+        results_pack[thr].emplace_back(solver.get_score(), solver.get_actions(), time, solver.get_epibt_steps(), solver.get_lns_steps());
     });
 
     std::vector<ItemType> results;
@@ -37,8 +37,8 @@ void PEPIBT_LNS::solve(uint64_t seed) {
     });
 
     PRINT(Printer() << "[PEPIBT_LNS] results: ";);
-    for (const auto &[score, plan, time, steps]: results) {
-        PRINT(Printer() << "(" << score << ", " << time << ", " << std::min(steps, (int) plan.size()) << "+" << std::max(0, steps - (int) plan.size()) << ") ";);
+    for (const auto &[score, plan, time, epibt_steps, lns_steps]: results) {
+        PRINT(Printer() << "(" << score << ", " << time << "ms, " << epibt_steps << "+" << lns_steps << ") ";);
         if (best_score < score) {
             best_score = score;
             actions = plan;

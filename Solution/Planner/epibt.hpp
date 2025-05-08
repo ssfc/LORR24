@@ -11,7 +11,7 @@ protected:
 
     double cur_score = 0;
 
-    uint32_t pibt_step = 0;
+    uint32_t epibt_step = 0;
 
     uint32_t available_operation_depth = 0;
 
@@ -66,5 +66,5 @@ public:
 
     [[nodiscard]] std::vector<Action> get_actions() const;
 
-    [[nodiscard]] uint32_t get_step() const;
+    [[nodiscard]] uint32_t get_epibt_steps() const;
 };

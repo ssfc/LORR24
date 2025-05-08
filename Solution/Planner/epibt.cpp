@@ -304,7 +304,7 @@ void EPIBT::solve() {
                 if (get_now() > end_time) {
                     break;
                 }
-                pibt_step++;
+                epibt_step++;
                 if (visited[r] != visited_counter) {
                     build(r);
                 }
@@ -364,6 +364,6 @@ std::vector<Action> EPIBT::get_actions() const {
     return answer;
 }
 
-uint32_t EPIBT::get_step() const {
-    return pibt_step;
+uint32_t EPIBT::get_epibt_steps() const {
+    return epibt_step;
 }

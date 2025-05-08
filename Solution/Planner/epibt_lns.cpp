@@ -87,9 +87,14 @@ void EPIBT_LNS::solve(uint64_t seed) {
     EPIBT::solve();
 
     temp = 0.001;
-    for (; get_now() < end_time; pibt_step++) {
+    while (get_now() < end_time) {
         uint32_t r = rnd.get(0, robots.size() - 1);
         try_build(r);
         temp *= 0.999;
+        lns_step++;
     }
+}
+
+uint32_t EPIBT_LNS::get_lns_steps() const {
+    return lns_step;
 }

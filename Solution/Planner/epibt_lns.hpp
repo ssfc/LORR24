@@ -10,6 +10,8 @@ class EPIBT_LNS : public EPIBT {
 
     double temp = 1;
 
+    uint32_t lns_step = 0;
+
     Randomizer rnd;
 
     bool consider();
@@ -28,4 +30,6 @@ public:
     EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time);
 
     void solve(uint64_t seed);
+
+    [[nodiscard]] uint32_t get_lns_steps() const;
 };
