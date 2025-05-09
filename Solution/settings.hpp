@@ -13,7 +13,7 @@
 
 #define ENABLE_SMART_OPERATION_EXECUTION
 
-//#define BUILD_META_INFO
+#define BUILD_META_INFO
 
 #define PRINT(args...) \
     do { args } while (0)
