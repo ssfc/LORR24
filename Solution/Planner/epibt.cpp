@@ -149,15 +149,13 @@ void EPIBT::remove_path(uint32_t r) {
     update_score(r, desires[r], -1);
 }
 
-bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
-    if (counter == -1 || (counter % 32 == 0 && get_now() > end_time)) {
-        counter = -1;
-        return false;
+EPIBT::RetType EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
+    if (counter % 4 == 0 && get_now() >= end_time) {
+        return RetType::REJECTED;
     }
 
-    uint32_t old_desired = desires[r];
-
     visited[r] = visited_counter;
+    uint32_t old_desired = desires[r];
 
     for (uint32_t desired: robot_desires[r]) {
         if (get_operation_depth(desired) > available_operation_depth) {
@@ -167,19 +165,25 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
         uint32_t to_r = get_used(r);
         if (to_r == -1) {
             add_path(r);
-            return true;
+            return RetType::ACCEPTED;
         } else if (to_r != -2) {
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r: " + std::to_string(to_r));
 
-            if (counter > 10'000 ||
-                visited[to_r] == visited_counter) {
+            if (visited[to_r] == visited_counter) {
                 continue;
             }
+
             remove_path(to_r);
             add_path(r);
 
-            if (build(to_r, depth + 1, ++counter)) {
-                return true;
+            RetType res = build(to_r, depth + 1, ++counter);
+            if (res == RetType::ACCEPTED) {
+                return res;
+            } else if (res == RetType::REJECTED) {
+                remove_path(r);
+                add_path(to_r);
+                desires[r] = old_desired;
+                return res;
             }
 
             remove_path(r);
@@ -187,15 +191,15 @@ bool EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
         }
     }
 
-    visited[r] = 0;
     desires[r] = old_desired;
-    return false;
+    visited[r] = 0;
+    return RetType::FAILED;
 }
 
 void EPIBT::build(uint32_t r) {
     remove_path(r);
     uint32_t counter = 0;
-    if (!build(r, 0, counter)) {
+    if (build(r, 0, counter) != RetType::ACCEPTED) {
         add_path(r);
     }
 }
@@ -293,15 +297,11 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
 }
 
 void EPIBT::solve() {
-    // get_epibt_operation_depth(): score
-    // 3: 3951 -> 4890
-    // 4: 3831 -> 5031
-    // 5: 3670 -> 5081
     for (available_operation_depth = 3; available_operation_depth <= get_epibt_operation_depth() + 2; available_operation_depth++) {
         for (int launch = 0; launch < 2; launch++) {
             visited_counter++;
             for (uint32_t r: order) {
-                if (get_now() > end_time) {
+                if (get_now() >= end_time) {
                     break;
                 }
                 epibt_step++;
@@ -324,7 +324,6 @@ std::vector<Action> EPIBT::get_actions() const {
         answer[r] = op[0];
 
 #ifdef ENABLE_SMART_OPERATION_EXECUTION
-
         // перебирает набор действий и выбирает лучшее по расстоянию до цели
         auto update_answer = [&](const std::vector<Action> &actions) {
             ASSERT(!actions.empty(), "is empty");

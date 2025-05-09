@@ -16,20 +16,16 @@ class EPIBT_LNS : public EPIBT {
 
     bool consider();
 
-    enum class RetType {
-        FAILED,
-        ACCEPTED,// success + accepted
-        REJECTED,// success + not accepted
-    };
+    RetType try_build(uint32_t r, uint32_t depth, uint32_t &counter);
 
-    RetType try_build(uint32_t r, uint32_t &counter, uint32_t depth);
-
-    bool try_build(uint32_t r);
+    void try_build(uint32_t r);
 
 public:
     EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time);
 
     void solve(uint64_t seed);
+
+    void parallel_solve(uint64_t seed);
 
     [[nodiscard]] uint32_t get_lns_steps() const;
 };

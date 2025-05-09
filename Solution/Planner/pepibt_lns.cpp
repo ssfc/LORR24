@@ -16,12 +16,14 @@ void PEPIBT_LNS::solve(uint64_t seed) {
     std::vector<std::vector<ItemType>> results_pack(THR);
 
     launch_threads(THR, [&](uint32_t thr) {
-        uint64_t random_seed = seed * (thr + 1) + 426136423;
-        ETimer timer;
-        EPIBT_LNS solver = main;
-        solver.solve(random_seed);
-        auto time = timer.get_ms();
-        results_pack[thr].emplace_back(solver.get_score(), solver.get_actions(), time, solver.get_epibt_steps(), solver.get_lns_steps());
+        Randomizer rnd(seed * (thr + 1) + 426136423);
+        while (get_now() < end_time) {
+            ETimer timer;
+            EPIBT_LNS solver = main;
+            solver.parallel_solve(rnd.get());
+            auto time = timer.get_ms();
+            results_pack[thr].emplace_back(solver.get_score(), solver.get_actions(), time, solver.get_epibt_steps(), solver.get_lns_steps());
+        }
     });
 
     std::vector<ItemType> results;
@@ -36,9 +38,14 @@ void PEPIBT_LNS::solve(uint64_t seed) {
         return std::get<0>(lhs) > std::get<0>(rhs);
     });
 
-    PRINT(Printer() << "[PEPIBT_LNS] results: ";);
+    PRINT(Printer() << "[PEPIBT_LNS] results(" << results.size() << "): ";);
+    uint32_t cnt_printed = 0;
     for (const auto &[score, plan, time, epibt_steps, lns_steps]: results) {
-        PRINT(Printer() << "(" << score << ", " << time << "ms, " << epibt_steps << "+" << lns_steps << ") ";);
+        PRINT(
+                if (cnt_printed < 10) {
+                    cnt_printed++;
+                    Printer() << "(" << score << ", " << time << "ms, " << epibt_steps << "+" << lns_steps << ") ";
+                });
         if (best_score < score) {
             best_score = score;
             actions = plan;

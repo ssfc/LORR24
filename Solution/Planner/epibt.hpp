@@ -53,7 +53,13 @@ protected:
 
     void remove_path(uint32_t r);
 
-    bool build(uint32_t r, uint32_t depth, uint32_t &counter);
+    enum class RetType {
+        FAILED,
+        ACCEPTED,// success + accepted
+        REJECTED,// success + not accepted
+    };
+
+    RetType build(uint32_t r, uint32_t depth, uint32_t &counter);
 
     void build(uint32_t r);
 

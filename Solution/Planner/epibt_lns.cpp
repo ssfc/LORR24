@@ -1,7 +1,7 @@
 #include <Planner/epibt_lns.hpp>
 
 #include <Objects/Basic/assert.hpp>
-#include <settings.hpp>
+#include <Objects/Environment/info.hpp>
 
 bool EPIBT_LNS::consider() {
     return old_score - 1e-6 <= cur_score
@@ -12,10 +12,9 @@ bool EPIBT_LNS::consider() {
             ;
 }
 
-EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t &counter, uint32_t depth) {
-    if (counter > 1000 || (counter % 16 == 0 && get_now() >= end_time)) {
-        counter = -1;
-        return RetType::FAILED;
+EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t depth, uint32_t &counter) {
+    if (counter % 4 == 0 && get_now() >= end_time) {
+        return RetType::REJECTED;
     }
 
     visited[r] = visited_counter;
@@ -33,18 +32,17 @@ EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t &counter, uint32_t 
                 desires[r] = old_desired;
                 return RetType::REJECTED;
             }
-        } else if (to_r != -2 && visited[to_r] != visited_counter) {
+        } else if (to_r != -2) {
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
-            ASSERT(visited[to_r] != visited_counter, "already visited");
 
-            if (rnd.get_d() < 0.2) {
+            if (visited[to_r] == visited_counter || rnd.get_d() < 0.3) {
                 continue;
             }
 
             remove_path(to_r);
             add_path(r);
 
-            RetType res = try_build(to_r, ++counter, depth + 1);
+            RetType res = try_build(to_r, depth + 1, ++counter);
             if (res == RetType::ACCEPTED) {
                 return res;
             } else if (res == RetType::REJECTED) {
@@ -64,17 +62,14 @@ EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t &counter, uint32_t 
     return RetType::FAILED;
 }
 
-bool EPIBT_LNS::try_build(uint32_t r) {
+void EPIBT_LNS::try_build(uint32_t r) {
     ++visited_counter;
     old_score = cur_score;
     remove_path(r);
     uint32_t counter = 0;
-    RetType res = try_build(r, counter, 0);
-    if (res != RetType::ACCEPTED) {
+    if (try_build(r, 0, counter) != RetType::ACCEPTED) {
         add_path(r);
-        return false;
     }
-    return true;
 }
 
 EPIBT_LNS::EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time)
@@ -88,6 +83,21 @@ void EPIBT_LNS::solve(uint64_t seed) {
 
     temp = 0.001;
     while (get_now() < end_time) {
+        uint32_t r = rnd.get(0, robots.size() - 1);
+        try_build(r);
+        temp *= 0.999;
+        lns_step++;
+    }
+}
+
+void EPIBT_LNS::parallel_solve(uint64_t seed) {
+    rnd = Randomizer(seed);
+
+    std::shuffle(order.begin(), order.end(), rnd.generator);
+    EPIBT::solve();
+
+    temp = 0.001;
+    while (get_now() < end_time && lns_step < robots.size() * 10) {
         uint32_t r = rnd.get(0, robots.size() - 1);
         try_build(r);
         temp *= 0.999;
