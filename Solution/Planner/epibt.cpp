@@ -70,25 +70,15 @@ int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
         }
     }
 
-    dist *= 1000;
 
-    // если мы проходим по таргету, то мы должны это делать как можно раньше
-    {
-        bool find = false;
-        for (uint32_t d = 0; d < DEPTH; d++) {
-            if (get_graph().get_pos(path[d]).get_pos() == target) {
-                find = true;
-                dist += d;
-                break;
-            }
-        }
-        if (!find) {
-            dist += 100;
+    for (uint32_t d = 0; d < DEPTH; d++) {
+        if (get_graph().get_pos(path[d]).get_pos() == target) {
+            dist = d;
+            dist = -dist;
         }
     }
 
-    dist -= desired;
-    ASSERT(dist > -1'000'000'000, "maybe overflow");
+    dist = dist * 50 - desired;
     return dist;
 }
 
