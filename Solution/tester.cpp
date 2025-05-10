@@ -38,16 +38,6 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
 }
 
 std::vector<std::tuple<std::string, int, bool>> tests = {
-        /*{"Data2023/city.domain/MR23-I-01.json", 1500},
-        {"Data2023/city.domain/MR23-I-02.json", 3500},
-        {"Data2023/random.domain/MR23-I-03.json", 500},
-        {"Data2023/random.domain/MR23-I-04.json", 500},
-        {"Data2023/random.domain/MR23-I-05.json", 1000},
-        {"Data2023/warehouse.domain/MR23-I-06.json", 5000},
-        {"Data2023/random.domain/MR23-I-07.json", 1000},
-        {"Data2023/random.domain/MR23-I-08.json", 2000},
-        {"Data2023/game.domain/MR23-I-09.json", 5000},
-        {"Data2023/warehouse.domain/MR23-I-10.json", 5000},*/
 
         {"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_200.json", 1000, true},
@@ -79,24 +69,13 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"example_problems/game.domain/brc202d_8000.json", 5000, true},
         {"example_problems/game.domain/brc202d_9000.json", 5000, true},
         {"example_problems/game.domain/brc202d_10000.json", 5000, true},*/
-
-        // ~5h
-        /*{"example_problems/random.domain/random_32_32_20_400.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_600.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},
-        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_3000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_4000.json", 5000, true},*/
 };
 
 int main() {
 
     std::vector<std::string> planner_algos = {
             //"pibt",
-            //"epibt(3)",
-            //"epibt(4)",
-            //"epibt(5)",
-            //"epibt_lns",
+            "epibt(4)",
             "pepibt(4)_lns",
             //"wppl",
             //"pibt_tf",
@@ -104,7 +83,7 @@ int main() {
 
     std::vector<std::string> graph_guidance_types = {
             "enable",
-            //"disable",
+            "disable",
     };
 
     std::vector<std::string> scheduler_algos = {
