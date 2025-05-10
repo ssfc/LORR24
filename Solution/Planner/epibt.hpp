@@ -59,7 +59,7 @@ protected:
         REJECTED,// success + not accepted
     };
 
-    RetType build(uint32_t r, uint32_t depth, uint32_t &counter);
+    RetType build(uint32_t r, uint32_t &counter);
 
     void build(uint32_t r);
 

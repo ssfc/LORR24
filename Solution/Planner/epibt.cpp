@@ -70,7 +70,6 @@ int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
         }
     }
 
-
     for (uint32_t d = 0; d < DEPTH; d++) {
         if (get_graph().get_pos(path[d]).get_pos() == target) {
             dist = d;
@@ -139,7 +138,7 @@ void EPIBT::remove_path(uint32_t r) {
     update_score(r, desires[r], -1);
 }
 
-EPIBT::RetType EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
+EPIBT::RetType EPIBT::build(uint32_t r, uint32_t &counter) {
     if (counter % 4 == 0 && get_now() >= end_time) {
         return RetType::REJECTED;
     }
@@ -159,14 +158,14 @@ EPIBT::RetType EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
         } else if (to_r != -2) {
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r: " + std::to_string(to_r));
 
-            if (visited[to_r] == visited_counter) {
+            if (visited[to_r] == visited_counter || counter > 3'000) {
                 continue;
             }
 
             remove_path(to_r);
             add_path(r);
 
-            RetType res = build(to_r, depth + 1, ++counter);
+            RetType res = build(to_r, ++counter);
             if (res == RetType::ACCEPTED) {
                 return res;
             } else if (res == RetType::REJECTED) {
@@ -189,7 +188,7 @@ EPIBT::RetType EPIBT::build(uint32_t r, uint32_t depth, uint32_t &counter) {
 void EPIBT::build(uint32_t r) {
     remove_path(r);
     uint32_t counter = 0;
-    if (build(r, 0, counter) != RetType::ACCEPTED) {
+    if (build(r, counter) != RetType::ACCEPTED) {
         add_path(r);
     }
 }

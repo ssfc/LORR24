@@ -16,7 +16,7 @@ class EPIBT_LNS : public EPIBT {
 
     bool consider();
 
-    RetType try_build(uint32_t r, uint32_t depth, uint32_t &counter);
+    RetType try_build(uint32_t r, uint32_t &counter);
 
     void try_build(uint32_t r);
 

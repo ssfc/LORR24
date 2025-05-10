@@ -87,7 +87,7 @@ PIBT::PIBT(const std::vector<Robot> &robots, TimePoint end_time) : robots(robots
 
 void PIBT::solve() {
     for (uint32_t r: order) {
-        if (std::chrono::steady_clock::now() > end_time) {
+        if (get_now() >= end_time) {
             break;
         }
         if (desires[r] == -1) {

@@ -12,7 +12,7 @@ bool EPIBT_LNS::consider() {
             ;
 }
 
-EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t depth, uint32_t &counter) {
+EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t &counter) {
     if (counter % 4 == 0 && get_now() >= end_time) {
         return RetType::REJECTED;
     }
@@ -35,14 +35,14 @@ EPIBT_LNS::RetType EPIBT_LNS::try_build(uint32_t r, uint32_t depth, uint32_t &co
         } else if (to_r != -2) {
             ASSERT(0 <= to_r && to_r < robots.size(), "invalid to_r");
 
-            if (visited[to_r] == visited_counter || rnd.get_d() < 0.3) {
+            if (visited[to_r] == visited_counter || rnd.get_d() < 0.3 || counter > 3'000) {
                 continue;
             }
 
             remove_path(to_r);
             add_path(r);
 
-            RetType res = try_build(to_r, depth + 1, ++counter);
+            RetType res = try_build(to_r, ++counter);
             if (res == RetType::ACCEPTED) {
                 return res;
             } else if (res == RetType::REJECTED) {
@@ -67,7 +67,7 @@ void EPIBT_LNS::try_build(uint32_t r) {
     old_score = cur_score;
     remove_path(r);
     uint32_t counter = 0;
-    if (try_build(r, 0, counter) != RetType::ACCEPTED) {
+    if (try_build(r, counter) != RetType::ACCEPTED) {
         add_path(r);
     }
 }
