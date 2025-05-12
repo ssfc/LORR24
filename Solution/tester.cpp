@@ -39,14 +39,14 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
 
 std::vector<std::tuple<std::string, int, bool>> tests = {
 
-        {"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
+        /*{"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_200.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_300.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_400.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_500.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_600.json", 1000, true},
         {"example_problems/random.domain/random_32_32_20_700.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},
+        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},*/
 
         /*{"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, true},
         {"example_problems/warehouse.domain/warehouse_large_2000.json", 5000, true},
@@ -59,7 +59,7 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"example_problems/warehouse.domain/warehouse_large_9000.json", 5000, true},
         {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},*/
 
-        /*{"example_problems/game.domain/brc202d_1000.json", 5000, true},
+        {"example_problems/game.domain/brc202d_1000.json", 5000, true},
         {"example_problems/game.domain/brc202d_2000.json", 5000, true},
         {"example_problems/game.domain/brc202d_3000.json", 5000, true},
         {"example_problems/game.domain/brc202d_4000.json", 5000, true},
@@ -68,10 +68,12 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"example_problems/game.domain/brc202d_7000.json", 5000, true},
         {"example_problems/game.domain/brc202d_8000.json", 5000, true},
         {"example_problems/game.domain/brc202d_9000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_10000.json", 5000, true},*/
+        {"example_problems/game.domain/brc202d_10000.json", 5000, true},
 };
 
 int main() {
+
+    std::cout << "game" << std::endl;
 
     std::vector<std::string> planner_algos = {
             //"pibt",

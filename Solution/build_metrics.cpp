@@ -13,12 +13,12 @@ std::ofstream total_table_output;
 
 const std::string dir = "Tmp/";
 
-void call(const std::string &algo_name, uint32_t test_id) {
+bool call(const std::string &algo_name, uint32_t test_id) {
     json data;
     std::ifstream input(dir + algo_name + "/test" + std::to_string(test_id) + ".json");
     if (!input) {
         std::cout << "unable ";
-        return;
+        return false;
     }
     double throughput = 0;
     uint32_t avg_step_time = 0;
@@ -60,6 +60,8 @@ void call(const std::string &algo_name, uint32_t test_id) {
         //int ret_code = std::system(launch_str.c_str());
         //ASSERT(ret_code == 0, "invalid ret code");
     }
+
+    return true;
 }
 
 int main() {
@@ -80,11 +82,14 @@ int main() {
             continue;
         }
         table_output << "id;algo name;agents num;steps num;num task finished;throughput;avg step time\n";
-        for (uint32_t test_id = 0; test_id < 10; test_id++) {
+        for (uint32_t test_id = 0;; test_id++) {
             ETimer timer;
             std::cout << "call(" << algo_name << ' ' << test_id << "): " << std::flush;
-            call(algo_name, test_id);
+            bool res = call(algo_name, test_id);
             std::cout << timer << std::endl;
+            if (!res) {
+                break;
+            }
         }
     }
 }
