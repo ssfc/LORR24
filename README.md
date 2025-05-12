@@ -28,18 +28,18 @@ You can compile a project using *CMakeLists.txt* it will create a `bin` folder w
 
 For main information, see the `readme` folder. We also add additional arguments to the *lifelong* program launch:
 
-| options                        |                                                                                                                                                                                      |
-|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| --planner_algo <br /> --pa     | String <br /> "pibt" = PIBT <br /> "pibt_tf" = PIBT+traffic flow <br /> "epibt" = EPIBT <br /> "epibt_lns" = EPIBT+LNS <br /> "pepibt_lns" = Parallel EPIBT+LNS <br /> "wppl" = WPPL |
-| --graph_guidance <br /> --gg   | String <br /> "enable" = enable Graph Guidance <br /> "disable" = disable Graph Guidance                                                                                             |
-| --scheduler_algo <br /> --sa   | String <br /> "greedy" = the multithreaded greedy task scheduler <br /> "hungarian" = the multithreaded Hungarian algorithm <br /> ***(hungarian is not recommended to use)***                     |
+| options                        |                                                                                                                                                                                                                                                                              |
+|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --planner_algo <br /> --pa     | String <br /> "pibt" = PIBT <br /> "pibt_tf" = PIBT+traffic flow <br /> "wppl" = WPPL <br /> "epibt(x)" = EPIBT(x) <br /> "epibt(x)_lns" = EPIBT(x)+LNS <br /> "pepibt(x)_lns" = Parallel EPIBT(x)+LNS <br /> Where x is operation depth: 3, 4, 5. Highly recommend using 4. |
+| --graph_guidance <br /> --gg   | String <br /> "enable" = enable Graph Guidance <br /> "disable" = disable Graph Guidance                                                                                                                                                                                     |
+| --scheduler_algo <br /> --sa   | String <br /> "greedy" = the multithreaded greedy task scheduler <br /> "hungarian" = the multithreaded Hungarian algorithm <br /> ***(hungarian is not recommended to use)***                                                                                               |
 
 This way you can run combinations of algorithms. But not all of them: ~~PIBT+traffic flow+GG~~ and ~~WPPL~~ are not supported
 
 
-An example of running a solution on a map `random-32-32-20` with `400` agents, log entry to the `test.json` file, `1000` steps, `300ms` time limit for one step, `30m` preprocessing time limit, planner: `EPIBT`, `enable` Graph Guidance, scheduler: `greedy`
+An example of running a solution on a map `random-32-32-20` with `400` agents, log entry to the `test.json` file, `1000` steps, `300ms` time limit for one step, `30m` preprocessing time limit, planner: `EPIBT` with operation depth = 4, `enable` Graph Guidance, scheduler: `greedy`
 ```
-./bin/lifelong -i ./example_problems/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa epibt --gg enable --sa greedy
+./bin/lifelong -i ./example_problems/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
 ```
 
 The program also includes self-written assertions. An example of the fall of such an assertion:
@@ -54,9 +54,9 @@ Also see `Solution/settings.hpp` for global project settings: enabling asserts, 
 
 ## Experiments
 
-Experiments with all logs, plots, and heat maps are [here](https://github.com/Straple/LORR24_experiments)
+***OUTDATED EXPERIMENTS***. EPIBT(X) shows better results.
 
-![image](https://github.com/user-attachments/assets/b13368eb-dae7-4a36-8319-805637963a84)
+Experiments with all logs, plots, and heat maps are [here](https://github.com/Straple/LORR24_experiments)
 
 ## TODO
 1) Improve the pool of operations. It's not quite complete right now
