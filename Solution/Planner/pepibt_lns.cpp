@@ -7,13 +7,18 @@ PEPIBT_LNS::PEPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time) : r
 }
 
 void PEPIBT_LNS::solve(uint64_t seed) {
+    ETimer timer;
     EPIBT_LNS main(get_robots_handler().get_robots(), end_time);
+    main.EPIBT::solve();
+    PRINT(Printer() << "[EPIBT] solve: " << main.get_epibt_steps() << ", time: " << timer << '\n';);
 
     // (score, actions, time, epibt_steps, lns_steps)
     using ItemType = std::tuple<double, std::vector<Action>, uint32_t, uint32_t, uint32_t>;
 
     constexpr uint32_t THR = THREADS;
     std::vector<std::vector<ItemType>> results_pack(THR);
+
+    results_pack[0].emplace_back(main.get_score(), main.get_actions(), timer.get_ms(), main.get_epibt_steps(), main.get_lns_steps());
 
     launch_threads(THR, [&](uint32_t thr) {
         Randomizer rnd(seed * (thr + 1) + 426136423);

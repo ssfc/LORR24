@@ -77,10 +77,9 @@ EPIBT_LNS::EPIBT_LNS(const std::vector<Robot> &robots, TimePoint end_time)
 }
 
 void EPIBT_LNS::solve(uint64_t seed) {
-    rnd = Randomizer(seed);
-
     EPIBT::solve();
 
+    rnd = Randomizer(seed);
     temp = 0.001;
     while (get_now() < end_time) {
         uint32_t r = rnd.get(0, robots.size() - 1);
@@ -92,10 +91,6 @@ void EPIBT_LNS::solve(uint64_t seed) {
 
 void EPIBT_LNS::parallel_solve(uint64_t seed) {
     rnd = Randomizer(seed);
-
-    std::shuffle(order.begin(), order.end(), rnd.generator);
-    EPIBT::solve();
-
     temp = 0.001;
     while (get_now() < end_time && lns_step < robots.size() * 10) {
         uint32_t r = rnd.get(0, robots.size() - 1);
