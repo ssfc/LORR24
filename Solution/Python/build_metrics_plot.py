@@ -6,18 +6,32 @@ import seaborn as sns
 import pandas as pd
 from PIL import Image
 
-plan_algos = ["pepibt_lns+gg+gs", "pepibt_lns+gs", "epibt+gg+gs", "epibt+gs", "pibt+gg+gs", "pibt+gs", "wppl+gg+gs", "pibt_tf+gs"]
+plan_algos = [
+    "epibt(4)+gg+gs",
+    #"epibt(4)+gs",
+    "pepibt(4)_lns+gg+gs",
+    #"pepibt(4)_lns+gs",
+    "pepibt_lns+gg+gs",
+    #"pepibt_lns+gs",
+    "epibt+gg+gs",
+    #"epibt+gs",
+
+    "wppl+gg+gs",
+
+    #"pibt+gg+gs", "pibt+gs",
+    "pibt_tf+gs"
+]
 # colors = ['lime', 'dodgerblue', 'orange', 'red', 'blueviolet', 'aqua', 'deeppink', 'brown']
 # colors = ['green', 'blue', 'orange', 'red', 'blueviolet', 'aqua', 'deeppink', 'brown']
-plan_algos_name = ['EPIBT+LNS+GG', 'EPIBT+LNS', 'EPIBT+GG', 'EPIBT', 'PIBT+GG', 'PIBT', 'WPPL+GG', 'PIBT+traffic flow']
-markers = ['o', 'v', 's', 'p', '*', 'x', 'D', 'P']
+# plan_algos_name = ['EPIBT+LNS+GG', 'EPIBT+LNS', 'EPIBT+GG', 'EPIBT', 'PIBT+GG', 'PIBT', 'WPPL+GG', 'PIBT+traffic flow']
+markers = ['o', 'v', 's', 'p', '*', 'x', 'D', 'P', 'o', 'v', 's', 'p', '*', 'x', 'D', 'P', 'o', 'v', 's', 'p', '*', 'x', 'D', 'P']
 
 color_palette = sns.color_palette("tab10", 8)
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=color_palette)
 
 
 def add_map(map_name, map_text, column):
-    df = pd.read_csv('../../Data/' + map_name + '/total_metrics.csv', sep=';')
+    df = pd.read_csv('../../NewData/' + map_name + '/total_metrics.csv', sep=';')
     df['throughput'] = df['throughput'].astype(float)
     grouped = df.groupby('algo name')
 
@@ -29,28 +43,28 @@ def add_map(map_name, map_text, column):
 
     ax = axes[1][column]
     for i in range(len(plan_algos)):
-        # try:
-        df = grouped.get_group(plan_algos[i])
-        ax.plot(df['agents num'], df['throughput'], alpha=1, label=plan_algos_name[i], marker=markers[i])  # , color=colors[i])
-        if map_name == "random":
-            ax.set_ylabel('Throughput')
-        ax.grid(True)
-        # except:
-        # print("no group:", plan_algos[i])
+        try:
+            df = grouped.get_group(plan_algos[i])
+            ax.plot(df['agents num'], df['throughput'], alpha=1, label=plan_algos[i], marker=markers[i])  # , color=colors[i])
+            if map_name == "random":
+                ax.set_ylabel('Throughput')
+            ax.grid(True)
+        except:
+            print("no group:", plan_algos[i])
 
     ax = axes[2][column]
     for i in range(len(plan_algos)):
-        # try:
-        df = grouped.get_group(plan_algos[i])
-        ax.plot(df['agents num'], df['avg step time'], alpha=1, label=plan_algos_name[i],
-                marker=markers[i])  # , color=colors[i])
-        ax.set_yscale('log')
-        if map_name == "random":
-            ax.set_ylabel('Decision Time (ms)')
-        ax.grid(True)
-        ax.set_xlabel('Number of Agents')
-        # except:
-        # print("no group:", plan_algos[i])
+        try:
+            df = grouped.get_group(plan_algos[i])
+            ax.plot(df['agents num'], df['avg step time'], alpha=1, label=plan_algos[i],
+                    marker=markers[i])  # , color=colors[i])
+            ax.set_yscale('log')
+            if map_name == "random":
+                ax.set_ylabel('Decision Time (ms)')
+            ax.grid(True)
+            ax.set_xlabel('Number of Agents')
+        except:
+            print("no group:", plan_algos[i])
 
 
 if __name__ == '__main__':
@@ -68,5 +82,5 @@ if __name__ == '__main__':
         labels.pop(-1)
     fig.legend(lines, labels, loc='lower center', ncol=4)
 
-    plt.savefig("metrics_plot.pdf", format='pdf', dpi=800)
+    #plt.savefig("metrics_plot.pdf", format='pdf', dpi=800)
     plt.show()

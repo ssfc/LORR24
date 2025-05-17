@@ -39,53 +39,65 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
 
 std::vector<std::tuple<std::string, int, bool>> tests = {
 
-        /*{"example_problems/random.domain/random_32_32_20_100.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_200.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_300.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_400.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_500.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_600.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_700.json", 1000, true},
-        {"example_problems/random.domain/random_32_32_20_800.json", 1000, true},*/
+        /*{"Tests/My/random.domain/random_32_32_20_100.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_200.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_300.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_400.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_500.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_600.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_700.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_800.json", 1000, true},*/
 
-        /*{"example_problems/warehouse.domain/warehouse_large_1000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_2000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_3000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_4000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_5000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_6000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_7000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_8000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_9000.json", 5000, true},
-        {"example_problems/warehouse.domain/warehouse_large_10000.json", 5000, true},*/
+        /*{"Tests/My/warehouse.domain/warehouse_large_1000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_2000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_3000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_4000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_5000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_6000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_7000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_8000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_9000.json", 5000, true},
+        {"Tests/My/warehouse.domain/warehouse_large_10000.json", 5000, true},*/
 
-        {"example_problems/game.domain/brc202d_1000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_2000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_3000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_4000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_5000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_6000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_7000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_8000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_9000.json", 5000, true},
-        {"example_problems/game.domain/brc202d_10000.json", 5000, true},
+        /*{"Tests/My/game.domain/brc202d_1000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_2000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_3000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_4000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_5000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_6000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_7000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_8000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_9000.json", 5000, true},
+        {"Tests/My/game.domain/brc202d_10000.json", 5000, true},*/
+
+        {"Tests/Competition/city.domain/CITY-01.json", 3000, true},
+        {"Tests/Competition/city.domain/CITY-02.json", 3000, true},
+        {"Tests/Competition/game.domain/GAME.json", 5000, true},
+        {"Tests/Competition/random.domain/RANDOM-01.json", 600, true},
+        {"Tests/Competition/random.domain/RANDOM-02.json", 600, true},
+        {"Tests/Competition/random.domain/RANDOM-03.json", 800, true},
+        {"Tests/Competition/random.domain/RANDOM-04.json", 1000, true},
+        {"Tests/Competition/random.domain/RANDOM-05.json", 2000, true},
+        {"Tests/Competition/warehouse.domain/SORTATION.json", 5000, true},
+        {"Tests/Competition/warehouse.domain/WAREHOUSE.json", 5000, true},
+
 };
 
 int main() {
 
-    std::cout << "game" << std::endl;
+    std::cout << "lol" << std::endl;
 
     std::vector<std::string> planner_algos = {
             //"pibt",
             "epibt(4)",
-            "pepibt(4)_lns",
+            //"pepibt(4)_lns",
             //"wppl",
             //"pibt_tf",
     };
 
     std::vector<std::string> graph_guidance_types = {
             "enable",
-            "disable",
+            //"disable",
     };
 
     std::vector<std::string> scheduler_algos = {

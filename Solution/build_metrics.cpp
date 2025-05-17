@@ -55,8 +55,7 @@ bool call(const std::string &algo_name, uint32_t test_id) {
 
     // build usage plots
     {
-        //std::string launch_str = "python3 Solution/Python/build_usage_plot.py '" + dir + algo_name + "/usage" + std::to_string(test_id) + ".txt' heatmap" + std::to_string(test_id) + " " + "game";
-        //std::cout << "\nlaunch_str: " << launch_str << std::endl;
+        //std::string launch_str = "python3 Solution/Python/build_usage_plot.py '" + dir + algo_name + "/usage" + std::to_string(test_id) + ".txt' heatmap" + std::to_string(test_id) + " " + "warehouse";
         //int ret_code = std::system(launch_str.c_str());
         //ASSERT(ret_code == 0, "invalid ret code");
     }
@@ -74,7 +73,7 @@ int main() {
             continue;
         }
         std::string algo_name = iter.path();
-        algo_name = algo_name.substr(std::find(algo_name.begin(), algo_name.end(), '/') - algo_name.begin() + 1);
+        algo_name = algo_name.substr(dir.size());
 
         table_output = std::ofstream(dir + algo_name + "/metrics.csv");
         if (!table_output) {
