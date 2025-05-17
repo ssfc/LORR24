@@ -231,17 +231,6 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
     }
     std::unordered_set<uint32_t> used_task;
 
-    uint32_t cnt_empty_dp = 0;
-    // (dist, r, index)
-    std::priority_queue<std::tuple<uint32_t, uint32_t, uint32_t>, std::vector<std::tuple<uint32_t, uint32_t, uint32_t>>, std::greater<>> Heap;
-    for (uint32_t r: free_robots) {
-        if (!dp[r].empty()) {
-            Heap.push({dp[r][0].first, r, 0});
-        } else {
-            cnt_empty_dp++;
-        }
-    }
-
     auto validate_task = [&](uint32_t task_id) {
         // task is already used
         if (used_task.count(task_id)) {
@@ -258,35 +247,124 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
         return true;
     };
 
-    while (!Heap.empty() && get_now() < end_time) {
-        auto [dist, r, index] = Heap.top();
-        Heap.pop();
-
-        uint32_t task_id = dp[r][index].second;
-        ASSERT(dist == dp[r][index].first, "invalid dist");
-
-        if (!validate_task(task_id)) {
-            index++;
-
-            if (index < dp[r].size()) {
-                Heap.push({dp[r][index].first, r, index});
+    if constexpr (!ENABLE_PARALLEL_LAZY_SCHEDULER) {
+        // (dist, r, index)
+        std::priority_queue<std::tuple<uint32_t, uint32_t, uint32_t>, std::vector<std::tuple<uint32_t, uint32_t, uint32_t>>, std::greater<>> Heap;
+        for (uint32_t r: free_robots) {
+            if (!dp[r].empty()) {
+                Heap.push({dp[r][0].first, r, 0});
             }
-
-            continue;
         }
 
-        ASSERT(env->task_pool.count(task_id), "no contains");
-        ASSERT(env->task_pool[task_id].agent_assigned == -1, "already assigned");
-        ASSERT(!used_task.count(task_id), "already used");
+        while (!Heap.empty() && get_now() < end_time) {
+            auto [dist, r, index] = Heap.top();
+            Heap.pop();
 
-        add(r, task_id);
-        used_task.insert(task_id);
+            uint32_t task_id = dp[r][index].second;
+            ASSERT(dist == dp[r][index].first, "invalid dist");
+
+            if (!validate_task(task_id)) {
+                index++;
+
+                if (index < dp[r].size()) {
+                    Heap.push({dp[r][index].first, r, index});
+                }
+
+                continue;
+            }
+
+            ASSERT(env->task_pool.count(task_id), "no contains");
+            ASSERT(env->task_pool[task_id].agent_assigned == -1, "already assigned");
+            ASSERT(!used_task.count(task_id), "already used");
+
+            add(r, task_id);
+            used_task.insert(task_id);
+        }
+    } else {
+
+        std::vector<std::priority_queue<std::tuple<uint32_t, uint32_t, uint32_t>, std::vector<std::tuple<uint32_t, uint32_t, uint32_t>>, std::greater<>>> Heaps(THREADS);
+        for (uint32_t i = 0; i < free_robots.size(); i++) {
+            uint32_t r = free_robots[i];
+            if (!dp[r].empty()) {
+                Heaps[i % THREADS].push({dp[r][0].first, r, 0});
+            }
+        }
+
+        while (get_now() < end_time) {
+            auto work = [&](uint32_t thr) {
+                auto &Heap = Heaps[thr];
+                while (!Heap.empty() && get_now() < end_time) {
+                    auto [dist, r, index] = Heap.top();
+                    Heap.pop();
+
+                    uint32_t task_id = dp[r][index].second;
+                    ASSERT(dist == dp[r][index].first, "invalid dist");
+
+                    if (!validate_task(task_id)) {
+                        index++;
+
+                        if (index < dp[r].size()) {
+                            Heap.push({dp[r][index].first, r, index});
+                        }
+
+                        continue;
+                    }
+
+                    ASSERT(env->task_pool.count(task_id), "no contains");
+                    ASSERT(env->task_pool[task_id].agent_assigned == -1, "already assigned");
+                    ASSERT(!used_task.count(task_id), "already used");
+
+                    Heap.push({dist, r, index});
+                    break;
+                }
+            };
+            std::vector<std::thread> threads(THREADS);
+            for (uint32_t thr = 0; thr < threads.size(); thr++) {
+                threads[thr] = std::thread(work, thr);
+            }
+            for (uint32_t thr = 0; thr < threads.size(); thr++) {
+                threads[thr].join();
+            }
+            uint32_t best_i = -1;
+            for (uint32_t thr = 0; thr < threads.size(); thr++) {
+                if (!Heaps[thr].empty() && (best_i == -1 || std::get<0>(Heaps[best_i].top()) > std::get<0>(Heaps[thr].top()))) {
+                    best_i = thr;
+                }
+            }
+            if (best_i == -1) {
+                break;
+            }
+
+            auto& Heap = Heaps[best_i];
+            auto [dist, r, index] = Heap.top();
+
+            uint32_t task_id = dp[r][index].second;
+            ASSERT(dist == dp[r][index].first, "invalid dist");
+
+            if (!validate_task(task_id)) {
+                continue;
+            }
+
+            ASSERT(env->task_pool.count(task_id), "no contains");
+            ASSERT(env->task_pool[task_id].agent_assigned == -1, "already assigned");
+            ASSERT(!used_task.count(task_id), "already used");
+
+            Heap.pop();
+            add(r, task_id);
+            used_task.insert(task_id);
+        }
     }
 
     validate();
 
     {
-        uint32_t p = (free_robots.size() - Heap.size() - cnt_empty_dp) * 100.0 / free_robots.size();
+        uint32_t cnt_assigned = 0;
+        for (uint32_t r: free_robots) {
+            if (desires[r] != -1) {
+                cnt_assigned++;
+            }
+        }
+        uint32_t p = cnt_assigned * 100.0 / free_robots.size();
         ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
         Printer() << "[Scheduler] real assigned robots: " << p << "%" << (p != 100 ? " bad\n" : "\n");
     }
