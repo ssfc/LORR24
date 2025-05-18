@@ -29,3 +29,8 @@ uint32_t &get_epibt_operation_depth() {
     static uint32_t depth = 0;
     return depth;
 }
+
+uint32_t &get_disable_agents() {
+    static uint32_t disable_agents = 0;
+    return disable_agents;
+}

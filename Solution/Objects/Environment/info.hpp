@@ -42,3 +42,5 @@ enum class SchedulerType {
 SchedulerType &get_scheduler_type();
 
 uint32_t& get_epibt_operation_depth();
+
+uint32_t& get_disable_agents();

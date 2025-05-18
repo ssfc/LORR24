@@ -31,7 +31,7 @@ bool PIBT::build(uint32_t r, int banned_desired, uint32_t depth, uint32_t &count
         // если там никого нет или он еще не посчитан
         if (!pos_to_robot.count(to.get_pos()) || desires[pos_to_robot.at(to.get_pos())] == -1) {
 
-            uint32_t dist = get_hm().get(get_graph().get_node(to), robots[r].target);
+            uint32_t dist = robots[r].is_disable() ? 0 : get_hm().get(get_graph().get_node(to), robots[r].target);
             actions.emplace_back(dist, dir);
         }
     }

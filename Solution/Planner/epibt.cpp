@@ -42,7 +42,9 @@ uint32_t EPIBT::get_used(uint32_t r) const {
 }
 
 int64_t EPIBT::get_smart_dist_IMPL(uint32_t r, uint32_t desired) const {
-    ASSERT(!robots[r].is_disable(), "disable agent is deprecated");
+    if (robots[r].is_disable()) {
+        return desired;
+    }
 
     const auto &op = get_operations()[desired];
     const auto &path = get_omap().get_nodes_path(robots[r].node, desired);
@@ -213,11 +215,9 @@ EPIBT::EPIBT(const std::vector<Robot> &robots, TimePoint end_time)
         int32_t max_weight = robots.size() + 1;
 
         robot_power.resize(robots.size());
-        // const double workload = robots.size() * 1.0 / get_map().get_count_free();
         for (uint32_t r = 0; r < robots.size(); r++) {
             double power = (max_weight - weight[r]) * 1.0 / max_weight;
             if (robots[r].is_disable()) {
-                FAILED_ASSERT("robot must be not disable");
                 power = 0;
             }
             power = power * power;
@@ -313,6 +313,9 @@ std::vector<Action> EPIBT::get_actions() const {
         answer[r] = op[0];
 
 #ifdef ENABLE_SMART_OPERATION_EXECUTION
+        if(robots[r].is_disable()){
+            continue;
+        }
         // перебирает набор действий и выбирает лучшее по расстоянию до цели
         auto update_answer = [&](const std::vector<Action> &actions) {
             ASSERT(!actions.empty(), "is empty");

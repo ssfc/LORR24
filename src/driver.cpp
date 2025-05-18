@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
             ("planner_algo,pa", po::value<string>()->required(), "planner algo")                                                                                                                                                              //
             ("graph_guidance,gg", po::value<string>()->required(), "graph guidance")                                                                                                                                                          //
             ("scheduler_algo,sa", po::value<string>()->required(), "scheduler algo")                                                                                                                                                          //
+            ("disable_agents,da", po::value<uint32_t>()->default_value(0), "disable agents num")                                                                                                                                             //
             ("inputFile,i", po::value<std::string>()->required(), "input file name")                                                                                                                                                          //
             ("output,o", po::value<std::string>()->default_value("./output.json"), "output results from the evaluation into a JSON formated file. If no file specified, the default name is 'output.json'")                                   //
             ("outputScreen,c", po::value<int>()->default_value(1), "the level of details in the output file, 1--showing all the output, 2--ignore the events and tasks, 3--ignore the events, tasks, errors, planner times, starts and paths")//
@@ -135,6 +136,8 @@ int main(int argc, char **argv) {
             FAILED_ASSERT("unexpected scheduler algo");
         }
     }
+
+    get_disable_agents() = vm["disable_agents"].as<uint32_t>();
 
     ASSERT(!(get_planner_type() == PlannerType::WPPL && get_graph_guidance_type() == GraphGuidanceType::DISABLE), "unexpected configuration: only WPPL+GG");
     ASSERT(!(get_planner_type() == PlannerType::PIBT_TF && get_graph_guidance_type() == GraphGuidanceType::ENABLE), "unexpected configuration: only PIBT+traffic flow without GG");

@@ -51,6 +51,31 @@ void RobotsHandler::update(const SharedEnvironment &env) {
         robots[r].target = target;
         robots[r].priority = task_dist;
     }
+
+    if (get_disable_agents() != 0) {
+        uint32_t max_task_assigned = robots.size() < get_disable_agents() ? 0 : robots.size() - get_disable_agents();
+        std::vector<std::pair<double, uint32_t>> ids;
+        for (uint32_t r = 0; r < robots.size(); r++) {
+            ids.emplace_back(robots[r].priority, r);
+        }
+        std::sort(ids.begin(), ids.end());
+
+        for (auto [metric, r]: ids) {
+            // не инициализирован
+            if (!robots[r].target) {
+                continue;
+            }
+            // есть задача
+            if (max_task_assigned > 0) {
+                // enable
+                max_task_assigned--;
+            } else {
+                // disable
+                robots[r].priority = -1;
+                robots[r].target = 0;
+            }
+        }
+    }
 }
 
 const Robot &RobotsHandler::get_robot(uint32_t r) const {
