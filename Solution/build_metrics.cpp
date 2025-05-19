@@ -11,7 +11,7 @@ std::ofstream table_output;
 
 std::ofstream total_table_output;
 
-const std::string dir = "Tmp/";
+const std::string dir = "NewData/random/";
 
 bool call(const std::string &algo_name, uint32_t test_id) {
     json data;
@@ -55,9 +55,9 @@ bool call(const std::string &algo_name, uint32_t test_id) {
 
     // build usage plots
     {
-        //std::string launch_str = "python3 Solution/Python/build_usage_plot.py '" + dir + algo_name + "/usage" + std::to_string(test_id) + ".txt' heatmap" + std::to_string(test_id) + " " + "warehouse";
-        //int ret_code = std::system(launch_str.c_str());
-        //ASSERT(ret_code == 0, "invalid ret code");
+        std::string launch_str = "python3 Solution/Python/build_usage_plot.py '" + dir + algo_name + "/usage" + std::to_string(test_id) + ".txt' heatmap" + std::to_string(test_id) + " " + "random";
+        int ret_code = std::system(launch_str.c_str());
+        ASSERT(ret_code == 0, "invalid ret code");
     }
 
     return true;

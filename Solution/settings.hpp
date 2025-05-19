@@ -9,7 +9,7 @@
 
 //#define ENABLE_DEFAULT_SCHEDULER
 
-//#define ENABLE_ASSERT
+#define ENABLE_ASSERT
 
 #define ENABLE_SMART_OPERATION_EXECUTION
 
@@ -28,7 +28,7 @@ static constexpr uint32_t THREADS = 32;
 
 static constexpr uint32_t SCHEDULER_REBUILD_DP_TIME = 200;
 
-static constexpr uint32_t SCHEDULER_LAZY_SOLVE_TIME = 300;
+static constexpr uint32_t SCHEDULER_LAZY_SOLVE_TIME = 500;
 
 static constexpr uint32_t SCHEDULER_LNS_SOLVE_TIME = 0;
 

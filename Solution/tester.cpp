@@ -25,11 +25,9 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
                            " --planner_algo '" + plan_algo + "'" +                                 //
                            " --graph_guidance " + graph_guidance_type +                            //
                            " --scheduler_algo " + scheduler_algo +                                 //
-                           " --disable_agents 4000" +                                              //
+                           //" --disable_agents 4000" + /*disable agents for competition GAME*/    //
                            " > 'Tmp/" + algo_name + "/output" + std::to_string(test_id) + ".txt'";
 
-    // 4000: 21690
-    // 3500: 18900
     int ret_code = std::system(call_str.c_str());
     std::cout << timer << std::endl;
     ASSERT(ret_code == 0, "invalid ret code");
@@ -37,14 +35,14 @@ void call(const std::string &test, int steps_num, const std::string &plan_algo, 
 
 std::vector<std::tuple<std::string, int, bool>> tests = {
 
-        /*{"Tests/My/random.domain/random_32_32_20_100.json", 1000, true},
+        {"Tests/My/random.domain/random_32_32_20_100.json", 1000, true},
         {"Tests/My/random.domain/random_32_32_20_200.json", 1000, true},
         {"Tests/My/random.domain/random_32_32_20_300.json", 1000, true},
         {"Tests/My/random.domain/random_32_32_20_400.json", 1000, true},
         {"Tests/My/random.domain/random_32_32_20_500.json", 1000, true},
         {"Tests/My/random.domain/random_32_32_20_600.json", 1000, true},
         {"Tests/My/random.domain/random_32_32_20_700.json", 1000, true},
-        {"Tests/My/random.domain/random_32_32_20_800.json", 1000, true},*/
+        {"Tests/My/random.domain/random_32_32_20_800.json", 1000, true},
 
         /*{"Tests/My/warehouse.domain/warehouse_large_1000.json", 5000, true},
         {"Tests/My/warehouse.domain/warehouse_large_2000.json", 5000, true},
@@ -68,30 +66,27 @@ std::vector<std::tuple<std::string, int, bool>> tests = {
         {"Tests/My/game.domain/brc202d_9000.json", 5000, true},
         {"Tests/My/game.domain/brc202d_10000.json", 5000, true},*/
 
-        {"Tests/Competition/city.domain/CITY-01.json", 3000, false},
-        {"Tests/Competition/city.domain/CITY-02.json", 3000, false},
+        /*{"Tests/Competition/city.domain/CITY-01.json", 3000, true},
+        {"Tests/Competition/city.domain/CITY-02.json", 3000, true},
         {"Tests/Competition/game.domain/GAME.json", 5000, true},
-        {"Tests/Competition/random.domain/RANDOM-01.json", 600, false},
-        {"Tests/Competition/random.domain/RANDOM-02.json", 600, false},
-        {"Tests/Competition/random.domain/RANDOM-03.json", 800, false},
-        {"Tests/Competition/random.domain/RANDOM-04.json", 1000, false},
-        {"Tests/Competition/random.domain/RANDOM-05.json", 2000, false},
-        {"Tests/Competition/warehouse.domain/SORTATION.json", 5000, false},// epibt(4)+gg плохой результат, так как плохо шедулер работал, нужно дать больше времени
-        {"Tests/Competition/warehouse.domain/WAREHOUSE.json", 5000, false},
+        {"Tests/Competition/random.domain/RANDOM-01.json", 600, true},
+        {"Tests/Competition/random.domain/RANDOM-02.json", 600, true},
+        {"Tests/Competition/random.domain/RANDOM-03.json", 800, true},
+        {"Tests/Competition/random.domain/RANDOM-04.json", 1000, true},
+        {"Tests/Competition/random.domain/RANDOM-05.json", 2000, true},
+        {"Tests/Competition/warehouse.domain/SORTATION.json", 5000, true},
+        {"Tests/Competition/warehouse.domain/WAREHOUSE.json", 5000, true},*/
 
-        // тестировать только pepibt(4)_lns +-gg
-        // нужно дотестировать game
-        // и протестировать random
-        // warehouse не поменялся
+        // TODO: добавить в readme --disable_agents
 };
 
 int main() {
 
-    std::cout << "kek" << std::endl;
+    std::cout << "lolarion" << std::endl;
 
     std::vector<std::string> planner_algos = {
             //"pibt",
-            //"epibt(4)",
+            "epibt(4)",
             "pepibt(4)_lns",
             //"wppl",
             //"pibt_tf",
@@ -99,7 +94,7 @@ int main() {
 
     std::vector<std::string> graph_guidance_types = {
             "enable",
-            //"disable",
+            "disable",
     };
 
     std::vector<std::string> scheduler_algos = {

@@ -313,7 +313,7 @@ std::vector<Action> EPIBT::get_actions() const {
         answer[r] = op[0];
 
 #ifdef ENABLE_SMART_OPERATION_EXECUTION
-        if(robots[r].is_disable()){
+        if (robots[r].is_disable()) {
             continue;
         }
         // перебирает набор действий и выбирает лучшее по расстоянию до цели

@@ -141,36 +141,35 @@ def paint_all(data, mn, mx, to_file):
 
 
 if __name__ == '__main__':
-    begin_path = "../../Data/game/"
+    begin_path = "../../NewData/game/"
     end_path = "/usage2.txt"
 
     # warehouse
     '''algos = [
-        ["pepibt_lns+gg+gs", "EPIBT+LNS+GG, throughput: 37.86"],
-        ["pepibt_lns+gs", "EPIBT+LNS, throughput: 10.11"],
+        ["pepibt(4)_lns+gg+gs", "EPIBT+LNS+GG"],
+        ["pepibt(4)_lns+gs", "EPIBT+LNS"],
 
-        ["epibt+gg+gs", "EPIBT+GG, throughput: 22.33"],
-        ["epibt+gs", "EPIBT, throughput: 7.37"],
+        ["epibt(4)+gg+gs", "EPIBT+GG"],
+        ["epibt(4)+gs", "EPIBT"],
 
-        ["pibt+gg+gs", "PIBT+GG, Throughput: 12.21"],
-        ["pibt+gs", "PIBT, Throughput: 4.91"],
+        ["pibt+gg+gs", "PIBT+GG"],
+        ["pibt+gs", "PIBT"],
 
-        ["wppl+gg+gs", "WPPL+GG, throughput: 33.35"],
-        ["pibt_tf+gs", "PIBT+traffic flow, throughput: 19.58"],
+        ["wppl+gg+gs", "WPPL+GG"],
+        ["pibt_tf+gs", "PIBT+traffic flow"],
     ]'''
 
+    # game
     algos = [
-        ["pepibt_lns+gg+gs", "EPIBT+LNS+GG, throughput: 5.98"],
-        ["pepibt_lns+gs", "EPIBT+LNS, throughput: 2.87"],
+        ["pepibt(4)_lns+gg+gs", "EPIBT+LNS+GG"],
+        ["epibt(4)+gg+gs", "EPIBT+GG"],
+        ["pibt+gg+gs", "PIBT+GG"],
+        ["wppl+gg+gs", "WPPL+GG"],
 
-        ["epibt+gg+gs", "EPIBT+GG, throughput: 2.93"],
-        ["epibt+gs", "EPIBT, throughput: 2.18"],
-
-        ["pibt+gg+gs", "PIBT+GG, Throughput: 2.37"],
-        ["pibt+gs", "PIBT, Throughput: 1.90"],
-
-        ["wppl+gg+gs", "WPPL+GG, throughput: 3.03"],
-        ["pibt_tf+gs", "PIBT+traffic flow, throughput: 1.96"],
+        ["pepibt(4)_lns+gs", "EPIBT+LNS"],
+        ["epibt(4)+gs", "EPIBT"],
+        ["pibt+gs", "PIBT"],
+        ["pibt_tf+gs", "PIBT+traffic flow"],
     ]
 
     to_file = "game_plots.pdf"
