@@ -222,7 +222,7 @@ class PlanConfig2:
     def load_events(self, data:Dict):
         print("Loading event", end="...")
 
-        assert self.max_seq_num > -1
+        #assert self.max_seq_num > -1
         for (finish_tstep, ag_id, task_id, nxt_errand_id) in data["events"]:
             if (finish_tstep > self.end_tstep):
                 continue

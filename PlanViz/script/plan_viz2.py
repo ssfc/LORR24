@@ -179,7 +179,8 @@ class PlanViz2:
         self.task_shown = ttk.Combobox(self.frame, width=15, state="readonly",
                                        values=["Next Errand",
                                                "Assigned Tasks",
-                                               "All Tasks"
+                                               "All Tasks",
+                                               "None"
                                                ])
         self.task_shown.current(0)
         self.task_shown.bind("<<ComboboxSelected>>", self.show_tasks_by_click)
