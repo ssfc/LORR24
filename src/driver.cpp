@@ -246,3 +246,8 @@ int main(int argc, char **argv) {
 
     _exit(0);
 }
+
+// Compile on ubuntu platform:
+// ./compile.sh
+// Run on ubuntu platform:
+// ./build/lifelong --inputFile ./example_problems/random.domain/random_32_32_20_100.json -o test.json -s 5000
