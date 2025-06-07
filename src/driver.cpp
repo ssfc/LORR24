@@ -248,6 +248,6 @@ int main(int argc, char **argv) {
 }
 
 // Compile on ubuntu platform:
-// ./compile.sh
+// cmake. ; make
 // Run on ubuntu platform:
-// ./build/lifelong --inputFile ./example_problems/random.domain/random_32_32_20_100.json -o test.json -s 5000
+// ./bin/lifelong -i ./example_problems_hse/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
