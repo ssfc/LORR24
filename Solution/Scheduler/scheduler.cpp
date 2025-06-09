@@ -29,6 +29,8 @@ int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
     return dist;
 }
 
+// 不知道怎么面对其中的多线程问题, 后面再想想
+// 突然想到, 计算每个方块内的agent数量可以用到多线程方法, 因为可以独立计算
 void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed_schedule) {
     solver.update();
     solver.rebuild_dp(std::min(end_time, get_now() + Milliseconds(SCHEDULER_REBUILD_DP_TIME)));
