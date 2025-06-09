@@ -249,12 +249,18 @@ void MyScheduler::hungarian_schedule(TimePoint end_time, std::vector<int> &sched
     }
 }
 
-void MyScheduler::plan(TimePoint end_time, std::vector<int> &proposed_schedule) {
-    if (get_scheduler_type() == SchedulerType::GREEDY) {
+void MyScheduler::plan(TimePoint end_time, std::vector<int> &proposed_schedule)
+{
+    if (get_scheduler_type() == SchedulerType::GREEDY)
+    {
         solver_schedule(end_time, proposed_schedule);
-    } else if (get_scheduler_type() == SchedulerType::HUNGARIAN) {
+    }
+    else if (get_scheduler_type() == SchedulerType::HUNGARIAN)
+    {
         hungarian_schedule(end_time, proposed_schedule);
-    } else {
+    }
+    else
+    {
         FAILED_ASSERT("undefined scheduler type");
     }
 }
