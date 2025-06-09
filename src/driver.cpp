@@ -126,13 +126,18 @@ int main(int argc, char **argv) {
 
     std::string scheduler_algo = vm["scheduler_algo"].as<std::string>();
     {
-        if (scheduler_algo == "greedy") {
+        if (scheduler_algo == "greedy")
+        {
             scheduler_algo = "+gs";
             get_scheduler_type() = SchedulerType::GREEDY;
-        } else if (scheduler_algo == "hungarian") {
+        }
+        else if (scheduler_algo == "hungarian")
+        {
             scheduler_algo = "+hs";
             get_scheduler_type() = SchedulerType::HUNGARIAN;
-        } else {
+        }
+        else
+        {
             FAILED_ASSERT("unexpected scheduler algo");
         }
     }
