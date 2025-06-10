@@ -136,6 +136,11 @@ int main(int argc, char **argv) {
             scheduler_algo = "+hs";
             get_scheduler_type() = SchedulerType::HUNGARIAN;
         }
+        else if (scheduler_algo == "DefaultGreedy")
+        {
+            scheduler_algo = "+default_greedy";
+            get_scheduler_type() = SchedulerType::DEFAULT_GREEDY;
+        }
         else
         {
             FAILED_ASSERT("unexpected scheduler algo");

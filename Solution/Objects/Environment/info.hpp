@@ -37,7 +37,7 @@ GraphGuidanceType &get_graph_guidance_type();
 enum class SchedulerType {
     GREEDY,
     HUNGARIAN,
-    DefaultGreedy
+    DEFAULT_GREEDY,
 };
 
 SchedulerType &get_scheduler_type();

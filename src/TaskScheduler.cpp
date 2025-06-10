@@ -25,6 +25,11 @@ void TaskScheduler::initialize(int preprocess_time_limit) {
     int limit = preprocess_time_limit / 2 - DefaultPlanner::SCHEDULER_TIMELIMIT_TOLERANCE;
     DefaultPlanner::schedule_initialize(limit, env);
 #else
+    // Default initialization
+    int limit = preprocess_time_limit / 2 - DefaultPlanner::SCHEDULER_TIMELIMIT_TOLERANCE;
+    DefaultPlanner::schedule_initialize(limit, env);
+
+    // HSE initialization
     init_environment(*env);
 #endif
 }
@@ -59,7 +64,17 @@ void TaskScheduler::plan(int time_limit, std::vector<int> &proposed_schedule) {
 #else
     TimePoint end_time = std::min(env->plan_start_time + Milliseconds(time_limit - 10), get_now() + Milliseconds(SCHEDULER_REBUILD_DP_TIME + SCHEDULER_LAZY_SOLVE_TIME + SCHEDULER_LNS_SOLVE_TIME));
     update_environment(*env);
-    my_scheduler.plan(end_time, proposed_schedule);
+
+    if (get_scheduler_type() == SchedulerType::DEFAULT_GREEDY)
+    {
+        int limit = time_limit / 2 - DefaultPlanner::SCHEDULER_TIMELIMIT_TOLERANCE;
+        DefaultPlanner::schedule_plan(limit, proposed_schedule, env);
+    }
+    else
+    {
+        my_scheduler.plan(end_time, proposed_schedule);
+    }
+    
 
     PRINT(
             uint32_t cnt = 0;
