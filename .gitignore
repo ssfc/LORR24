@@ -74,3 +74,6 @@ Makefile
 
 # 忽略环境相关文件
 .env
+
+# 其他个性文件
+printer.txt
