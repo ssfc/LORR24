@@ -340,3 +340,191 @@ void BaseSystem::saveResults(const string &fileName, int screen) const {
     std::ofstream f(fileName, std::ios_base::trunc | std::ios_base::out);
     f << std::setw(4) << js;
 }
+
+void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, string _task_method, int _square_size,
+                               int screen) const
+{
+    // 获取当前时间
+    std::time_t now = std::time(nullptr);
+    std::tm* localTime = std::localtime(&now);
+
+    // 查找路径中最后一个斜杠的位置
+    size_t lastSlash = fileName.find_last_of("/\\");
+    // 查找路径中最后一个点的位置（文件扩展名的开始）
+    size_t lastDot = fileName.find_last_of(".");
+    // 提取斜杠和点之间的部分（文件名，不包含扩展名）
+    std::string outfileName = fileName.substr(lastSlash + 1, lastDot - lastSlash - 1);
+
+    // 定义格式化后的时间的字符串
+    std::string timeStr;
+
+    // 设置格式化后的时间长度，使用100个字符的缓冲区作为初始大小
+    timeStr.resize(100);
+
+    // 格式化时间并存储在字符串中
+    std::strftime(&timeStr[0], timeStr.size(), "%Y-%m-%d-%H-%M", localTime);
+
+    // 删除格式化后字符串中的空字符部分（\0），并调整字符串大小
+    timeStr.resize(std::strlen(timeStr.c_str()));
+
+    outfileName = outfileName + '-' + _simulation_time + '-' + _task_method + '-' + std::to_string(_square_size)
+                  + '-' + timeStr + ".json";
+
+    cout << "outfilename: " << outfileName << endl;
+
+    json js;
+    // Save action model
+    js["actionModel"] = "MAPF_T";
+    js["version"] = "2024 LoRR";
+
+    // std::string feasible = fast_mover_feasible ? "Yes" : "No";
+    // js["AllValid"] = feasible;
+
+    js["teamSize"] = num_of_agents;
+
+    js["numTaskFinished"] = task_manager.num_of_task_finish;
+    int makespan = 0;
+    if (num_of_agents > 0)
+    {
+        makespan = solution_costs[0];
+        for (int a = 1; a < num_of_agents; a++)
+        {
+            if (solution_costs[a] > makespan)
+            {
+                makespan = solution_costs[a];
+            }
+        }
+    }
+    js["makespan"] = makespan;
+
+    js["numPlannerErrors"] = simulator.get_number_errors();
+    js["numScheduleErrors"] = task_manager.get_number_errors();
+
+    js["numEntryTimeouts"] = total_timetous;
+
+    // Save start locations[x,y,orientation]
+    if (screen <= 2)
+    {
+        js["start"] = simulator.starts_to_json();
+    }
+
+    if (screen <= 2)
+    {
+        js["actualPaths"] = simulator.actual_path_to_json();
+    }
+
+    if (screen <=1)
+    {
+        js["plannerPaths"] = simulator.planned_path_to_json();
+
+        json planning_times = json::array();
+        for (double time: planner_times)
+            planning_times.push_back(time);
+        js["plannerTimes"] = planning_times;
+
+        // Save errors
+        js["errors"] = simulator.action_errors_to_json();
+
+        //actual schedules
+        json aschedules = json::array();
+        for (int i = 0; i < num_of_agents; i++)
+        {
+            std::string schedules;
+            bool first = true;
+            for (const auto schedule : task_manager.actual_schedule[i])
+            {
+                if (!first)
+                {
+                    schedules+= ",";
+                }
+                else
+                {
+                    first = false;
+                }
+
+                schedules+=std::to_string(schedule.first);
+                schedules+=":";
+                int tid = schedule.second;
+                schedules+=std::to_string(tid);
+            }
+            aschedules.push_back(schedules);
+        }
+
+        js["actualSchedule"] = aschedules;
+
+        //planned schedules
+        json pschedules = json::array();
+        for (int i = 0; i < num_of_agents; i++)
+        {
+            std::string schedules;
+            bool first = true;
+            for (const auto schedule : task_manager.planner_schedule[i])
+            {
+                if (!first)
+                {
+                    schedules+= ",";
+                }
+                else
+                {
+                    first = false;
+                }
+
+                schedules+=std::to_string(schedule.first);
+                schedules+=":";
+                int tid = schedule.second;
+                schedules+=std::to_string(tid);
+
+            }
+            pschedules.push_back(schedules);
+        }
+
+        js["plannerSchedule"] = pschedules;
+
+        // Save errors
+        json schedule_errors = json::array();
+        for (auto error: task_manager.schedule_errors)
+        {
+            std::string error_msg;
+            int t_id;
+            int agent1;
+            int agent2;
+            int timestep;
+            std::tie(error_msg,t_id,agent1,agent2,timestep) = error;
+            json e = json::array();
+            e.push_back(t_id);
+            e.push_back(agent1);
+            e.push_back(agent2);
+            e.push_back(timestep);
+            e.push_back(error_msg);
+            schedule_errors.push_back(e);
+        }
+
+        js["scheduleErrors"] = schedule_errors;
+
+        // Save events
+        json event = json::array();
+        for(auto e: task_manager.events)
+        {
+            json ev = json::array();
+            int timestep;
+            int agent_id;
+            int task_id;
+            int seq_id;
+            std::tie(timestep,agent_id,task_id,seq_id) = e;
+            ev.push_back(timestep);
+            ev.push_back(agent_id);
+            ev.push_back(task_id);
+            ev.push_back(seq_id);
+            event.push_back(ev);
+        }
+        js["events"] = event;
+
+        // Save all tasks
+        json tasks = task_manager.to_json(map.cols);
+        js["tasks"] = tasks;
+    }
+
+    std::ofstream f(outfileName,std::ios_base::trunc |std::ios_base::out);
+    f << std::setw(4) << js;
+
+}

@@ -69,6 +69,8 @@ public:
     //void saveSimulationIssues(const string &fileName) const;
     void saveResults(const string &fileName, int screen) const;
 
+    void saveMyResults(const string &fileName, string _simulation_time, string _task_method, int _square_size,
+                       int screen) const;
 
 protected:
     Grid map;
