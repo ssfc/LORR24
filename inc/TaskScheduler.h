@@ -11,6 +11,9 @@ public:
     SharedEnvironment *env;
     MyScheduler my_scheduler;
 
+    std::unordered_set<int> free_agents;
+    std::unordered_set<int> free_tasks;
+
     struct AgentTask
     {
         int task_id = -1;
