@@ -272,7 +272,14 @@ int main(int argc, char **argv) {
 // Run on ubuntu platform:
 // ./bin/lifelong -i ./example_problems_hse/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
 // ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-01.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
-// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-01.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-02.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-03.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-04.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-05.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/city.domain/CITY-01.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/city.domain/CITY-02.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/game.domain/GAME.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+// ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/warehouse.domain/SORTATION.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
 // ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/warehouse.domain/WAREHOUSE.json -o test.json -s 5000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
 
 
