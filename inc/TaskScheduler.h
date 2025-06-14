@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_set>
 #include <SharedEnv.h>
 #include <Tasks.h>
 
