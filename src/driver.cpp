@@ -59,7 +59,8 @@ int main(int argc, char **argv) {
             ("planTimeLimit,t", po::value<int>()->default_value(1000), "the time limit for planner in milliseconds")                                                                                                                          //
             ("preprocessTimeLimit,p", po::value<int>()->default_value(30000), "the time limit for preprocessing in milliseconds")                                                                                                             //
             ("logFile,l", po::value<std::string>()->default_value(""), "redirect stdout messages into the specified log file")                                                                                                                //
-            ("logDetailLevel,d", po::value<int>()->default_value(1), "the minimum severity level of log messages to display, 1--showing all the messages, 2--showing warnings and fatal errors, 3--showing fatal errors only");
+            ("logDetailLevel,d", po::value<int>()->default_value(1), "the minimum severity level of log messages to display, 1--showing all the messages, 2--showing warnings and fatal errors, 3--showing fatal errors only")
+            ("squareSize", po::value<int>()->default_value(12), "the partition square size");
 
     po::store(po::parse_command_line(argc, argv, desc), vm);
 
@@ -244,6 +245,12 @@ int main(int argc, char **argv) {
     system_ptr->simulate(vm["simulationTime"].as<int>());
 
     system_ptr->saveResults(vm["output"].as<std::string>(), vm["outputScreen"].as<int>());
+
+    task_assignment_method = vm["scheduler_algo"].as<std::string>();
+    partition_square_size = vm["squareSize"].as<int>();
+    system_ptr->saveMyResults(vm["inputFile"].as<std::string>(), std::to_string(vm["simulationTime"].as<int>()),
+                              task_assignment_method, partition_square_size, vm["outputScreen"].as<int>());
+
 
     delete model;
     delete logger;
