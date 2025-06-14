@@ -11,6 +11,10 @@ public:
     SharedEnvironment *env;
     MyScheduler my_scheduler;
 
+    struct Point {
+        int x, y;
+    };
+
     explicit TaskScheduler(SharedEnvironment *env) : env(env), my_scheduler(env) {
 
     }
