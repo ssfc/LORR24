@@ -271,6 +271,8 @@ int main(int argc, char **argv) {
 // cmake. ; make
 // Run on ubuntu platform:
 // ./bin/lifelong -i ./example_problems_hse/random.domain/random_32_32_20_400.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
+
+// Main Round Evaluation Instances
 // ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-01.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
 // ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-02.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
 // ./bin/lifelong -i ./2024main-instance/MainRoundEvaluationInstances/random.domain/RANDOM-03.json -o test.json -s 1000 -t 300 -p 1800000 --pa 'epibt(4)' --gg enable --sa greedy
