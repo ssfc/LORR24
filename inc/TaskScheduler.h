@@ -28,6 +28,7 @@ public:
     int total_min_span = 0; // 已完成任务的理论完成时间下界之和
     int total_real_duration = 0; // 已完成任务的实际完成时间之和
     double total_jam = 0;
+    double jam_coefficient = 1; // 在多大程度上考虑拥堵
 
     struct Point {
         int x, y;
