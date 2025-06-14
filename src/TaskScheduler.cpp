@@ -29,6 +29,8 @@ void TaskScheduler::initialize(int preprocess_time_limit) {
     int limit = preprocess_time_limit / 2 - DefaultPlanner::SCHEDULER_TIMELIMIT_TOLERANCE;
     DefaultPlanner::schedule_initialize(limit, env);
 
+    agent_task.resize(env->num_of_agents); // initialize all agents to free state
+
     // HSE initialization
     init_environment(*env);
 #endif
