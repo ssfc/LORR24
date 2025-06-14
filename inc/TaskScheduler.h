@@ -24,6 +24,8 @@ public:
     };
     vector<AgentTask> agent_task;
 
+    int numTaskFinished = 0;
+
     struct Point {
         int x, y;
     };
