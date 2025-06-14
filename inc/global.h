@@ -9,5 +9,6 @@
 
 std::string task_assignment_method;
 int partition_square_size;
+std::string path_planning_method;
 
 #endif // GLOBAL_H

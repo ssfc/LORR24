@@ -70,7 +70,7 @@ public:
     void saveResults(const string &fileName, int screen) const;
 
     void saveMyResults(const string &fileName, string _simulation_time, string _task_method, int _square_size,
-                       int screen) const;
+                       string _path_planning_method, int screen) const;
 
 protected:
     Grid map;

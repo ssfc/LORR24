@@ -342,7 +342,7 @@ void BaseSystem::saveResults(const string &fileName, int screen) const {
 }
 
 void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, string _task_method, int _square_size,
-                               int screen) const
+                               string _path_planning_method, int screen) const
 {
     // 获取当前时间
     std::time_t now = std::time(nullptr);
@@ -368,7 +368,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     timeStr.resize(std::strlen(timeStr.c_str()));
 
     outfileName = outfileName + '-' + _simulation_time + '-' + _task_method + '-' + std::to_string(_square_size)
-                  + '-' + timeStr + ".json";
+                  + '-' + _path_planning_method + '-' + timeStr + ".json";
 
     cout << "outfilename: " << outfileName << endl;
 
