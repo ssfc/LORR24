@@ -26,4 +26,11 @@ public:
     virtual void initialize(int preprocess_time_limit);
 
     virtual void plan(int time_limit, std::vector<int> &proposed_schedule);
+
+    // 11: compute pickup jam by counting whether other agent-task line intersect with this agent-task line
+    [[nodiscard]] int compute_jam_curr_pickup_intersect_curr_goal(int _agent_id, Point _agent_loc,
+                                                                  Point _agent_end);
+    void adaptive_jam_curr_pickup_intersect_curr_goal(int time_limit, std::vector<int> & proposed_schedule);
+
+
 };

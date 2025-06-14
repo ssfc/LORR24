@@ -38,6 +38,7 @@ enum class SchedulerType {
     GREEDY,
     HUNGARIAN,
     DEFAULT_GREEDY,
+    adaptive_jam_curr_pickup_intersect_curr_goal,
 };
 
 SchedulerType &get_scheduler_type();

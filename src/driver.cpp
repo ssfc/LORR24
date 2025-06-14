@@ -143,6 +143,11 @@ int main(int argc, char **argv) {
             scheduler_algo = "+default_greedy";
             get_scheduler_type() = SchedulerType::DEFAULT_GREEDY;
         }
+        else if (scheduler_algo == "adaptive_jam_curr_pickup_intersect_curr_goal")
+        {
+            scheduler_algo = "+adaptive_jam_curr_pickup_intersect_curr_goal";
+            get_scheduler_type() = SchedulerType::adaptive_jam_curr_pickup_intersect_curr_goal;
+        }
         else
         {
             FAILED_ASSERT("unexpected scheduler algo");
