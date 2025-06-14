@@ -1,5 +1,6 @@
 #include "CompetitionSystem.h"
 #include "Evaluation.h"
+#include "global.h"
 #include "nlohmann/json.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
