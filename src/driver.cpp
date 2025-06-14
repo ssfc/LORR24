@@ -249,7 +249,7 @@ int main(int argc, char **argv) {
 
     task_assignment_method = vm["scheduler_algo"].as<std::string>();
     partition_square_size = vm["squareSize"].as<int>();
-    path_planning_method = vm["scheduler_algo"].as<std::string>();
+    path_planning_method = vm["planner_algo"].as<std::string>();
     system_ptr->saveMyResults(vm["inputFile"].as<std::string>(), std::to_string(vm["simulationTime"].as<int>()),
                               task_assignment_method, partition_square_size, path_planning_method,
                               vm["outputScreen"].as<int>());
