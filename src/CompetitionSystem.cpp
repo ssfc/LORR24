@@ -334,7 +334,7 @@ void BaseSystem::saveResults(const string &fileName, int screen) const {
 
         // Save all tasks
         json tasks = task_manager.to_json(map.cols);
-        js["tasks"] = tasks;
+        // js["tasks"] = tasks;
     }
 
     std::ofstream f(fileName, std::ios_base::trunc | std::ios_base::out);
@@ -521,7 +521,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
 
         // Save all tasks
         json tasks = task_manager.to_json(map.cols);
-        js["tasks"] = tasks;
+        // js["tasks"] = tasks;
     }
 
     std::ofstream f(outfileName,std::ios_base::trunc |std::ios_base::out);

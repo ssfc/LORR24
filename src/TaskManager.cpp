@@ -206,7 +206,7 @@ json TaskManager::to_json(int map_cols) const {
             locs.push_back(loc % map_cols);
         }
         task.push_back(locs);
-        tasks.push_back(task);
+        // tasks.push_back(task);
     }
     return tasks;
 }
