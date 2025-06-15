@@ -515,7 +515,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
             ev.push_back(agent_id);
             ev.push_back(task_id);
             ev.push_back(seq_id);
-            event.push_back(ev);
+            // event.push_back(ev);
         }
         js["events"] = event;
 
