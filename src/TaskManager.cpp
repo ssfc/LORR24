@@ -91,7 +91,7 @@ bool TaskManager::set_task_assignment(vector<int> &assignment) {
 
     for (int a = 0; a < current_assignment.size(); a++) {
         if (actual_schedule[a].empty() || current_assignment[a] != actual_schedule[a].back().second) {
-            actual_schedule[a].push_back(make_pair(curr_timestep, current_assignment[a]));
+            // actual_schedule[a].push_back(make_pair(curr_timestep, current_assignment[a]));
         }
     }
 
