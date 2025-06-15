@@ -8,6 +8,9 @@
 
 #include <settings.hpp>
 
+extern std::string task_assignment_method;
+extern int partition_square_size;
+
 /**
  * Initializes the task scheduler with a given time limit for preprocessing.
  * 
