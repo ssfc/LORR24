@@ -65,7 +65,7 @@ bool TaskManager::validate_task_assignment(vector<int> &assignment) {
 bool TaskManager::set_task_assignment(vector<int> &assignment) {
     for (int a = 0; a < assignment.size(); a++) {
         if (planner_schedule[a].empty() || assignment[a] != planner_schedule[a].back().second) {
-            planner_schedule[a].push_back(make_pair(curr_timestep, assignment[a]));
+            // planner_schedule[a].push_back(make_pair(curr_timestep, assignment[a]));
         }
     }
     if (!validate_task_assignment(assignment)) {

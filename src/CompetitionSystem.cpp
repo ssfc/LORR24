@@ -475,7 +475,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
                 schedules+=std::to_string(tid);
 
             }
-            pschedules.push_back(schedules);
+            // pschedules.push_back(schedules);
         }
 
         js["plannerSchedule"] = pschedules;
