@@ -38,6 +38,9 @@ public:
         int x, y;
     };
 
+    int first_epoch_done_time = -1; // 如果初始阶段的任务较多, 先等它们分配完成. 本变量记录初始分配结束时间。
+    std::unordered_map<int, int> task_region; // 记录每个task所属的历史区域
+
     explicit TaskScheduler(SharedEnvironment *env) : env(env), my_scheduler(env) {
 
     }
@@ -93,6 +96,9 @@ public:
     [[nodiscard]] int compute_jam_curr_pickup_intersect_curr_goal(int _agent_id, Point _agent_loc,
                                                                   Point _agent_end);
     void adaptive_jam_curr_pickup_intersect_curr_goal(int time_limit, std::vector<int> & proposed_schedule);
+
+    // 默认分配算法，用于其他分配算法处理首批任务
+    void greedy_sum_without_newtask(int time_limit, std::vector<int> & proposed_schedule);
 
     // 1.2: 将地图分成12x12的区域, task所在区域中agent的数量作为sum jam weight
     void adaptive_jam_task_pickup_region_count_current(int time_limit, std::vector<int> & proposed_schedule);

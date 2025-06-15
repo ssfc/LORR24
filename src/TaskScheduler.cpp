@@ -285,6 +285,85 @@ void TaskScheduler::adaptive_jam_curr_pickup_intersect_curr_goal(int time_limit,
 }
 
 
+// 默认分配算法，用于其他分配算法处理首批任务
+void TaskScheduler::greedy_sum_without_newtask(int time_limit, std::vector<int> & proposed_schedule)
+{
+    // use at most half of time_limit to compute schedule, -10 for timing error tolerance
+    // so that the remainning time are left for path planner
+    TimePoint endtime = std::chrono::steady_clock::now() + std::chrono::milliseconds(time_limit);
+    // cout<<"schedule plan limit" << time_limit <<endl;
+
+    // 由于new task已经在调用前插入过了, 所以这里不再插入新任务
+    cout << "free agent num: " << free_agents.size() << endl;
+    // cout << "free task num: " << free_tasks.size() << endl;
+
+    int min_task_i, min_task_makespan, dist, c_loc, count;
+    clock_t start = clock();
+
+    // iterate over the free agents to decide which task to assign to each of them
+    auto it = free_agents.begin();
+    while (it != free_agents.end())
+    {
+        // keep assigning until timeout
+        if (std::chrono::steady_clock::now() > endtime)
+        {
+            break;
+        }
+        int i = *it;
+
+        assert(env->curr_task_schedule[i] == -1);
+
+        min_task_i = -1;
+        min_task_makespan = INT_MAX;
+        count = 0;
+
+        // iterate over all the unassigned tasks to find the one with the minimum makespan for agent i
+        for (int t_id : free_tasks)
+        {
+            //check for timeout every 10 task evaluations
+            if (count % 10 == 0 && std::chrono::steady_clock::now() > endtime)
+            {
+                break;
+            }
+            dist = 0;
+            c_loc = env->curr_states.at(i).location;
+
+            // iterate over the locations (errands) of the task to compute the makespan to finish the task
+            // makespan: the time for the agent to complete all the errands of the task t_id in order
+            for (int loc : env->task_pool[t_id].locations){
+                dist += DefaultPlanner::get_h(env, c_loc, loc);
+                c_loc = loc;
+            }
+
+            // update the new minimum makespan
+            if (dist < min_task_makespan){
+                min_task_i = t_id;
+                min_task_makespan = dist;
+            }
+            count++;
+        }
+
+        // assign the best free task to the agent i (assuming one exists)
+        if (min_task_i != -1){
+            proposed_schedule[i] = min_task_i;
+            it = free_agents.erase(it);
+            free_tasks.erase(min_task_i);
+        }
+        // nothing to assign
+        else{
+            proposed_schedule[i] = -1;
+            it++;
+        }
+    }
+
+    cout << "Time Usage: " <<  ((float)(clock() - start))/CLOCKS_PER_SEC <<endl;
+#ifndef NDEBUG
+    cout << "new free agents: " << env->new_freeagents.size() << " new tasks: "<< env->new_tasks.size() <<  endl;
+    cout << "free agents: " << free_agents.size() << " free tasks: " << free_tasks.size() << endl;
+#endif
+}
+
+
 // 1.2: 用地图以12x12方形分割区域, task所在区域中agent的数量作为jam
 void TaskScheduler::adaptive_jam_task_pickup_region_count_current(int time_limit, std::vector<int> & proposed_schedule)
 {
