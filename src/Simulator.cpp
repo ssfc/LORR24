@@ -8,9 +8,9 @@ vector<State> Simulator::move(vector<Action> &actions) {
         //move_valid = false;
         all_valid = false;
         if (k >= actions.size()) {
-            planner_movements[k].push_back(Action::NA);
+            // planner_movements[k].push_back(Action::NA);
         } else {
-            planner_movements[k].push_back(actions[k]);
+            // planner_movements[k].push_back(actions[k]);
         }
     }
 
@@ -25,7 +25,7 @@ vector<State> Simulator::move(vector<Action> &actions) {
 
     for (int k = 0; k < num_of_agents; k++) {
         paths[k].push_back(curr_states[k]);
-        actual_movements[k].push_back(actions[k]);
+        // actual_movements[k].push_back(actions[k]);
     }
     //return move_valid;
     return curr_states;
