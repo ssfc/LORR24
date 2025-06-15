@@ -148,6 +148,11 @@ int main(int argc, char **argv) {
             scheduler_algo = "+adaptive_jam_curr_pickup_intersect_curr_goal";
             get_scheduler_type() = SchedulerType::adaptive_jam_curr_pickup_intersect_curr_goal;
         }
+        else if (scheduler_algo == "adaptive_jam_task_pickup_region_count_current")
+        {
+            scheduler_algo = "+adaptive_jam_task_pickup_region_count_current";
+            get_scheduler_type() = SchedulerType::adaptive_jam_task_pickup_region_count_current;
+        }
         else
         {
             FAILED_ASSERT("unexpected scheduler algo");

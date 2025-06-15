@@ -94,5 +94,6 @@ public:
                                                                   Point _agent_end);
     void adaptive_jam_curr_pickup_intersect_curr_goal(int time_limit, std::vector<int> & proposed_schedule);
 
-
+    // 1.2: 将地图分成12x12的区域, task所在区域中agent的数量作为sum jam weight
+    void adaptive_jam_task_pickup_region_count_current(int time_limit, std::vector<int> & proposed_schedule);
 };

@@ -39,6 +39,7 @@ enum class SchedulerType {
     HUNGARIAN,
     DEFAULT_GREEDY,
     adaptive_jam_curr_pickup_intersect_curr_goal,
+    adaptive_jam_task_pickup_region_count_current,
 };
 
 SchedulerType &get_scheduler_type();
