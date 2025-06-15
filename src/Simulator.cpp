@@ -24,7 +24,7 @@ vector<State> Simulator::move(vector<Action> &actions) {
     timestep++;
 
     for (int k = 0; k < num_of_agents; k++) {
-        paths[k].push_back(curr_states[k]);
+        // paths[k].push_back(curr_states[k]);
         // actual_movements[k].push_back(actions[k]);
     }
     //return move_valid;
@@ -61,7 +61,7 @@ json Simulator::actual_path_to_json() const {
                 path += "W";
             }
         }
-        apaths.push_back(path);
+        // apaths.push_back(path);
     }
 
     return apaths;
@@ -92,7 +92,7 @@ json Simulator::planned_path_to_json() const {
                 path += "W";
             }
         }
-        ppaths.push_back(path);
+        // ppaths.push_back(path);
     }
 
     return ppaths;
