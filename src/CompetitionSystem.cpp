@@ -144,7 +144,7 @@ void BaseSystem::simulate(int simulation_time) {
         if (simulator.get_curr_timestep() >= simulation_time) {
 
             auto diff = end - start;
-            planner_times.push_back(std::chrono::duration<double>(diff).count());
+            // planner_times.push_back(std::chrono::duration<double>(diff).count());
             break;
         }
 
@@ -160,7 +160,7 @@ void BaseSystem::simulate(int simulation_time) {
 
 
         auto diff = end - start;
-        planner_times.push_back(std::chrono::duration<double>(diff).count());
+        // planner_times.push_back(std::chrono::duration<double>(diff).count());
 
         // update tasks
         task_manager.update_tasks(curr_states, proposed_schedule, simulator.get_curr_timestep());
