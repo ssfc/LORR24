@@ -117,7 +117,7 @@ json Simulator::starts_to_json() const {
                 s.push_back("N");
                 break;
         }
-        start.push_back(s);
+        // start.push_back(s);
     }
 
     return start;
