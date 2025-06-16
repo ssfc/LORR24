@@ -28,3 +28,21 @@
 
 
 
+## 2 Обзор литературы 文献综述
+
+### 2.1 Priority Inheritance with Backtracking
+
+
+
+### 2.2 Windowed Parallel PIBT-LNS
+
+
+
+### 2.3 Graph Guidance
+
+
+
+### 2.4 Lazy constraints addition search for MAPF
+
+
+
