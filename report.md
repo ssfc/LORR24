@@ -133,6 +133,10 @@ di 是一系列动作，而不是单个动作。在 EPIBT 算法中，为了更�
 
 在EPIBT算法的第15行“C ← op ∈ Operations”中，这句话的意思是：令变量C等于所有可能的操作序列op的集合（即C是所有可选操作组成的集合，Operations表示操作池，里面包括例如前进、等待、转向等动作的固定长度组合）。接下来的排序和遍历，就是对这些操作序列依次尝试，为每个代理选择最合适的一组动作序列。
 
+### Q: Algorithm 1 EPIBT Line 16的sort C in descending order of wop是什么意思?
+
+在EPIBT算法的第16行，“sort C in descending order of wop” 的意思是：将所有候选操作序列C按照wop值从大到小进行排序。这里的wop是每条操作序列的优先级分数，通常表示该操作序列执行后能够多大程度上让代理（agent）接近目标，分数越高代表操作越优。这样排序后，算法会优先尝试那些最有助于代理前进的操作序列，从而提高决策效果和路径质量. 
+
 ### 3.3 Enhanced Priority Inheritance with Backtracking Large Neighborhood Search
 
 此外，本文还提出了对 EPIBT 的一种改进方案，用以解决 PIBT 算法的主要缺陷：优先级问题。在这类算法中，优先级会直接影响解的质量。
