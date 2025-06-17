@@ -78,10 +78,9 @@ Algorithm 1 EPIBT
 8: for i ∈ A do
 9:     if di ̸= 0 then
 10:        continue ▷ агент уже построен 该代理已经安排完毕
-11: P ← P \ getPath(si, di) ▷ удалим ему путь
+11:    P ← P \ getPath(si, di) ▷ удалим ему путь 删除他的路径
 12: if EPIBT(i) = failed then ▷ попытаемся построить новый
-13: P ← P ∪ getPath(si, d′
-i) ▷ не получилось, вернем обратно
+13: P ← P ∪ getPath(si, d′i) ▷ не получилось, вернем обратно
 14: procedure EPIBT(i)
 15: C ← op ∈ Operations
 16: sort C in descending order of wop
