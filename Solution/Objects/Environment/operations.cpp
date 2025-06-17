@@ -51,13 +51,23 @@ bool verify_operation(const Operation &op) {
 }
 
 void OperationsGenerator::generate(Operation &op, uint32_t i) {
-    if (i == DEPTH) {
-        if (verify_operation(op)) {
+    // 递归出口：如果已经达到设定的深度DEPTH
+    if (i == DEPTH)
+    {
+        if (verify_operation(op))
+        {
+            // 如果当前操作序列op有效（没有浪费步数的操作），就加入操作池pool
             pool.push_back(op);
         }
-    } else {
-        for (int32_t action = 0; action < 4; action++) {
+    }
+    else
+    {
+        // 递归过程：还没有达到DEPTH
+        for (int32_t action = 0; action < 4; action++)
+        {
+            // 将当前位置i设为当前动作
             op[i] = static_cast<Action>(action);
+            // 递归调用填充下一个位置
             generate(op, i + 1);
         }
     }
