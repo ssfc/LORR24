@@ -105,8 +105,8 @@ Algorithm 1 EPIBT
 30:         if EPIBT(j) = success then
 31:             return success ▷ мы смогли рекурсивно построить агентов 我们能够递归地构建智能体
 ▷ не смогли, вернем как было 没能做到，我们会恢复原状。
-32:         P ← P \ getPath(si, d′i) ▷ удалим путь агенту i
-33:         P ← P ∪ getPath(sj , dj) ▷ вернем старый путь агенту j
+32:         P ← P \ getPath(si, d′i) ▷ удалим путь агенту i 我们将删除（去除）第 i 个代理的路径
+33:         P ← P ∪ getPath(sj , dj) ▷ вернем старый путь агенту j 我们将恢复第 j 个代理的原路径
 34:         di ← d′i
 35: return failed
 ```
