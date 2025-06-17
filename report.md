@@ -64,6 +64,53 @@ PIBT 算法的原理在于为每个代理分配其期望的移动方向：左、
 
 于是，在 EPIBT 中，一开始所有代理的操作都是 WWW，即都原地等待。接下来步骤与 PIBT 类似：按优先级排序后依次处理每个代理。选中代理 r，需要为其分配操作，递归调用代理的构建函数。将操作池按 wₒₚ 排序，依次尝试操作。取出某个操作 op，检查该操作形成的路径。如果该路径上没有其他代理（无碰撞），则将该操作分配给代理 r，递归返回，构建成功。如果路径上和其他代理有冲突，且涉及两个及以上代理，则跳过这个操作（否则递归复杂度过大）。如果只与一个代理 t 有冲突，则清除 t 的路径，把当前代理 r 分配该操作 op，然后对代理 t 递归地重新分配操作。
 
+```pseudocode
+Algorithm 1 EPIBT
+1: Input: graph G, starts {s1, . . . , sn}, goals {g1, . . . , gn}
+2: Output: selected actions {d1, . . . , dn}  // 纳尼，居然用d表示action
+3: Preface: di = 0 for i = 1, . . . , n. ▷ Изначально, все роботы выбрали операцию, где они
+просто стоят
+4: Preface: P ← getPath(si, di) for i = 1, . . . , n ▷ P это множество непересекающихся путей
+агентов, getPath(si, di) выдает путь из si с операцией di
+5: pi ← dist(si, gi); for each agent i = 1, . . . , n
+6: A ← {1, . . . , n}
+7: sort A in ascending order of priorities pi
+8: for i ∈ A do
+9: if di ̸= 0 then
+10: continue ▷ агент уже построен
+11: P ← P \ getPath(si, di) ▷ удалим ему путь
+12: if EPIBT(i) = failed then ▷ попытаемся построить новый
+13: P ← P ∪ getPath(si, d′
+i) ▷ не получилось, вернем обратно
+14: procedure EPIBT(i)
+15: C ← op ∈ Operations
+16: sort C in descending order of wop
+17: for op ∈ C do
+18: if getPath(si, op) ̸⊂ G then ▷ данная операция op при выполнении из si выйдет за
+пределы графа (врежется в стену, выйдет за карту)
+19: continue
+20: if getUsed(si, op, P) = ∅ then ▷ getUsed выдаст агентов, с которыми мы врежемся,
+если стартуем из si и выполним операцию op
+21: di ← op ▷ присвоит агенту i операцию op
+22: P ← P ∪ getPath(si, op) ▷ добавить этот путь
+23: return success ▷ мы ни с кем не врежемся
+24: if |getUsed(si, op, P)| ≥ 2 then
+25: continue ▷ путь задевает большое число агентов
+26: j ∈ getUsed(si, op, P) ▷ мы коллизим только с одним агентом. возьмем его
+27: P ← P \ getPath(sj , dj) ▷ снесем путь, мешающему агенту
+28: P ← P ∪ getPath(si, op) ▷ поставим путь агенту i
+29: di ← op
+30: if EPIBT(j) = success then
+31: return success ▷ мы смогли рекурсивно построить агентов
+▷ не смогли, вернем как было
+32: P ← P \ getPath(si, d′
+i) ▷ удалим путь агенту i
+33: P ← P ∪ getPath(sj , dj) ▷ вернем старый путь агенту j
+34: di ← d′
+i
+35: return failed
+```
+
 ### 3.3 Enhanced Priority Inheritance with Backtracking Large Neighborhood Search
 此外，本文还提出了对 EPIBT 的一种改进方案，用以解决 PIBT 算法的主要缺陷：优先级问题。在这类算法中，优先级会直接影响解的质量。
 
