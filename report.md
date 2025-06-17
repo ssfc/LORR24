@@ -69,7 +69,7 @@ Algorithm 1 EPIBT
 1: Input: graph G, starts {s1, . . . , sn}, goals {g1, . . . , gn}
 2: Output: selected actions {d1, . . . , dn}  // 纳尼，居然用d表示action
 3: Preface: di = 0 for i = 1, . . . , n. ▷ Изначально, все роботы выбрали операцию, где они
-просто стоят
+просто стоят 这是代理的多个不相交路径，getPath(si, di) 返回从 si 出发、通过操作 di 得到的路径。
 4: Preface: P ← getPath(si, di) for i = 1, . . . , n ▷ P это множество непересекающихся путей
 агентов, getPath(si, di) выдает путь из si с операцией di
 5: pi ← dist(si, gi); for each agent i = 1, . . . , n
@@ -111,7 +111,12 @@ i
 35: return failed
 ```
 
+### Q: Algorithm 1 EPIBT Line 3的preface是什么意思?
+
+在Algorithm 1 EPIBT的第3行，"Preface" 表示初始化的意思。这里 `di = 0 for i = 1, ..., n` 指的是所有机器人一开始都选择了编号为0的操作（即默认操作，通常代表“等待”或“原地不动”）。注释也说明了：最开始所有机器人都选择了一个只是站在原地的操作。这是为了给后续的路径和动作分配做基础设定。
+
 ### 3.3 Enhanced Priority Inheritance with Backtracking Large Neighborhood Search
+
 此外，本文还提出了对 EPIBT 的一种改进方案，用以解决 PIBT 算法的主要缺陷：优先级问题。在这类算法中，优先级会直接影响解的质量。
 
 EPIBT+LNS 为所有代理的状态定义了一种度量方式。在我的实现中，这个度量是 \(\sum_{r} w_{op_r}\)，其中 \(op_r\) 表示代理 \(r\) 所选择的操作。该值越大，说明代理越能有效地向目标移动。
