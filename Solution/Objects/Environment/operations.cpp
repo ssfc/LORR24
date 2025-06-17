@@ -16,7 +16,9 @@ bool verify_operation(const Operation &op) {
             return false;
         }
     }
+
     // операции вида CWR плохие, потому что мы повернулись, прошло пашу шагов и мы повернулись обратно 像 CWR 这种操作是不好的，因为我们先转了一次，走了几步，然后又转了回来。
+    // comment: 确实, 这样可以防止原地振荡
     for (int i = 0; i < op.size(); i++) {
         for (int j = i + 1; j < op.size() && op[j] != Action::FW; j++) {
             if (op[i] == Action::CR && op[j] == Action::CCR) {
