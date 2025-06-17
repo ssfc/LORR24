@@ -87,7 +87,7 @@ Algorithm 1 EPIBT
 16:     sort C in descending order of wop
 17:     for op ∈ C do
 18:         if getPath(si, op) ̸⊂ G then ▷ данная операция op при выполнении из si выйдет за
-пределы графа (врежется в стену, выйдет за карту)
+пределы графа (врежется в стену, выйдет за карту) 该操作 op 从 si 执行时将超出图的边界（会撞到墙壁，或超出地图）.
 19:             continue
 20:         if getUsed(si, op, P) = ∅ then ▷ getUsed выдаст агентов, с которыми мы врежемся,
 если стартуем из si и выполним операцию op
