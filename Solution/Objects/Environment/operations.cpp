@@ -73,6 +73,7 @@ void OperationsGenerator::generate(Operation &op, uint32_t i) {
     }
 }
 
+// 获得一批有效的操作序列（Operation），其本质是构造操作池（pool），并最终返回。
 std::vector<Operation> OperationsGenerator::get()
 {
     //Operation op;
