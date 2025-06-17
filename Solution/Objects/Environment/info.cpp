@@ -1,5 +1,6 @@
 #include <Objects/Environment/info.hpp>
 
+// 返回一个静态变量 unique_id 的引用，可以在程序各处读取或修改它的值。
 uint32_t &get_unique_id() {
     static uint32_t unique_id = 0;
     return unique_id;
