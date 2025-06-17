@@ -83,31 +83,29 @@ Algorithm 1 EPIBT
 13:        P ← P ∪ getPath(si, d′i) ▷ не получилось, вернем обратно 没成功，我们退回去
 
 14: procedure EPIBT(i)
-15: C ← op ∈ Operations
-16: sort C in descending order of wop
-17: for op ∈ C do
-18: if getPath(si, op) ̸⊂ G then ▷ данная операция op при выполнении из si выйдет за
+15:     C ← op ∈ Operations
+16:     sort C in descending order of wop
+17:     for op ∈ C do
+18:         if getPath(si, op) ̸⊂ G then ▷ данная операция op при выполнении из si выйдет за
 пределы графа (врежется в стену, выйдет за карту)
-19: continue
-20: if getUsed(si, op, P) = ∅ then ▷ getUsed выдаст агентов, с которыми мы врежемся,
+19:             continue
+20:         if getUsed(si, op, P) = ∅ then ▷ getUsed выдаст агентов, с которыми мы врежемся,
 если стартуем из si и выполним операцию op
-21: di ← op ▷ присвоит агенту i операцию op
-22: P ← P ∪ getPath(si, op) ▷ добавить этот путь
-23: return success ▷ мы ни с кем не врежемся
-24: if |getUsed(si, op, P)| ≥ 2 then
-25: continue ▷ путь задевает большое число агентов
-26: j ∈ getUsed(si, op, P) ▷ мы коллизим только с одним агентом. возьмем его
-27: P ← P \ getPath(sj , dj) ▷ снесем путь, мешающему агенту
-28: P ← P ∪ getPath(si, op) ▷ поставим путь агенту i
-29: di ← op
-30: if EPIBT(j) = success then
-31: return success ▷ мы смогли рекурсивно построить агентов
+21:             di ← op ▷ присвоит агенту i операцию op
+22:             P ← P ∪ getPath(si, op) ▷ добавить этот путь
+23:             return success ▷ мы ни с кем не врежемся
+24:         if |getUsed(si, op, P)| ≥ 2 then
+25:             continue ▷ путь задевает большое число агентов
+26:         j ∈ getUsed(si, op, P) ▷ мы коллизим только с одним агентом. возьмем его
+27:         P ← P \ getPath(sj , dj) ▷ снесем путь, мешающему агенту
+28:         P ← P ∪ getPath(si, op) ▷ поставим путь агенту i
+29:         di ← op
+30:         if EPIBT(j) = success then
+31:             return success ▷ мы смогли рекурсивно построить агентов
 ▷ не смогли, вернем как было
-32: P ← P \ getPath(si, d′
-i) ▷ удалим путь агенту i
-33: P ← P ∪ getPath(sj , dj) ▷ вернем старый путь агенту j
-34: di ← d′
-i
+32:         P ← P \ getPath(si, d′i) ▷ удалим путь агенту i
+33:         P ← P ∪ getPath(sj , dj) ▷ вернем старый путь агенту j
+34:         di ← d′i
 35: return failed
 ```
 
