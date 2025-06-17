@@ -79,7 +79,7 @@ Algorithm 1 EPIBT
 9:     if di ̸= 0 then
 10:        continue ▷ агент уже построен 该代理已经安排完毕
 11:    P ← P \ getPath(si, di) ▷ удалим ему путь 删除他的路径
-12:    if EPIBT(i) = failed then ▷ попытаемся построить новый
+12:    if EPIBT(i) = failed then ▷ попытаемся построить новый 没成功，我们退回去
 13:        P ← P ∪ getPath(si, d′i) ▷ не получилось, вернем обратно
 
 14: procedure EPIBT(i)
