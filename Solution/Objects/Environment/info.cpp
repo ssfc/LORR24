@@ -6,6 +6,7 @@ uint32_t &get_unique_id() {
     return unique_id;
 }
 
+// 提供一个在程序运行期间始终唯一的 MapType 类型变量的引用。
 MapType &get_map_type() {
     static MapType type = MapType::NONE;
     return type;
