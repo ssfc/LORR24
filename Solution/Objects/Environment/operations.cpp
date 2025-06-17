@@ -10,6 +10,7 @@
 bool verify_operation(const Operation &op) {
     // не нужно, чтобы на конце операции были повороты 操作的末尾不应有转向（动作）。
     // грамотный подсчет веса операции это увидит 合理的操作权重计算会发现这一点。
+    // 1. 检查操作结尾不能有转向动作
     for (int i = op.size() - 1; i >= 0 && op[i] != Action::FW; i--) {
         if (op[i] == Action::CR || op[i] == Action::CCR) {
             return false;
