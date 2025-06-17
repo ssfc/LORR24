@@ -73,7 +73,8 @@ void OperationsGenerator::generate(Operation &op, uint32_t i) {
     }
 }
 
-std::vector<Operation> OperationsGenerator::get() {
+std::vector<Operation> OperationsGenerator::get()
+{
     //Operation op;
     //generate(op, 0);
 
