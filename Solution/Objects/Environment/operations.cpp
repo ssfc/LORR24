@@ -35,7 +35,7 @@ bool verify_operation(const Operation &op) {
     FAILED_ASSERT("TODO");
 
     // операции вида RRR плохие, потому что мы 3 раза крутимся, когда могли 1: CWW 像RRR这种操作是不好的，因为我们转了3次，其实可以只转1次：CWW。
-    // comment: 转一次比转三次的优点体现在哪? 
+    // comment: 转一次比转三次的优点体现在哪?
     for (int i = 0; i < op.size(); i++) {
         for (int j = i + 1; j < op.size() && op[j] != Action::FW; j++) {
             for (int k = j + 1; k < op.size() && op[k] != Action::FW; k++) {
@@ -45,6 +45,7 @@ bool verify_operation(const Operation &op) {
             }
         }
     }
+
     return true;
 }
 
