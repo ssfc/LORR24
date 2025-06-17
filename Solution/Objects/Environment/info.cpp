@@ -25,6 +25,7 @@ SchedulerType &get_scheduler_type() {
     return type;
 }
 
+// 返回一个代表操作深度的静态变量的引用。
 uint32_t &get_epibt_operation_depth() {
     static uint32_t depth = 0;
     return depth;
