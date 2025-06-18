@@ -172,6 +172,7 @@ std::vector<Operation> OperationsGenerator::get()
     return result;
 }
 
+// 提供一个全局唯一的、可被访问和修改的 Operation 集合
 std::vector<Operation> &get_operations() {
     static std::vector<Operation> operations;
     return operations;
