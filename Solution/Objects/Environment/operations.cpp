@@ -83,6 +83,7 @@ std::vector<Operation> OperationsGenerator::get()
     {
         std::vector<std::string> operations_pool_strs = {
                 // вообще тут получилось 3951->4108, но там немного стремная логика
+                // ...（三个长字符串，包含不同深度下的所有合法序列集合）
                 // 3951 and 6080
                 "17 WWW RRF RWF CWF WWF RFW CFW WFW RFF CFF FWW WFF FRF FCF FWF FFW FFF",
 
@@ -92,6 +93,7 @@ std::vector<Operation> OperationsGenerator::get()
                 // 3670 and 6153
                 "136 WWWWW CCWWF RWWWF CWWWF WWWWF RRWFW RWWFW CWWFW WWWFW RRFWW RRWFF RWFWW RWWFF CWFWW CWWFF RRFRF RRFCF WWFWW WWWFF RRFWF RWFRF RWFCF CWFRF CWFCF RFWWW RWFWF CFWWW CWFWF WWFRF WWFCF WFWWW WWFWF RFRRF CFRRF RRFFW RFRWF RFCWF CFRWF CFCWF RFWWF RWFFW CFWWF CWFFW WFRRF WFRWF WFCWF FWWWW WFWWF WWFFW RRFFF RFRFW RFCFW CFRFW CFCFW FRRWF RFWFW RWFFF CFWFW CWFFF FRWWF FCWWF WFRFW WFCFW FWWWF WFWFW WWFFF RFRFF RFCFF CFRFF CFCFF FRRFW RFFWW RFWFF CFFWW CFWFF FRWFW FCWFW WFRFF WFCFF FWWFW WFFWW WFWFF FRRFF RFFRF RFFCF CFFRF CFFCF RFFWF CFFWF FRFWW FRWFF FCFWW FCWFF WFFRF WFFCF FWFWW FWWFF WFFWF FRFRF FRFCF FCFRF FCFCF RFFFW CFFFW FRFWF FCFWF FWFRF FWFCF FFWWW FWFWF WFFFW FFRRF RFFFF CFFFF FRFFW FCFFW FFRWF FFCWF FFWWF FWFFW WFFFF FRFFF FCFFF FFRFW FFCFW FFWFW FWFFF FFRFF FFCFF FFFWW FFWFF FFFRF FFFCF FFFWF FFFFW FFFFF",
         };
+
         std::stringstream input(operations_pool_strs.at(get_epibt_operation_depth() - 3));
         uint32_t num;
         input >> num;
@@ -107,6 +109,7 @@ std::vector<Operation> OperationsGenerator::get()
         }
     }
 
+    // 3. 排序权重（注释掉，仅供参考）
     /*auto get_operation_weight = [&](Operation op) {
         double s = 0;
         for (uint32_t d = 0; d < op.size(); d++) {
@@ -121,6 +124,7 @@ std::vector<Operation> OperationsGenerator::get()
         return get_operation_weight(lhs) < get_operation_weight(rhs);
     });*/
 
+    // 4. 首操作全为 W（注释掉）
     // add WWW
     /*{
         Operation op;
@@ -136,6 +140,7 @@ std::vector<Operation> OperationsGenerator::get()
 
     std::vector<Operation> result = pool;
 
+    // 5. 复杂去重方案（注释掉）
     /*std::set<std::tuple<uint32_t, std::array<std::pair<uint32_t, uint32_t>, DEPTH>>> visited;
     for (auto operation: pool) {
         std::array<std::pair<uint32_t, uint32_t>, DEPTH> positions{};
@@ -154,6 +159,7 @@ std::vector<Operation> OperationsGenerator::get()
         }
     }*/
 
+    // 6. 打印结果
     PRINT(
             Printer() << "Operations:\n"
                       << result.size() << ' ';
