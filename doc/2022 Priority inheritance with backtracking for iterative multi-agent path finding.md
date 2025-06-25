@@ -222,7 +222,7 @@ Algorithm 1 PIBT.
  8: procedure PIBT(ai, aj)  // ai继承了aj的优先级
  9:     C ←Neighbor(πi[t]) ∪ {πi[t]}  // 候选节点包括ai当前位置和当前为止的邻居
  10:    sort C in increasing order of dist(u, gi) where u ∈ C // 优先选择距离目标点启发式距离较近的
- 11:    for v ∈C do // 按照距离目标点启发式距离由近及远尝试
+ 11:    for v ∈C do // 按照距离目标点启发式距离由近及远尝试邻域
  12:        if ∃ak ∈ A s.t. πk[t +1] = v then continue // 排除已经被请求的节点, to avoid vertex conflict
  13:        if aj != ⊥ ∧ πj[t] = v then continue // 排除正在被占据的节点, to avoid edge conflict
  14:        πi[t +1] ← v
