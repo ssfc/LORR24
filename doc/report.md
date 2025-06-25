@@ -84,13 +84,13 @@ Algorithm 1 EPIBT
 
 14: procedure EPIBT(i)
 15:     C ← op ∈ Operations
-16:     sort C in descending order of wop
+16:     sort C in descending order of w_op
 17:     for op ∈ C do
 18:         if getPath(si, op) ̸⊂ G then ▷ данная операция op при выполнении из si выйдет за
-пределы графа (врежется в стену, выйдет за карту) 该操作 op 从 si 执行时将超出图的边界（会撞到墙壁，或超出地图）.
+пределы графа (врежется в стену, выйдет за карту) // 该操作 op 从 si 执行时将超出图的边界（会撞到墙壁，或超出地图）.
 19:             continue
 20:         if getUsed(si, op, P) = ∅ then ▷ getUsed выдаст агентов, с которыми мы врежемся,
-если стартуем из si и выполним операцию op getUsed 会返回如果我们从 si 出发并执行操作 op 时会与之发生碰撞的代理列表.
+если стартуем из si и выполним операцию op getUsed // 会返回如果我们从 si 出发并执行操作 op 时会与之发生碰撞的代理列表.
 // 没有碰撞的话，当然可以放心添加了
 21:             di ← op ▷ присвоит агенту i операцию op 将操作 op 分配给代理 i.
 22:             P ← P ∪ getPath(si, op) ▷ добавить этот путь 添加这条路径
