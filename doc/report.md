@@ -76,7 +76,7 @@ Algorithm 1 EPIBT
 6: A ← {1, ..., n}
 7: sort A in ascending order of priorities pi
 8: for i ∈ A do
-9:     if di ̸= 0 then
+9:     if di ̸= 0 then // 0换成空集符号更合适
 10:        continue ▷ агент уже построен // 该代理已经安排完毕
 11:    P ← P \ getPath(si, di) ▷ удалим ему путь // 删除他的路径
 12:    if EPIBT(i) = failed then ▷ попытаемся построить новый // 尝试构建新的
