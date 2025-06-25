@@ -67,7 +67,7 @@ PIBT 算法的原理在于为每个代理分配其期望的移动方向：左、
 ```pseudocode
 Algorithm 1 EPIBT
 1: Input: graph G, starts {s1, . . . , sn}, goals {g1, . . . , gn}
-2: Output: selected actions {d1, . . . , dn}  // 纳尼，居然用d表示action
+2: Output: selected actions {d1, . . . , dn}  // 每个 di 代表代理要执行的一串操作（比如“等待-等待-前进”），而不是只做一次简单的移动或等待。
 3: Preface: di = 0 for i = 1, . . . , n. ▷ Изначально, все роботы выбрали операцию, где они
 просто стоят 这是代理的多个不相交路径，getPath(si, di) // 返回从 si 出发、通过操作 di 得到的路径。
 4: Preface: P ← getPath(si, di) for i = 1, ..., n ▷ P это множество непересекающихся путей
