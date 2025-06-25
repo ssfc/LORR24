@@ -70,9 +70,9 @@ Algorithm 1 EPIBT
 2: Output: selected actions {d1, . . . , dn}  // 纳尼，居然用d表示action
 3: Preface: di = 0 for i = 1, . . . , n. ▷ Изначально, все роботы выбрали операцию, где они
 просто стоят 这是代理的多个不相交路径，getPath(si, di) // 返回从 si 出发、通过操作 di 得到的路径。
-4: Preface: P ← getPath(si, di) for i = 1, . . . , n ▷ P это множество непересекающихся путей
+4: Preface: P ← getPath(si, di) for i = 1, ..., n ▷ P это множество непересекающихся путей
 агентов, getPath(si, di) выдает путь из si с операцией di // P 是代理（智能体）的一组互不相交的路径的集合，getPath(si, di) 返回从 si 出发、按操作 di 执行时所经过的路径.
-5: pi ← dist(si, gi); for each agent i = 1, . . . , n
+5: pi ← dist(si, gi); for each agent i = 1, ..., n
 6: A ← {1, . . . , n}
 7: sort A in ascending order of priorities pi
 8: for i ∈ A do
