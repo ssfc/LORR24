@@ -224,7 +224,7 @@ Algorithm 1 PIBT.
  10:    sort C in increasing order of dist(u, gi) where u ∈ C // 优先选择距离目标点启发式距离较近的
  11:    for v ∈C do // 按照距离目标点启发式距离由近及远尝试邻域
  12:        if ∃ak ∈ A s.t. πk[t +1] = v then continue // 排除已经被请求的节点, to avoid vertex conflict
- 13:        if aj != ⊥ ∧ πj[t] = v then continue // 排除正在被占据的节点, to avoid edge conflict
+ 13:        if aj != ⊥ ∧ πj[t] = v then continue // 排除正在被占据的节点, to avoid i-j edge conflict
  14:        πi[t +1] ← v
  15:        if ∃ak ∈ A s.t. πk[t] = v ∧ πk[t +1] =⊥ then // 如果Agent k当前位置在v但下个位置没定, 就要被push走了
  16:            if PIBT(ak, ai) is invalid then continue
