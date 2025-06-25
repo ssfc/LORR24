@@ -73,7 +73,7 @@ Algorithm 1 EPIBT
 4: Preface: P ← getPath(si, di) for i = 1, ..., n ▷ P это множество непересекающихся путей
 агентов, getPath(si, di) выдает путь из si с операцией di // P 是代理（智能体）的一组互不相交的路径的集合，getPath(si, di) 返回从 si 出发、按操作 di 执行时所经过的路径.
 5: pi ← dist(si, gi); for each agent i = 1, ..., n
-6: A ← {1, . . . , n}
+6: A ← {1, ..., n}
 7: sort A in ascending order of priorities pi
 8: for i ∈ A do
 9:     if di ̸= 0 then
