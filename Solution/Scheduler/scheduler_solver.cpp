@@ -8,7 +8,8 @@
 #include <atomic>
 #include <unordered_set>
 
-// 为单个机器人 r 构建 dp[r]。dp[r] 是一个 候选任务列表，每个元素是 (距离, task_id) 的 pair。
+// 为单个机器人 r 构建 dp[r]。
+// dp[r] 是一个 候选任务列表，每个元素是 (距离, task_id) 的 pair。也就是：机器人 r 到每个可选任务之间的成本估计列表。
 void SchedulerSolver::rebuild_dp(uint32_t r) {
     dp[r].clear();
     for (uint32_t t: free_tasks) {
