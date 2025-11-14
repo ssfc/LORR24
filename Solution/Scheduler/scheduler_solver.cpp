@@ -17,7 +17,7 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
         // 计算机器人 r 到任务 t 的距离（或代价）：get_dist(r, t)  将 (距离, t) 这个 pair 添加到 dp[r]
         dp[r].emplace_back(get_dist(r, t), t);
     }
-    std::sort(dp[r].begin(), dp[r].end());
+    std::sort(dp[r].begin(), dp[r].end()); // 排序后，dp[r][0] 就是 r 最适合执行的任务（最短距离/最便宜）。
     timestep_updated[r] = env->curr_timestep + 1;
 }
 
