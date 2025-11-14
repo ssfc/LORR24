@@ -25,6 +25,7 @@ GraphGuidanceType &get_graph_guidance_type() {
 }
 
 // 提供一个全局唯一的、可读可写的 SchedulerType 类型变量，并通过函数接口进行访问和管理。
+// SchedulerType type默认是GREEDY，也就是那一堆LAZY和LNS
 SchedulerType &get_scheduler_type() {
     static SchedulerType type = SchedulerType::GREEDY;
     return type;
