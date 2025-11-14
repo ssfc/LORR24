@@ -12,7 +12,9 @@
 // dp[r] 是一个 候选任务列表，每个元素是 (距离, task_id) 的 pair。也就是：机器人 r 到每个可选任务之间的成本估计列表。
 void SchedulerSolver::rebuild_dp(uint32_t r) {
     dp[r].clear(); // 清空机器人 r 原来的 dp 列表（因为任务变化或时间变化，之前的计算失效）。
+    // 遍历当前所有 未被分配（free）的任务 t
     for (uint32_t t: free_tasks) {
+        // 计算机器人 r 到任务 t 的距离（或代价）：get_dist(r, t)  将 (距离, t) 这个 pair 添加到 dp[r]
         dp[r].emplace_back(get_dist(r, t), t);
     }
     std::sort(dp[r].begin(), dp[r].end());
