@@ -33,8 +33,11 @@ int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
 // 突然想到, 计算每个方块内的agent数量可以用到多线程方法, 因为可以独立计算
 void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed_schedule) {
     solver.update();
+    // SCHEDULER_REBUILD_DP_TIME = 200;
     solver.rebuild_dp(std::min(end_time, get_now() + Milliseconds(SCHEDULER_REBUILD_DP_TIME)));
+    // SCHEDULER_LAZY_SOLVE_TIME = 500;
     solver.lazy_solve(std::min(end_time, get_now() + Milliseconds(SCHEDULER_LAZY_SOLVE_TIME)));
+    // SCHEDULER_LNS_SOLVE_TIME = 0;
     solver.lns_solve(std::min(end_time, get_now() + Milliseconds(SCHEDULER_LNS_SOLVE_TIME)));
     proposed_schedule = solver.get_schedule();
 }
