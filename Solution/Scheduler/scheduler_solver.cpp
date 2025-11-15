@@ -100,6 +100,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
 
     uint32_t r = rnd.get(free_robots); // 随机选机器人
     uint32_t t = rnd.get(free_tasks); // 随机选任务
+    // comment: 这里和吾人的区别是，吾人不是随机挑选，而是选gap最大的那个
 
     // уже используется
     if (desires[r] == t) {
