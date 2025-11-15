@@ -45,6 +45,8 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
             Printer() << "[Scheduler] rebuild_dp: " << p << "%" << (p != 100 ? " bad, " : ", ") << timer << '\n';);
 }
 
+// 模拟退火（Simulated Annealing）风格的比较函数。
+// 用于判断是否接受一个新的候选解 cur_score。
 bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rnd) const {
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
 }
