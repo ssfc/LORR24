@@ -131,6 +131,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     }
     validate(); // 笑死了，空函数
 
+    // 4️⃣ 使用模拟退火判断是否接受这次变更
     return consider(old_score, rnd, [&]() {
         if (other_r != -1) {
             remove(r);
