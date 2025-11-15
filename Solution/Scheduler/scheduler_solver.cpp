@@ -169,6 +169,7 @@ SchedulerSolver::SchedulerSolver(SharedEnvironment *env)
 
 // 负责从环境 env 中读取当前任务和机器人的状态 → 构建可调度的自由任务/机器人集 → 初始化代价 → 为后续搜索做好准备。
 void SchedulerSolver::update() {
+    // 🧩 1. 初始化 desires / dp / 时间戳等结构
     desires.resize(env->num_of_agents, -1);
     timestep_updated.resize(desires.size());
     dp.resize(desires.size());
