@@ -59,8 +59,9 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
 
     uint32_t source = get_robots_handler().get_robot(r).node;
     uint64_t dist_to_target = get_hm().get(source, task_target[t]);
-    uint64_t dist = dist_to_target * 5 + task_metric[t];
+    uint64_t dist = dist_to_target * 5 + task_metric[t]; // agent到task起点距离占据最大权重
     ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
+
     return dist;
 }
 
