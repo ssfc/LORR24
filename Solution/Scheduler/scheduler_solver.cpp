@@ -21,6 +21,7 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
     timestep_updated[r] = env->curr_timestep + 1;
 }
 
+// 为多个机器人并行重建 dp 列表的函数。
 void SchedulerSolver::rebuild_dp(TimePoint end_time) {
     ETimer timer;
     std::vector<uint32_t> order = free_robots;
