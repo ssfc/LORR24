@@ -66,6 +66,7 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
     return dist;
 }
 
+// 从机器人 r 移除其任务
 void SchedulerSolver::remove(uint32_t r) {
     ASSERT(0 <= r && r < desires.size(), "invalid r");
     uint32_t t = desires[r];
