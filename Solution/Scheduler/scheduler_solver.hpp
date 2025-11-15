@@ -10,7 +10,7 @@
 
 struct SchedulerSolver {
 
-    double cur_score = 0;
+    double cur_score = 0; // 总cost
 
     // desires[r] = task id
     std::vector<uint32_t> desires;

@@ -74,7 +74,7 @@ void SchedulerSolver::remove(uint32_t r) {
         return;
     }
 
-    cur_score -= get_dist(r, t);
+    cur_score -= get_dist(r, t); // 总cost
     task_to_robot[t] = -1;
     desires[r] = -1;
 }
