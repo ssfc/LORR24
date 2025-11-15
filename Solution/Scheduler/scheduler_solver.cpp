@@ -220,6 +220,7 @@ void SchedulerSolver::update() {
     }
 
     // build task_metric, task_target
+    // 🧩 4. 构建 task_metric / task_target（任务内部代价）
     {
         ETimer timer;
         for (uint32_t t: free_tasks) {
