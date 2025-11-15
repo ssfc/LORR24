@@ -103,6 +103,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     // comment: 这里和吾人的区别是，吾人不是随机挑选，而是选gap最大的那个
 
     // уже используется
+    // 排除“机器人已经在执行该任务”的情况
     if (desires[r] == t) {
         return false;
     }
