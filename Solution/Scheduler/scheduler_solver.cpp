@@ -47,6 +47,7 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
 
 // 模拟退火（Simulated Annealing）风格的比较函数。
 // 用于判断是否接受一个新的候选解 cur_score。
+// 模拟退火思想：允许局部“坏解”，避免陷入局部最优。当 temp 高时，更容易接受坏解；temp 低时，逐渐趋向贪心。
 bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rnd) const {
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
 }
