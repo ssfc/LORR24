@@ -108,6 +108,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
         return false;
     }
 
+    // 2️⃣ 准备交换相关的信息
     uint32_t old_t = desires[r];
     uint32_t other_r = task_to_robot[t];
     ASSERT(r != other_r, "invalid other_r");
