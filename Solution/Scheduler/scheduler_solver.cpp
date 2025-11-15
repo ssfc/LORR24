@@ -112,6 +112,8 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     uint32_t old_t = desires[r];
     uint32_t other_r = task_to_robot[t];
     ASSERT(r != other_r, "invalid other_r");
+
+    // 3️⃣ 尝试执行任务替换（临时修改状态）
     if (other_r != -1) {
         remove(r);
         remove(other_r);
