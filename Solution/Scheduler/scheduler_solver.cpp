@@ -201,10 +201,13 @@ void SchedulerSolver::update() {
 
         // есть задача и она в процессе выполнения
         // не можем ее убрать
+        // 情况 A：机器人正在进行任务（不能改变）
         if (env->task_pool.count(t) && env->task_pool.at(t).idx_next_loc != 0) {
             desires[r] = t;
             continue;
         }
+
+        // 情况 B：机器人无任务 或 任务可重分配
         if (
                 // нет задачи
                 !env->task_pool.count(t)
