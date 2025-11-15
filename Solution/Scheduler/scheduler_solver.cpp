@@ -182,9 +182,9 @@ void SchedulerSolver::update() {
     for (auto &[t, task]: env->task_pool) {
         int r = task.agent_assigned;
         if (
-                r == -1// нет агента
+                r == -1// нет агента // 未分配
 #ifdef ENABLE_SCHEDULER_CHANGE_TASK
-                || task.idx_next_loc == 0// мы можем поменять задачу
+                || task.idx_next_loc == 0// мы можем поменять задачу // 可以重新分配（任务刚开始）
 #endif
         ) {
 #ifdef ENABLE_SCHEDULER_CHANGE_TASK
