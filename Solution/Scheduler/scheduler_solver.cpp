@@ -91,6 +91,7 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
     desires[r] = t;
 }
 
+// 随机选择一个机器人 r 和一个任务 t，然后尝试让机器人 r 改执行任务 t（可能涉及任务交换），并通过一次“模拟退火式判断”决定是否接受这个变化。
 bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     double old_score = cur_score;
 
