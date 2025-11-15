@@ -223,8 +223,8 @@ void SchedulerSolver::update() {
     // 🧩 4. 构建 task_metric / task_target（任务内部代价）
     {
         ETimer timer;
-        // 确保数组够大。
         for (uint32_t t: free_tasks) {
+            // 确保数组够大。
             if (task_metric.size() <= t) {
                 task_metric.resize(t + 1, -1);
                 task_target.resize(t + 1);
