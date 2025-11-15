@@ -151,6 +151,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     });
 }
 
+// 笑死了，空函数
 void SchedulerSolver::validate() {
     /*std::set<uint32_t> S;
     for (uint32_t r = 0; r < desires.size(); r++) {
