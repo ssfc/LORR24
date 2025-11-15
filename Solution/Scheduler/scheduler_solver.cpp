@@ -123,7 +123,9 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
         if (old_t != -1) {
             add(other_r, old_t);
         }
-    } else {
+    }
+    // ▶ 情况 B：任务 t 没有人占用（单独换任务）
+    else {
         remove(r);
         add(r, t);
     }
