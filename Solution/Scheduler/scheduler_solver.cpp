@@ -178,6 +178,7 @@ void SchedulerSolver::update() {
     free_tasks.clear();
 
     // build free_tasks
+    // 🧩 2. 构造 free_tasks —— 可被重新分配的任务
     for (auto &[t, task]: env->task_pool) {
         int r = task.agent_assigned;
         if (
