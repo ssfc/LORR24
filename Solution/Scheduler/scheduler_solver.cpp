@@ -129,7 +129,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
         remove(r);
         add(r, t);
     }
-    validate();
+    validate(); // 笑死了，空函数
 
     return consider(old_score, rnd, [&]() {
         if (other_r != -1) {
