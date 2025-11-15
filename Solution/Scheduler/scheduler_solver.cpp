@@ -24,11 +24,13 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
 // 为多个机器人并行重建 dp 列表的函数。
 void SchedulerSolver::rebuild_dp(TimePoint end_time) {
     ETimer timer;
-    std::vector<uint32_t> order = free_robots;
+    std::vector<uint32_t> order = free_robots; // 当前空闲机器人列表 free_robots。
+    // 根据 timestep_updated 排序：优先更新 dp 时间最久的机器人。
     std::stable_sort(order.begin(), order.end(), [&](uint32_t lhs, uint32_t rhs) {
         return timestep_updated[lhs] < timestep_updated[rhs];
     });
 
+    // 多线程更新
     std::atomic<uint32_t> counter{};
     launch_threads(THREADS, [&](uint32_t thr) {
         for (uint32_t i = thr; i < order.size() && get_now() < end_time; i += THREADS) {
