@@ -114,6 +114,7 @@ bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     ASSERT(r != other_r, "invalid other_r");
 
     // 3️⃣ 尝试执行任务替换（临时修改状态）
+    // ▶ 情况 A：任务 t 被 someone 占用（交换任务）
     if (other_r != -1) {
         remove(r);
         remove(other_r);
