@@ -195,6 +195,7 @@ void SchedulerSolver::update() {
     }
 
     // build free_robots
+    // 🧩 3. 构造 free_robots —— 可以重新分配任务的机器人
     for (uint32_t r = 0; r < env->num_of_agents; r++) {
         int t = env->curr_task_schedule[r];
 
