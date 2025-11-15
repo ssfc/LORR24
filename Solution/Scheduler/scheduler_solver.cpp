@@ -98,8 +98,8 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
 bool SchedulerSolver::try_peek_task(Randomizer &rnd) {
     double old_score = cur_score;
 
-    uint32_t r = rnd.get(free_robots);
-    uint32_t t = rnd.get(free_tasks);
+    uint32_t r = rnd.get(free_robots); // 随机选机器人
+    uint32_t t = rnd.get(free_tasks); // 随机选任务
 
     // уже используется
     if (desires[r] == t) {
