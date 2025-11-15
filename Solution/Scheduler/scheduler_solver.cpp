@@ -167,6 +167,7 @@ SchedulerSolver::SchedulerSolver(SharedEnvironment *env)
     : env(env), task_to_robot(1'000'000, -1), dp(10'000) {
 }
 
+// 负责从环境 env 中读取当前任务和机器人的状态 → 构建可调度的自由任务/机器人集 → 初始化代价 → 为后续搜索做好准备。
 void SchedulerSolver::update() {
     desires.resize(env->num_of_agents, -1);
     timestep_updated.resize(desires.size());
