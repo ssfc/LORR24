@@ -79,13 +79,14 @@ void SchedulerSolver::remove(uint32_t r) {
     desires[r] = -1;
 }
 
+// 给机器人 r 分配任务 t
 void SchedulerSolver::add(uint32_t r, uint32_t t) {
     ASSERT(0 <= r && r < desires.size(), "invalid r");
     ASSERT(0 <= t && t < task_to_robot.size(), "invalid t");
     ASSERT(desires[r] == -1, "already have task");
     ASSERT(task_to_robot[t] == -1, "already have robot");
 
-    cur_score += get_dist(r, t);
+    cur_score += get_dist(r, t); // 总cost
     task_to_robot[t] = r;
     desires[r] = t;
 }
