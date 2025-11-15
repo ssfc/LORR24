@@ -52,6 +52,7 @@ bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rn
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
 }
 
+// 距离 = agent到task起点距离 *5 + 任务代价
 uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
     if (t == -1) {
         return 1e6;
