@@ -281,6 +281,10 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
     std::unordered_set<uint32_t> used_task;
 
     // 🧩 2️⃣ validate_task lambda
+    // 用来检查任务是否可分配：
+    // 没被当前分配使用过
+    // 存在于 task_pool 中
+    // 没有被其它机器人占用
     auto validate_task = [&](uint32_t task_id) {
         // task is already used
         if (used_task.count(task_id)) {
