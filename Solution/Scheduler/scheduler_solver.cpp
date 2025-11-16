@@ -307,6 +307,7 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
         std::priority_queue<std::tuple<uint32_t, uint32_t, uint32_t>, std::vector<std::tuple<uint32_t, uint32_t, uint32_t>>, std::greater<>> Heap;
         for (uint32_t r: free_robots) {
             if (!dp[r].empty()) {
+                // 初始堆中每个机器人只放最优候选任务（距离最短）。
                 Heap.push({dp[r][0].first, r, 0});
             }
         }
