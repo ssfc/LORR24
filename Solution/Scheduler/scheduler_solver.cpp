@@ -266,6 +266,11 @@ void SchedulerSolver::update() {
             Printer() << "[Scheduler] free tasks: " << free_tasks.size() << '\n';);
 }
 
+
+// 在给定时间窗口 end_time 内，为空闲机器人分配任务。
+// 贪心优先分配最短距离任务，同时保证任务不会重复分配。
+// 可以选择单线程或多线程版本。
+// “懒惰”指的是：尽量用现有 dp 列表（机器人候选任务按距离排序），不做复杂搜索或优化。
 void SchedulerSolver::lazy_solve(TimePoint end_time) {
     ETimer timer;
     for (uint32_t r: free_robots) {
