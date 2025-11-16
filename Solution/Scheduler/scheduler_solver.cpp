@@ -453,10 +453,11 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
 // 循环直到结束时间
 // 这段代码就是一个 带模拟退火 SA 的 LNS 优化循环。
 void SchedulerSolver::lns_solve(TimePoint end_time) {
+    // 如果没有自由机器人、没有自由任务、或者配置中禁用了 LNS，则直接退出。
     if (free_robots.empty() || free_tasks.empty() || SCHEDULER_LNS_SOLVE_TIME == 0) {
         return;
     }
-    static Randomizer rnd;
+    static Randomizer rnd; // 使用静态随机数生成器，减少重复构造开销。
     temp = 1;
     ETimer timer;
     double old_score = get_score();
