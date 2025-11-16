@@ -280,6 +280,7 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
     }
     std::unordered_set<uint32_t> used_task;
 
+    // 🧩 2️⃣ validate_task lambda
     auto validate_task = [&](uint32_t task_id) {
         // task is already used
         if (used_task.count(task_id)) {
