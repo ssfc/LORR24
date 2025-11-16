@@ -269,7 +269,7 @@ void SchedulerSolver::update() {
 
 // 在给定时间窗口 end_time 内，为空闲机器人分配任务。
 // 贪心优先分配最短距离任务，同时保证任务不会重复分配。
-// 可以选择单线程或多线程版本。
+// 可以选择单线程或多线程版本。默认是单线程
 // “懒惰”指的是：尽量用现有 dp 列表（机器人候选任务按距离排序），不做复杂搜索或优化。
 void SchedulerSolver::lazy_solve(TimePoint end_time) {
 
@@ -445,6 +445,13 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
     PRINT(Printer() << "[Scheduler] lazy solve: " << timer << '\n';);
 }
 
+// LNS 是一种局部扰动 + 逐步改善的启发式优化方法。
+// 这里它用于调度器：
+// 当前已经有一个任务分配方案（score）
+// 然后随机扰动部分 robot-task 对
+// 如果变得更好，则接受；如果更差，则 “可能” 接受（模拟退火）
+// 循环直到结束时间
+// 这段代码就是一个 带模拟退火 SA 的 LNS 优化循环。
 void SchedulerSolver::lns_solve(TimePoint end_time) {
     if (free_robots.empty() || free_tasks.empty() || SCHEDULER_LNS_SOLVE_TIME == 0) {
         return;
