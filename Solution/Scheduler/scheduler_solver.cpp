@@ -323,6 +323,7 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
             uint32_t task_id = dp[r][index].second;
             ASSERT(dist == dp[r][index].first, "invalid dist");
 
+            // 如果该任务不可用（被占用或已分配），尝试 dp[r] 的下一个候选任务。再放回堆中，等待下次轮到它。
             if (!validate_task(task_id)) {
                 index++;
 
