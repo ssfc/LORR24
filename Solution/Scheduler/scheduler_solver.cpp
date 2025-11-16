@@ -229,9 +229,12 @@ void SchedulerSolver::update() {
                 task_metric.resize(t + 1, -1);
                 task_target.resize(t + 1);
             }
+
+            // 计算任务目标点（首位置）
             auto &task = env->task_pool[t];
             task_target[t] = task.locations[0] + 1;
 
+            // 计算任务内部 metric（任务路径的剩余距离）
             uint32_t d = 0;
             for (int i = 0; i + 1 < task.locations.size(); i++) {
                 int source = task.locations[i] + 1;
@@ -242,6 +245,7 @@ void SchedulerSolver::update() {
         }
     }
 
+    // 🧩 5. 初始化 task_to_robot 映射
     for (uint32_t t: free_tasks) {
         if (t >= task_to_robot.size()) {
             task_to_robot.resize(t + 1, -1);
@@ -249,6 +253,7 @@ void SchedulerSolver::update() {
         task_to_robot[t] = -1;
     }
 
+    // 🧩 6. 初始化 cur_score + desires
     cur_score = 0;
     for (uint32_t r: free_robots) {
         desires[r] = -1;
