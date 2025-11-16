@@ -315,6 +315,7 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
             }
         }
 
+        // 按最小距离取出堆顶任务。时间未到 end_time 才继续
         while (!Heap.empty() && get_now() < end_time) {
             auto [dist, r, index] = Heap.top();
             Heap.pop();
