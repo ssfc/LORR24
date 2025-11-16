@@ -463,6 +463,10 @@ void SchedulerSolver::lns_solve(TimePoint end_time) {
     double old_score = get_score();
     uint32_t step = 0;
     for (; get_now() < end_time; step++) {
+        // 随机选一个机器人 r
+        // 随机选一个任务 t
+        // 尝试交换 / 调整任务分配
+        // 根据 SA 规则决定是否接受
         try_peek_task(rnd);
         temp *= 0.999;
     }
