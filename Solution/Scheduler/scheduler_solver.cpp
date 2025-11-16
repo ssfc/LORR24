@@ -301,7 +301,7 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
         return true;
     };
 
-    // bool ENABLE_PARALLEL_LAZY_SCHEDULER = false; 也就是说不enable
+    // 前文有bool ENABLE_PARALLEL_LAZY_SCHEDULER = false; 也就是说不enable
     if constexpr (!ENABLE_PARALLEL_LAZY_SCHEDULER) {
         // (dist, r, index)
         std::priority_queue<std::tuple<uint32_t, uint32_t, uint32_t>, std::vector<std::tuple<uint32_t, uint32_t, uint32_t>>, std::greater<>> Heap;
