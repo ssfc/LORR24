@@ -473,6 +473,7 @@ void SchedulerSolver::lns_solve(TimePoint end_time) {
     PRINT(Printer() << "[Scheduler] lns solve: " << old_score << "->" << get_score() << " (" << (old_score - get_score() >= 0 ? "+" : "-") << (old_score - get_score()) / old_score * 100 << "%), " << step << ", " << timer << '\n';);
 }
 
+// 它把调度器内部记录的“每个机器人/worker 的 desire 值”转换成 int，并返回结果数组。
 std::vector<int> SchedulerSolver::get_schedule() const {
     std::vector<int> result(desires.size());
     for (uint32_t r = 0; r < desires.size(); r++) {
