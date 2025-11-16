@@ -272,6 +272,8 @@ void SchedulerSolver::update() {
 // 可以选择单线程或多线程版本。
 // “懒惰”指的是：尽量用现有 dp 列表（机器人候选任务按距离排序），不做复杂搜索或优化。
 void SchedulerSolver::lazy_solve(TimePoint end_time) {
+
+    // 🧩 1️⃣ 初始化与清理
     ETimer timer;
     for (uint32_t r: free_robots) {
         remove(r);
