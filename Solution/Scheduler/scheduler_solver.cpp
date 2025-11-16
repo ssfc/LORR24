@@ -304,6 +304,9 @@ void SchedulerSolver::lazy_solve(TimePoint end_time) {
     // 前文有bool ENABLE_PARALLEL_LAZY_SCHEDULER = false; 也就是说不enable
     if constexpr (!ENABLE_PARALLEL_LAZY_SCHEDULER) {
         // (dist, r, index)
+        // 先比 tuple[0]，也就是 dist
+        // 如果相等，再比 tuple[1] (free robot id)
+        // 再比 tuple[2] (index)
         std::priority_queue<std::tuple<uint32_t, uint32_t, uint32_t>, std::vector<std::tuple<uint32_t, uint32_t, uint32_t>>, std::greater<>> Heap;
         for (uint32_t r: free_robots) {
             if (!dp[r].empty()) {
