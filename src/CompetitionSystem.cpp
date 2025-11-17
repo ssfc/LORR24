@@ -603,8 +603,8 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
 
     to_csv << instance.num_of_agents << ","; // num of agents
     to_csv << get_cpu_name() << ","; // device
-    to_csv << init_algo_name << ","; // high level method, replace with initial plan algorithm name
-    to_csv << replan_algo_name << ","; // low level method, replace with replan algorithm name
+    to_csv << init_algo_name << ","; // high level method, replace with task assignment algorithm
+    to_csv << replan_algo_name << ","; // low level method, replace with path planning algorithm
     // to_csv << max_initial_iterations << ","; // replan algorithm name, 这里记录初始算法的运算次数
     to_csv << "disappearAtGoal" << ","; // disappear or not
     to_csv << "NULL" << ","; // CAT break-tie
