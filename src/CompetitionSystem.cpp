@@ -565,10 +565,10 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     to_csv << repo_link << ","; // method source
 
     // 获取当前时间点
-    auto now = std::chrono::system_clock::now();
+    auto now2 = std::chrono::system_clock::now();
 
     // 转换为 time_t 格式
-    std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
+    std::time_t currentTime = std::chrono::system_clock::to_time_t(now2);
 
     // 输出时间
     to_csv << std::put_time(std::localtime(&currentTime), "%Y-%m-%d %H:%M:%S")
