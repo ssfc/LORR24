@@ -597,9 +597,9 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     std::string map_name = filePath.filename().string(); // 提取文件名部分
     to_csv << map_name << ","; // instance
 
-    std::filesystem::path agentPath(instance.agent_fname);
-    std::string agent_file = agentPath.filename().string(); // 提取文件名部分
-    to_csv << agent_file << ","; // agent file
+    // std::filesystem::path agentPath(instance.agent_fname);
+    // std::string agent_file = agentPath.filename().string(); // 提取文件名部分
+    // to_csv << agent_file << ","; // agent file
 
     to_csv << instance.num_of_agents << ","; // num of agents
     to_csv << get_cpu_name() << ","; // device
