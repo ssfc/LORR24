@@ -527,4 +527,52 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     std::ofstream f(outfileName,std::ios_base::trunc |std::ios_base::out);
     f << std::setw(4) << js;
 
+
+    std::ofstream to_csv(to_csv_path, std::ios::app);  // 以追加模式打开文件
+    if (!to_csv.is_open()) {
+        std::cerr << "Error opening csv!" << std::endl;
+        return false;
+    }
+
+    to_csv << -1 << ","; // id
+
+    std::filesystem::path filePath(instance.map_fname);
+    std::string map_name = filePath.filename().string(); // 提取文件名部分
+    to_csv << map_name << ","; // instance
+
+    std::filesystem::path agentPath(instance.agent_fname);
+    std::string agent_file = agentPath.filename().string(); // 提取文件名部分
+    to_csv << agent_file << ","; // agent file
+
+    to_csv << instance.num_of_agents << ","; // num of agents
+    to_csv << get_cpu_name() << ","; // device
+    to_csv << init_algo_name << ","; // high level method, replace with initial plan algorithm name
+    to_csv << replan_algo_name << ","; // low level method, replace with replan algorithm name
+    // to_csv << max_initial_iterations << ","; // replan algorithm name, 这里记录初始算法的运算次数
+    to_csv << disappear_at_goal << ","; // disappear or not
+    to_csv << "NULL" << ","; // CAT break-tie
+    to_csv << rand_seed << ","; // random seed
+
+    std::cout << "sum_individual_cost: " << initial_sum_of_costs << std::endl;
+    to_csv << initial_sum_of_costs << ","; // cost
+
+    std::cout << "runtime (s): " << runtime << std::endl;
+    to_csv << runtime << ",";
+    to_csv << test_initial_solution << ","; // comment, 这里换成test initial solution
+    to_csv << repo_link << ","; // method source
+
+    // 获取当前时间点
+    auto now = std::chrono::system_clock::now();
+
+    // 转换为 time_t 格式
+    std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
+
+    // 输出时间
+    to_csv << std::put_time(std::localtime(&currentTime), "%Y-%m-%d %H:%M:%S")
+           << ",";
+
+    to_csv << destroy_strategy << ","; // 原highLevelExpanded, 用destoryStrategy取代内容
+
+    to_csv << neighbor_size << "\n"; // 原lowLevelExpanded, 用neighborSize取代内容
+
 }
