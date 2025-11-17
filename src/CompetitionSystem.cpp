@@ -537,7 +537,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
 
     to_csv << -1 << ","; // id
 
-    std::filesystem::path filePath(instance.map_fname);
+    std::filesystem::path filePath(fileName);
     std::string map_name = filePath.filename().string(); // 提取文件名部分
     to_csv << map_name << ","; // instance
 
