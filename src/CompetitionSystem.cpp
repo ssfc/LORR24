@@ -614,7 +614,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     to_csv << "NULL" << ","; // CAT break-tie
     to_csv << "randSeed" << ","; // random seed
 
-    std::cout << "sum_individual_cost: " << task_manager.num_of_task_finish << std::endl;
+    std::cout << "num task finished: " << task_manager.num_of_task_finish << std::endl;
     to_csv << task_manager.num_of_task_finish << ","; // cost
 
     std::cout << "runtime (s): " << makespan << std::endl;
