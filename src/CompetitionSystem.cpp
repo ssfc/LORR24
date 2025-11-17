@@ -606,7 +606,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     to_csv << init_algo_name << ","; // high level method, replace with initial plan algorithm name
     to_csv << replan_algo_name << ","; // low level method, replace with replan algorithm name
     // to_csv << max_initial_iterations << ","; // replan algorithm name, 这里记录初始算法的运算次数
-    to_csv << disappear_at_goal << ","; // disappear or not
+    to_csv << "disappearAtGoal" << ","; // disappear or not
     to_csv << "NULL" << ","; // CAT break-tie
     to_csv << rand_seed << ","; // random seed
 
