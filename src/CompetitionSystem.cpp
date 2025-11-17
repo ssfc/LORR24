@@ -559,7 +559,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
 
     std::cout << "runtime (s): " << runtime << std::endl;
     to_csv << runtime << ",";
-    to_csv << test_initial_solution << ","; // comment, 这里换成test initial solution
+    to_csv << "comment" << ","; // comment
 
     string repo_link = "https://github.com/ssfc/LORR24";
     to_csv << repo_link << ","; // method source
