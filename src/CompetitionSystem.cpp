@@ -608,7 +608,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     // to_csv << max_initial_iterations << ","; // replan algorithm name, 这里记录初始算法的运算次数
     to_csv << "disappearAtGoal" << ","; // disappear or not
     to_csv << "NULL" << ","; // CAT break-tie
-    to_csv << rand_seed << ","; // random seed
+    to_csv << "randSeed" << ","; // random seed
 
     std::cout << "sum_individual_cost: " << initial_sum_of_costs << std::endl;
     to_csv << initial_sum_of_costs << ","; // cost
