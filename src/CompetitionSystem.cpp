@@ -557,8 +557,8 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     std::cout << "sum_individual_cost: " << initial_sum_of_costs << std::endl;
     to_csv << initial_sum_of_costs << ","; // cost
 
-    std::cout << "runtime (s): " << runtime << std::endl;
-    to_csv << runtime << ",";
+    std::cout << "runtime (s): " << makespan << std::endl;
+    to_csv << makespan << ",";
     to_csv << "comment" << ","; // comment
 
     string repo_link = "https://github.com/ssfc/LORR24";
