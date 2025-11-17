@@ -607,7 +607,20 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
 
     to_csv << num_of_agents << ","; // num of agents
     to_csv << get_cpu_name() << ","; // device
-    to_csv << "hseGreedy" << ","; // high level method, replace with task assignment algorithm
+
+    if(get_scheduler_type() == SchedulerType::GREEDY)
+    {
+        to_csv << "hseGreedy" << ","; // high level method, replace with task assignment algorithm
+    }
+    else if(get_scheduler_type() == SchedulerType::HUNGARIAN)
+    {
+        to_csv << "hseHungarian" << ","; // high level method, replace with task assignment algorithm
+    }
+    else
+    {
+        to_csv << "otherTA" << ","; // high level method, replace with task assignment algorithm
+    }
+
     to_csv << "epibt(4)" << ","; // low level method, replace with path planning algorithm
     // to_csv << max_initial_iterations << ","; // replan algorithm name, 这里记录初始算法的运算次数
     to_csv << "disappearAtGoal" << ","; // disappear or not
