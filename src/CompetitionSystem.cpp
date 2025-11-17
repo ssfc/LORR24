@@ -528,6 +528,8 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     f << std::setw(4) << js;
 
 
+    std::string to_csv_path = "../result/experimental_results.csv";
+
     std::ofstream to_csv(to_csv_path, std::ios::app);  // 以追加模式打开文件
     if (!to_csv.is_open()) {
         std::cerr << "Error opening csv!" << std::endl;
