@@ -574,6 +574,6 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
 
     to_csv << destroy_strategy << ","; // 原highLevelExpanded, 用destoryStrategy取代内容
 
-    to_csv << neighbor_size << "\n"; // 原lowLevelExpanded, 用neighborSize取代内容
+    to_csv << "neighborSize" << "\n"; // 原lowLevelExpanded, 用neighborSize取代内容
 
 }
