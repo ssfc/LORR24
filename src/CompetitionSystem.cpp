@@ -16,6 +16,62 @@ using json = nlohmann::ordered_json;
 // }
 
 
+
+
+std::string get_cpu_name() {
+#ifdef _WIN32
+    // Windows 使用 wmic
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen("wmic cpu get Name", "r"), _pclose);
+    if (!pipe) return "";
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+    // 去掉空格和换行
+    result.erase(remove(result.begin(), result.end(), '\n'), result.end());
+    result.erase(remove(result.begin(), result.end(), '\r'), result.end());
+
+    // 保留指定型号
+    if (result.find("8250U") != std::string::npos) return "8250U";
+    if (result.find("12100F") != std::string::npos) return "12100F";
+    if (result.find("10400F") != std::string::npos) return "10400F";
+    return "Unknown";
+
+#elif __linux__
+    // Linux 从 /proc/cpuinfo 读取
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("grep 'model name' /proc/cpuinfo | head -n 1", "r"), pclose);
+    if (!pipe) return "";
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+    // 去掉多余字符
+    result.erase(remove(result.begin(), result.end(), '\n'), result.end());
+    result.erase(remove(result.begin(), result.end(), '\r'), result.end());
+
+    // 过滤掉前面的 "model name : "
+    size_t pos = result.find(":");
+    if (pos != std::string::npos) {
+        result = result.substr(pos + 2); // 跳过 ": " 两个字符
+    }
+
+    // 保留指定型号（可根据需求加）
+    if (result.find("8250U") != std::string::npos) return "8250U";
+    if (result.find("12100F") != std::string::npos) return "12100F";
+    if (result.find("10400F") != std::string::npos) return "10400F";
+    if (result.find("12490F") != std::string::npos) return "12490F";
+    return "Unknown";
+
+#else
+    return "Unknown";
+#endif
+}
+
+
+
+
 void BaseSystem::sync_shared_env() {
     if (!started) {
         env->goal_locations.resize(num_of_agents);
