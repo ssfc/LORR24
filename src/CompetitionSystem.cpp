@@ -572,7 +572,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     to_csv << std::put_time(std::localtime(&currentTime), "%Y-%m-%d %H:%M:%S")
            << ",";
 
-    to_csv << destroy_strategy << ","; // 原highLevelExpanded, 用destoryStrategy取代内容
+    to_csv << "destoryStrategy" << ","; // 原highLevelExpanded, 用destoryStrategy取代内容
 
     to_csv << "neighborSize" << "\n"; // 原lowLevelExpanded, 用neighborSize取代内容
 
