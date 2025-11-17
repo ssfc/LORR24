@@ -601,7 +601,7 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     // std::string agent_file = agentPath.filename().string(); // 提取文件名部分
     // to_csv << agent_file << ","; // agent file
 
-    to_csv << instance.num_of_agents << ","; // num of agents
+    to_csv << num_of_agents << ","; // num of agents
     to_csv << get_cpu_name() << ","; // device
     to_csv << "hseGreedy" << ","; // high level method, replace with task assignment algorithm
     to_csv << "epibt(4)" << ","; // low level method, replace with path planning algorithm
