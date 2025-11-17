@@ -590,6 +590,10 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     if (!to_csv.is_open()) {
         std::cerr << "Error opening csv!" << std::endl;
     }
+    else
+    {
+        cout << "opening csv file" << std::endl;
+    }
 
     to_csv << -1 << ","; // id
 
