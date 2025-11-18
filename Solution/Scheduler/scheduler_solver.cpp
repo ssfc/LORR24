@@ -120,7 +120,7 @@ uint64_t SchedulerSolver::get_origin_dist(uint32_t r, uint32_t t) const {
 }
 
 
-
+// r是agent的编号，t是task的编号
 uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) const {
     if (t == -1) {
         return 1e6;
@@ -129,6 +129,15 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) const {
     uint32_t source = get_robots_handler().get_robot(r).node;
     uint64_t dist_to_target = get_hm().get(source, task_target[t]);
     uint64_t dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+
+    auto i = r;
+
+    int sum_jam_weight = compute_jam_curr_pickup_intersect_curr_goal(i,
+                                                                             agent_point,
+                                                                             pickup_point);
+
+
+
     ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
 
     return dist;
