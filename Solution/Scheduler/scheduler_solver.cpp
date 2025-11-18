@@ -22,41 +22,6 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
 }
 
 
-// compute pickup jam by counting whether other agent-task line intersect with this agent-task line
-[[nodiscard]] int SchedulerSolver::compute_jam_curr_pickup_intersect_curr_goal(int _agent_id,
-                                                                             Point _agent_loc, Point _agent_end)
-{
-    int sum_jam_weight = 0;
-
-    // cout << "pickup loc " << pickup_twodim.x << " " << pickup_twodim.y << endl;
-
-    for(int j=0;j<env->goal_locations.size();j++)
-    {
-        if (j != _agent_id && !env->goal_locations[j].empty()) // only consider the agent with goals
-        {
-            int other_agent_loc = env->curr_states.at(j).location;
-            Point other_agent_start{other_agent_loc % env->cols, other_agent_loc / env->cols};
-
-            int other_agent_goal = env->goal_locations[j][0].first;
-            Point other_agent_end{other_agent_goal % env->cols, other_agent_goal / env->cols};
-            // cout << "other agent goal " << other_agent_goal << " " << other_agent_goal_x << " "
-            // << other_agent_goal_y << endl;
-
-            // 统计other agent和它目标点的连线与agent-pickup连线发生交叉的数量
-            if(isIntersecting(_agent_loc, _agent_end, other_agent_start, other_agent_end))
-            {
-                // cout << "task direction: " << agent_task_direction_x << " " << agent_task_direction_y << " "
-                // << task_direction_length << endl;
-
-                sum_jam_weight++;
-            }
-        }
-    }
-
-    return sum_jam_weight;
-}
-
-
 
 // 为多个机器人并行重建 dp 列表的函数。
 void SchedulerSolver::rebuild_dp(TimePoint end_time) {
@@ -117,6 +82,42 @@ uint64_t SchedulerSolver::get_origin_dist(uint32_t r, uint32_t t) const {
     ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
 
     return dist;
+}
+
+
+
+// compute pickup jam by counting whether other agent-task line intersect with this agent-task line
+[[nodiscard]] int SchedulerSolver::compute_jam_curr_pickup_intersect_curr_goal(int _agent_id,
+                                                                             Point _agent_loc, Point _agent_end)
+{
+    int sum_jam_weight = 0;
+
+    // cout << "pickup loc " << pickup_twodim.x << " " << pickup_twodim.y << endl;
+
+    for(int j=0;j<env->goal_locations.size();j++)
+    {
+        if (j != _agent_id && !env->goal_locations[j].empty()) // only consider the agent with goals
+        {
+            int other_agent_loc = env->curr_states.at(j).location;
+            Point other_agent_start{other_agent_loc % env->cols, other_agent_loc / env->cols};
+
+            int other_agent_goal = env->goal_locations[j][0].first;
+            Point other_agent_end{other_agent_goal % env->cols, other_agent_goal / env->cols};
+            // cout << "other agent goal " << other_agent_goal << " " << other_agent_goal_x << " "
+            // << other_agent_goal_y << endl;
+
+            // 统计other agent和它目标点的连线与agent-pickup连线发生交叉的数量
+            if(isIntersecting(_agent_loc, _agent_end, other_agent_start, other_agent_end))
+            {
+                // cout << "task direction: " << agent_task_direction_x << " " << agent_task_direction_y << " "
+                // << task_direction_length << endl;
+
+                sum_jam_weight++;
+            }
+        }
+    }
+
+    return sum_jam_weight;
 }
 
 
