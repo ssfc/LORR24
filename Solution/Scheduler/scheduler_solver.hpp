@@ -127,6 +127,8 @@ struct SchedulerSolver {
 
     [[nodiscard]] uint64_t get_dist(uint32_t r, uint32_t t) const;
 
+    [[nodiscard]] uint64_t get_origin_dist(uint32_t r, uint32_t t) const;
+
     void remove(uint32_t r);
 
     void add(uint32_t r, uint32_t t);
