@@ -131,6 +131,7 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) const {
     uint64_t dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
 
     auto i = r;
+    int agent_loc = env->curr_states.at(i).location;
 
     int sum_jam_weight = compute_jam_curr_pickup_intersect_curr_goal(i,
                                                                              agent_point,
