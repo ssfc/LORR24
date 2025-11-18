@@ -32,3 +32,13 @@ id,map_file,agent_file,num_agents,device,high level planner,low level planner,di
 -1,GAME.json,6500,12490F,DefaultGreedy,epibt(4),disappearAtGoal,NULL,randSeed,12141,5000,comment,https://github.com/ssfc/LORR24,2025-11-17 23:11:43,destoryStrategy,neighborSize
 -1,SORTATION.json,10000,12490F,DefaultGreedy,epibt(4),disappearAtGoal,NULL,randSeed,124821,5000,comment,https://github.com/ssfc/LORR24,2025-11-17 23:20:39,destoryStrategy,neighborSize
 -1,WAREHOUSE.json,10000,12490F,DefaultGreedy,epibt(4),disappearAtGoal,NULL,randSeed,113025,5000,comment,https://github.com/ssfc/LORR24,2025-11-17 23:28:56,destoryStrategy,neighborSize
+-1,RANDOM-01.json,100,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,595,600,comment,https://github.com/ssfc/LORR24,2025-11-18 09:54:04,destoryStrategy,neighborSize
+-1,RANDOM-02.json,200,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,991,600,comment,https://github.com/ssfc/LORR24,2025-11-18 09:54:06,destoryStrategy,neighborSize
+-1,RANDOM-03.json,400,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,1459,800,comment,https://github.com/ssfc/LORR24,2025-11-18 09:54:11,destoryStrategy,neighborSize
+-1,RANDOM-04.json,700,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,1379,1000,comment,https://github.com/ssfc/LORR24,2025-11-18 09:54:36,destoryStrategy,neighborSize
+-1,RANDOM-05.json,800,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,1409,2000,comment,https://github.com/ssfc/LORR24,2025-11-18 09:58:19,destoryStrategy,neighborSize
+-1,CITY-01.json,1500,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,7627,3000,comment,https://github.com/ssfc/LORR24,2025-11-18 10:03:02,destoryStrategy,neighborSize
+-1,CITY-02.json,3000,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,14129,3000,comment,https://github.com/ssfc/LORR24,2025-11-18 10:18:56,destoryStrategy,neighborSize
+-1,GAME.json,6500,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,16651,5000,comment,https://github.com/ssfc/LORR24,2025-11-18 11:03:50,destoryStrategy,neighborSize
+-1,SORTATION.json,10000,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,19276,5000,comment,https://github.com/ssfc/LORR24,2025-11-18 11:50:37,destoryStrategy,neighborSize
+-1,WAREHOUSE.json,10000,12490F,adaptive_jam_curr_pickup_intersect_curr_goal,epibt(4),disappearAtGoal,NULL,randSeed,18787,5000,comment,https://github.com/ssfc/LORR24,2025-11-18 12:40:49,destoryStrategy,neighborSize
