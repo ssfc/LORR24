@@ -620,6 +620,14 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     {
         to_csv << "DefaultGreedy" << ","; // high level method, replace with task assignment algorithm
     }
+    else if(get_scheduler_type() == SchedulerType::adaptive_jam_curr_pickup_intersect_curr_goal)
+    {
+        to_csv << "adaptive_jam_curr_pickup_intersect_curr_goal" << ","; // high level method, replace with task assignment algorithm
+    }
+    else if(get_scheduler_type() == SchedulerType::adaptive_jam_task_pickup_region_count_current)
+    {
+        to_csv << "adaptive_jam_task_pickup_region_count_current" << ","; // high level method, replace with task assignment algorithm
+    }
     else
     {
         to_csv << "otherTA" << ","; // high level method, replace with task assignment algorithm
