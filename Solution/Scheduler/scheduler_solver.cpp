@@ -120,6 +120,22 @@ uint64_t SchedulerSolver::get_origin_dist(uint32_t r, uint32_t t) const {
 }
 
 
+
+uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) const {
+    if (t == -1) {
+        return 1e6;
+    }
+
+    uint32_t source = get_robots_handler().get_robot(r).node;
+    uint64_t dist_to_target = get_hm().get(source, task_target[t]);
+    uint64_t dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+    ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
+
+    return dist;
+}
+
+
+
 // 从机器人 r 移除其任务
 void SchedulerSolver::remove(uint32_t r) {
     ASSERT(0 <= r && r < desires.size(), "invalid r");
