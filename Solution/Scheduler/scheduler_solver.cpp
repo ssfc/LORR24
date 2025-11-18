@@ -142,7 +142,7 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
                                                                              agent_point,
                                                                              pickup_point);
 
-
+    cout << "sum jam weight: " << sum_jam_weight << endl;
 
     ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
 
