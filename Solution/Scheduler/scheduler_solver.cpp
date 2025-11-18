@@ -105,6 +105,7 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
 
 
 // 距离 = agent到task起点距离 + 任务代价
+// r是agent的编号，t是task的编号
 uint64_t SchedulerSolver::get_origin_dist(uint32_t r, uint32_t t) const {
     if (t == -1) {
         return 1e6;
