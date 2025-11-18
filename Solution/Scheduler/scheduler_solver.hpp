@@ -43,6 +43,13 @@ struct SchedulerSolver {
     double jam_coefficient = 1; // 在多大程度上考虑拥堵
 
 
+    [[nodiscard]] int compute_jam_curr_pickup_intersect_curr_goal(int _agent_id, Point _agent_loc,
+                                                                  Point _agent_end);
+
+
+
+
+
     // dp[r] = отсортированный вектор (dist, task_id)
     std::vector<std::vector<std::pair<uint32_t, uint32_t>>> dp;
 
