@@ -43,6 +43,10 @@ struct SchedulerSolver {
     double jam_coefficient = 1; // 在多大程度上考虑拥堵
 
 
+    struct Point {
+        int x, y;
+    };
+
     [[nodiscard]] int compute_jam_curr_pickup_intersect_curr_goal(int _agent_id, Point _agent_loc,
                                                                   Point _agent_end);
 
