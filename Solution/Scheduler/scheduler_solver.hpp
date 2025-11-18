@@ -48,6 +48,12 @@ struct SchedulerSolver {
     };
 
 
+    // 11: compute pickup jam by counting whether other agent-task line intersect with this agent-task line
+    int cross(const Point& startA, const Point& endA, const Point& pointB) {
+        return (endA.x - startA.x) * (pointB.y - startA.y) - (endA.y - startA.y) * (pointB.x - startA.x);
+    }
+
+
     bool isIntersecting(const Point& startA, const Point& endA, const Point& startB, const Point& endB) {
         // Bounding box filter
         if (std::max(startA.x, endA.x) < std::min(startB.x, endB.x) ||
