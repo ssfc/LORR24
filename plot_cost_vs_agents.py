@@ -74,8 +74,8 @@ def main():
 
     # 不同方法的附加条件与样式
     methods: Tuple[Tuple[str, Dict[str, object], Dict[str, object]], ...] = (
-        #("CBS", {"high level planner": "CBS-whoenig"}, {"marker": "^"}),
-        #("CBSDepth", {"high level planner": "CBSDepth-whoenig"}, {"marker": "v"}),
+        ("hseGreedy", {"high level planner": "hseGreedy"}, {"marker": "^"}),
+        ("hseHungarian", {"high level planner": "hseHungarian"}, {"marker": "v"}),
         #("CBSDepthKNN", {"high level planner": "CBSDepthKNN"}, {"marker": "^"}),
         #("CBSDepthKNNSparse", {"high level planner": "CBSDepthKNNSparse"}, {"marker": "v"}),
         #("CBSDepthSelectConflict", {"high level planner": "CBSDepthSelectConflict"}, {"marker": "^"}),
@@ -89,9 +89,9 @@ def main():
         #("CBSDepthBeam2", {"high level planner": "CBSFlowBeam-whoenig", "comment": 2}, {"marker": "*"}),
         #("CBSDepthBeam8", {"high level planner": "CBSFlowBeam-whoenig", "comment": 8}, {"marker": "v"}),
         #("PP", {"high level planner": "PP", "low level planner": "1", "comment": 1}, {"marker": "^"}),
-        ("PP", {"high level planner": "PP", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
+        #("PP", {"high level planner": "PP", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
         #("multiPP", {"high level planner": "multiPP"}, {"marker": "v"}),
-        ("leftBottomManhattan", {"high level planner": "leftBottomManhattan", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
+        #("leftBottomManhattan", {"high level planner": "leftBottomManhattan", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
         #("leftTopManhattan", {"high level planner": "leftTopManhattan", "low level planner": "1", "comment": 1}, {"marker": "^"}),
         #("leftBottom", {"high level planner": "leftBottom", "low level planner": "1"}, {"marker": "v"}),
         #("PbyLength", {"high level planner": "PbyLength"}, {"marker": "v"}),
@@ -99,10 +99,12 @@ def main():
     )
 
     for name, extra_filters, _style in [
+        ("hseGreedy", {"high level planner": "hseGreedy"}, {"marker": "^"}),
+        ("hseHungarian", {"high level planner": "hseHungarian"}, {"marker": "v"}),
         #("PP", {"high level planner": "PP", "low level planner": "1", "comment": 0}, {"marker": "^"}),
-        ("PP", {"high level planner": "PP", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
+        #("PP", {"high level planner": "PP", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
         #("leftBottomManhattan", {"high level planner": "leftBottomManhattan", "low level planner": "1", "comment": 0}, {"marker": "^"}),
-        ("leftBottomManhattan", {"high level planner": "leftBottomManhattan", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
+        #("leftBottomManhattan", {"high level planner": "leftBottomManhattan", "low level planner": "PP", "comment": 0}, {"marker": "^"}),
         #("PbyLength", {"high level planner": "PbyLength", "low level planner": "1"}, {"marker": "^"}),
         #("leftBottomAndLength", {"high level planner": "leftBottomAndLength", "low level planner": "1"}, {"marker": "^"}),
         #("goalLeftBottom", {"high level planner": "goalLeftBottom", "low level planner": "1"}, {"marker": "*"}),
