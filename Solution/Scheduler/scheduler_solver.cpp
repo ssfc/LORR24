@@ -135,6 +135,7 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) const {
     Point agent_point{agent_loc % env->cols, agent_loc / env->cols};
 
     int pickup_loc = env->task_pool[t].locations[0];
+    Point pickup_point{pickup_loc % env->cols, pickup_loc / env->cols};
 
     int sum_jam_weight = compute_jam_curr_pickup_intersect_curr_goal(i,
                                                                              agent_point,
