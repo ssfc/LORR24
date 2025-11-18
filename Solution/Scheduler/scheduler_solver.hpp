@@ -130,7 +130,7 @@ struct SchedulerSolver {
     [[nodiscard]] uint64_t get_origin_dist(uint32_t r, uint32_t t) const;
 
     // 加上考虑拥堵的距离
-    [[nodiscard]] uint64_t get_jam_dist(uint32_t r, uint32_t t) const;
+    [[nodiscard]] uint64_t get_jam_dist(uint32_t r, uint32_t t);
 
     void remove(uint32_t r);
 

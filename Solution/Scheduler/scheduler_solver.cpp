@@ -122,7 +122,7 @@ uint64_t SchedulerSolver::get_origin_dist(uint32_t r, uint32_t t) const {
 
 
 // r是agent的编号，t是task的编号
-uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) const {
+uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
     if (t == -1) {
         return 1e6;
     }
