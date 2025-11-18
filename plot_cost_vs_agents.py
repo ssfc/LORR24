@@ -66,10 +66,10 @@ def main():
 
     # 公共筛选条件
     base_filters = {
-        "map_file": args.map_file,
-        "agent_file": args.agent_file,
-        "device": "12490F",
-        "disappear_at_goal": 1,
+        #"map_file": args.map_file,
+        #"agent_file": args.agent_file,
+        #"device": "12490F",
+        #"disappear_at_goal": 1,
     }
 
     # 不同方法的附加条件与样式
