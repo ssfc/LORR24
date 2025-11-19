@@ -88,12 +88,14 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
     solver.lns_solve(std::min(end_time, get_now() + Milliseconds(SCHEDULER_LNS_SOLVE_TIME)));
     proposed_schedule = solver.get_schedule();
 
+    /*
     cout << proposed_schedule.size() << " proposed schedule: ";
     for (uint32_t i = 0; i < proposed_schedule.size(); i++)
     {
         cout << proposed_schedule[i] << ", ";
     }
     cout << endl;
+    */
 
     prev_schedule = proposed_schedule;
 }
