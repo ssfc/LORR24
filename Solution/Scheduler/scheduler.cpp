@@ -14,8 +14,8 @@
 
 MyScheduler::MyScheduler(SharedEnvironment *env) : env(env), solver(env) {
 
-    cout << "num agents: " << env->num_of_agents << endl;
-    agent_task.resize(env->num_of_agents); // initialize all agents to free state
+    // cout << "num agents: " << env->num_of_agents << endl;
+    // agent_task.resize(env->num_of_agents); // initialize all agents to free state
 
 }
 
@@ -36,6 +36,12 @@ int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
 // 不知道怎么面对其中的多线程问题, 后面再想想
 // 突然想到, 计算每个方块内的agent数量可以用到多线程方法, 因为可以独立计算
 void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed_schedule) {
+
+    // cout << "num agents: " << env->num_of_agents << endl;
+    if(agent_task.empty())
+    {
+        agent_task.resize(env->num_of_agents); // initialize all agents to free state
+    }
 
     for(auto const& element : env->new_freeagents)
     {
