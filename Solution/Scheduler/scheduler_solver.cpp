@@ -6,6 +6,7 @@
 #include <Tools/tools.hpp>
 
 #include <atomic>
+#include <iostream>
 #include <unordered_set>
 
 // 为单个机器人 r 构建 dp[r]。
@@ -55,7 +56,7 @@ bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rn
 }
 
 // 距离 = agent到task起点距离 *5 + 任务代价
-uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
+uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) {
     if (t == -1) {
         return 1e6;
     }
@@ -71,6 +72,24 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
     }
     else if(get_scheduler_type() == SchedulerType::SA_NOT_5)
     {
+        dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+    }
+    else if(get_scheduler_type() == SchedulerType::SA_jam_intersect)
+    {
+
+        auto i = r;
+        int agent_loc = env->curr_states.at(i).location;
+        Point agent_point{agent_loc % env->cols, agent_loc / env->cols};
+
+        int pickup_loc = env->task_pool[t].locations[0];
+        Point pickup_point{pickup_loc % env->cols, pickup_loc / env->cols};
+
+        int sum_jam_weight = compute_jam_curr_pickup_intersect_curr_goal(i,
+                                                                             agent_point,
+                                                                             pickup_point);
+
+        cout << "sum jam weight: " << sum_jam_weight << endl;
+
         dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
     }
     else
@@ -119,36 +138,6 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
 
     return sum_jam_weight;
 }
-
-
-// r是agent的编号，t是task的编号
-uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
-    if (t == -1) {
-        return 1e6;
-    }
-
-    uint32_t source = get_robots_handler().get_robot(r).node;
-    uint64_t dist_to_target = get_hm().get(source, task_target[t]);
-    uint64_t dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
-
-    auto i = r;
-    int agent_loc = env->curr_states.at(i).location;
-    Point agent_point{agent_loc % env->cols, agent_loc / env->cols};
-
-    int pickup_loc = env->task_pool[t].locations[0];
-    Point pickup_point{pickup_loc % env->cols, pickup_loc / env->cols};
-
-    int sum_jam_weight = compute_jam_curr_pickup_intersect_curr_goal(i,
-                                                                             agent_point,
-                                                                             pickup_point);
-
-    cout << "sum jam weight: " << sum_jam_weight << endl;
-
-    ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
-
-    return dist;
-}
-
 
 
 // 从机器人 r 移除其任务
