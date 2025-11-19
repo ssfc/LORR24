@@ -145,6 +145,11 @@ int main(int argc, char **argv) {
             scheduler_algo = "+sn5";
             get_scheduler_type() = SchedulerType::SA_NOT_5;
         }
+        else if (scheduler_algo == "sa_jam_intersect")
+        {
+            scheduler_algo = "+sji";
+            get_scheduler_type() = SchedulerType::SA_jam_intersect;
+        }
         else if (scheduler_algo == "hungarian")
         {
             scheduler_algo = "+hs";

@@ -265,6 +265,10 @@ void MyScheduler::plan(TimePoint end_time, std::vector<int> &proposed_schedule)
     {
         solver_schedule(end_time, proposed_schedule);
     }
+    else if (get_scheduler_type() == SchedulerType::SA_jam_intersect)
+    {
+        solver_schedule(end_time, proposed_schedule);
+    }
     else if (get_scheduler_type() == SchedulerType::HUNGARIAN)
     {
         hungarian_schedule(end_time, proposed_schedule);

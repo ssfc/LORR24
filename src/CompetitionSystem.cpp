@@ -616,6 +616,10 @@ void BaseSystem::saveMyResults(const string& fileName, string _simulation_time, 
     {
         to_csv << "SA_NOT_5" << ","; // high level method, replace with task assignment algorithm
     }
+    else if(get_scheduler_type() == SchedulerType::SA_jam_intersect)
+    {
+        to_csv << "SA_jam_intersect" << ","; // high level method, replace with task assignment algorithm
+    }
     else if(get_scheduler_type() == SchedulerType::HUNGARIAN)
     {
         to_csv << "hseHungarian" << ","; // high level method, replace with task assignment algorithm
