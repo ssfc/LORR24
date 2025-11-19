@@ -14,7 +14,8 @@
 
 MyScheduler::MyScheduler(SharedEnvironment *env) : env(env), solver(env) {
 
-    cout << "initial MyScheduler" << endl;
+    cout << "num agents: " << env->num_of_agents << endl;
+    agent_task.resize(env->num_of_agents); // initialize all agents to free state
 
 }
 
