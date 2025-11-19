@@ -88,7 +88,7 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) {
                                                                              agent_point,
                                                                              pickup_point);
 
-        cout << "sum jam weight: " << sum_jam_weight << endl;
+        // cout << "sum jam weight: " << sum_jam_weight << endl;
 
         dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
     }
