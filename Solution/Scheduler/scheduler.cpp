@@ -51,6 +51,8 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
         cout << proposed_schedule[i] << ", ";
     }
     cout << endl;
+
+    prev_schedule = proposed_schedule;
 }
 
 uint32_t calc_full_distance(Task &task) {

@@ -11,6 +11,9 @@ struct MyScheduler {
 
     SchedulerSolver solver;
 
+    std::vector<int> prev_schedule; // 用来记录proposed_schedule的变化情况
+
+
     MyScheduler() = default;
 
     explicit MyScheduler(SharedEnvironment *env);
