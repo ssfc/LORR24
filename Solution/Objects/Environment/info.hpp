@@ -35,7 +35,8 @@ enum class GraphGuidanceType {
 GraphGuidanceType &get_graph_guidance_type();
 
 enum class SchedulerType {
-    GREEDY, // HSE的greedy算法
+    GREEDY, // HSE的greedy算法, dist_to_target * 5 + task_metric[t]
+    SA_NOT_5, // 模拟退火，没有*5
     HUNGARIAN, // HSE的匈牙利算法
     DEFAULT_GREEDY, // 默认的greedys算法
     adaptive_jam_curr_pickup_intersect_curr_goal, // 数交叉点

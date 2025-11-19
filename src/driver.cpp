@@ -140,6 +140,11 @@ int main(int argc, char **argv) {
             scheduler_algo = "+gs";
             get_scheduler_type() = SchedulerType::GREEDY;
         }
+        else if (scheduler_algo == "sa_not5")
+        {
+            scheduler_algo = "+sn5";
+            get_scheduler_type() = SchedulerType::SA_NOT_5;
+        }
         else if (scheduler_algo == "hungarian")
         {
             scheduler_algo = "+hs";

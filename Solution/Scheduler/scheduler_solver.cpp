@@ -62,27 +62,27 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) const {
 
     uint32_t source = get_robots_handler().get_robot(r).node;
     uint64_t dist_to_target = get_hm().get(source, task_target[t]);
-    uint64_t dist = dist_to_target * 5 + task_metric[t]; // agent到task起点距离占据最大权重
-    ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
 
-    return dist;
-}
+    uint64_t dist = 0;
 
-
-// 距离 = agent到task起点距离 + 任务代价
-// r是agent的编号，t是task的编号
-uint64_t SchedulerSolver::get_origin_dist(uint32_t r, uint32_t t) const {
-    if (t == -1) {
-        return 1e6;
+    if(get_scheduler_type() == SchedulerType::GREEDY)
+    {
+        dist = dist_to_target * 5 + task_metric[t]; // agent到task起点距离占据最大权重
+    }
+    else if(get_scheduler_type() == SchedulerType::SA_NOT_5)
+    {
+        dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+    }
+    else
+    {
+        dist = dist_to_target * 5 + task_metric[t]; // agent到task起点距离占据最大权重
     }
 
-    uint32_t source = get_robots_handler().get_robot(r).node;
-    uint64_t dist_to_target = get_hm().get(source, task_target[t]);
-    uint64_t dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
     ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
 
     return dist;
 }
+
 
 
 
