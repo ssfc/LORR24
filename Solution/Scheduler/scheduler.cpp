@@ -35,10 +35,13 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
     // 定义在scheduler_solver.cpp内部
     solver.update(); // 负责从环境 env 中读取当前任务和机器人的状态 → 构建可调度的自由任务/机器人集 → 初始化代价 → 为后续搜索做好准备。
     // SCHEDULER_REBUILD_DP_TIME = 200;
+    // 为多个机器人并行重建 dp 列表的函数。
     solver.rebuild_dp(std::min(end_time, get_now() + Milliseconds(SCHEDULER_REBUILD_DP_TIME)));
     // SCHEDULER_LAZY_SOLVE_TIME = 500;
+    // 在给定时间窗口 end_time 内，为空闲机器人分配任务。
     solver.lazy_solve(std::min(end_time, get_now() + Milliseconds(SCHEDULER_LAZY_SOLVE_TIME)));
     // SCHEDULER_LNS_SOLVE_TIME = 0;
+    // LNS 是一种局部扰动 + 逐步改善的启发式优化方法。
     solver.lns_solve(std::min(end_time, get_now() + Milliseconds(SCHEDULER_LNS_SOLVE_TIME)));
     proposed_schedule = solver.get_schedule();
 }
