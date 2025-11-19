@@ -32,6 +32,38 @@ int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
 // 不知道怎么面对其中的多线程问题, 后面再想想
 // 突然想到, 计算每个方块内的agent数量可以用到多线程方法, 因为可以独立计算
 void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed_schedule) {
+
+    for(auto const& element : env->new_freeagents)
+    {
+        agent_task[element].complete_moment = env->curr_timestep;
+
+        if (agent_task[element].task_id != -1)
+        {
+            numTaskFinished++;
+            /*
+            FinishedTask temp;
+            temp.task_id = agent_task[element].task_id;
+            temp.min_task_dist = agent_task[element].min_task_dist;
+            temp.jam_when_assign = agent_task[element].jam_when_assign;
+            temp.heuristic_duration = agent_task[element].task_heuristic;
+            temp.real_duration = agent_task[element].complete_moment - agent_task[element].assign_moment;
+            finished_tasks.emplace_back(temp);
+             */
+
+            total_min_span += agent_task[element].min_task_dist;
+            total_real_duration += agent_task[element].complete_moment - agent_task[element].assign_moment;
+            total_jam += agent_task[element].jam_when_assign;
+
+            cout << "complete task " << agent_task[element].task_id
+                 << " minDist " << agent_task[element].min_task_dist
+                 << " heuristic " << agent_task[element].task_heuristic
+                 << " real " << agent_task[element].complete_moment - agent_task[element].assign_moment
+                 << " jam " << agent_task[element].jam_when_assign << endl;
+        }
+
+        agent_task[element].task_id = -1;
+    }
+
     // 定义在scheduler_solver.cpp内部
     solver.update(); // 负责从环境 env 中读取当前任务和机器人的状态 → 构建可调度的自由任务/机器人集 → 初始化代价 → 为后续搜索做好准备。
     // SCHEDULER_REBUILD_DP_TIME = 200;
