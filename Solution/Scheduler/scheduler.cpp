@@ -13,6 +13,9 @@
 #include <unordered_set>
 
 MyScheduler::MyScheduler(SharedEnvironment *env) : env(env), solver(env) {
+
+    cout << "initial MyScheduler" << endl;
+
 }
 
 int get_dist_to_start(uint32_t r, uint32_t t, SharedEnvironment *env) {
@@ -35,6 +38,7 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
 
     for(auto const& element : env->new_freeagents)
     {
+        cout << "new free agent " << endl;
         agent_task[element].complete_moment = env->curr_timestep;
 
         if (agent_task[element].task_id != -1)
