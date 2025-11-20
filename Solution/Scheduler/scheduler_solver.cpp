@@ -320,6 +320,10 @@ void SchedulerSolver::update() {
                 d += get_hm().get(get_graph().get_node(Position(source, 0)), target);
             }
             task_metric[t] = d;
+
+
+            // 如果方法是SA_square_current, 还要加上对拥堵启发式的估算
+
         }
     }
 
