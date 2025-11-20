@@ -48,7 +48,7 @@ struct SchedulerSolver {
 
 
     std::unordered_map<int, int> task_region; // 记录每个task所属的历史区域
-
+    vector<int> region_agent_num;
 
 
 

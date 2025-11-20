@@ -178,11 +178,13 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
     task_to_robot[t] = r;
     desires[r] = t;
 
+    int sum_jam_weight = region_agent_num[task_region[t]];
+
     if(get_scheduler_type() == SchedulerType::SA_square_current)
     {
         agent_task[r].task_id = t;
         agent_task[r].min_task_dist  = get_dist(r, t);
-        agent_task[r].task_heuristic = get_dist(r, t); // min_task_heuristic = dist + sum_jam_weight * jam_coefficient;
+        agent_task[r].task_heuristic = get_dist(r, t) + sum_jam_weight * jam_coefficient;
         agent_task[r].assign_moment = env->curr_timestep; // assign task moment
         // agent_task[i].jam_when_assign = corresponding_traffic_jam;
     }
@@ -354,7 +356,8 @@ void SchedulerSolver::update() {
                 int num_region_row = std::ceil((double)env->rows / region_row);
 
                 // 将map分为若干区域, 统计每个区域agent的数量
-                vector<int> region_agent_num(num_region_column * num_region_row, 0);
+                region_agent_num.resize(num_region_column * num_region_row);
+                std::fill(region_agent_num.begin(), region_agent_num.end(), 0);
 
                 for (int i=0;i<env->num_of_agents;i++)
                 {
