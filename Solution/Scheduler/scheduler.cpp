@@ -38,20 +38,20 @@ int get_dist(uint32_t r, uint32_t t, SharedEnvironment *env) {
 void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed_schedule) {
 
     // cout << "num agents: " << env->num_of_agents << endl;
-    if(agent_task.empty())
+    if(solver.agent_task.empty())
     {
-        agent_task.resize(env->num_of_agents); // initialize all agents to free state
+        // agent_task.resize(env->num_of_agents); // initialize all agents to free state
         solver.agent_task.resize(env->num_of_agents); // initialize all agents to free state
     }
 
     for(auto const& element : env->new_freeagents)
     {
-        cout << "new free agent " << endl;
-        agent_task[element].complete_moment = env->curr_timestep;
+        // cout << "new free agent " << endl;
+        solver.agent_task[element].complete_moment = env->curr_timestep;
 
-        if (agent_task[element].task_id != -1)
+        if (solver.agent_task[element].task_id != -1)
         {
-            numTaskFinished++;
+            solver.numTaskFinished++;
             /*
             FinishedTask temp;
             temp.task_id = agent_task[element].task_id;
@@ -62,18 +62,18 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
             finished_tasks.emplace_back(temp);
              */
 
-            total_min_span += agent_task[element].min_task_dist;
-            total_real_duration += agent_task[element].complete_moment - agent_task[element].assign_moment;
-            total_jam += agent_task[element].jam_when_assign;
+            solver.total_min_span += solver.agent_task[element].min_task_dist;
+            solver.total_real_duration += solver.agent_task[element].complete_moment - solver.agent_task[element].assign_moment;
+            solver.total_jam += solver.agent_task[element].jam_when_assign;
 
-            cout << "complete task " << agent_task[element].task_id
-                 << " minDist " << agent_task[element].min_task_dist
-                 << " heuristic " << agent_task[element].task_heuristic
-                 << " real " << agent_task[element].complete_moment - agent_task[element].assign_moment
-                 << " jam " << agent_task[element].jam_when_assign << endl;
+            cout << "complete task " << solver.agent_task[element].task_id
+                 << " minDist " << solver.agent_task[element].min_task_dist
+                 << " heuristic " << solver.agent_task[element].task_heuristic
+                 << " real " << solver.agent_task[element].complete_moment - solver.agent_task[element].assign_moment
+                 << " jam " << solver.agent_task[element].jam_when_assign << endl;
         }
 
-        agent_task[element].task_id = -1;
+        solver.agent_task[element].task_id = -1;
     }
 
     // 定义在scheduler_solver.cpp内部

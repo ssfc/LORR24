@@ -13,6 +13,7 @@ struct MyScheduler {
 
     std::vector<int> prev_schedule; // 用来记录proposed_schedule的变化情况
 
+    /*
     struct AgentTask
     {
         int task_id = -1;
@@ -31,7 +32,7 @@ struct MyScheduler {
     int total_real_duration = 0; // 已完成任务的实际完成时间之和
     double total_jam = 0;
     double jam_coefficient = 1; // 在多大程度上考虑拥堵
-
+    */
 
 
 
