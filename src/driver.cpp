@@ -150,6 +150,11 @@ int main(int argc, char **argv) {
             scheduler_algo = "+sji";
             get_scheduler_type() = SchedulerType::SA_jam_intersect;
         }
+        else if (scheduler_algo == "sa_square_current")
+        {
+            scheduler_algo = "+sqc";
+            get_scheduler_type() = SchedulerType::SA_square_current;
+        }
         else if (scheduler_algo == "hungarian")
         {
             scheduler_algo = "+hs";

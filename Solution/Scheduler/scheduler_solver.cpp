@@ -92,6 +92,10 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) {
 
         dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
     }
+    else if(get_scheduler_type() == SchedulerType::SA_square_current)
+    {
+        dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+    }
     else
     {
         dist = dist_to_target * 5 + task_metric[t]; // agent到task起点距离占据最大权重
