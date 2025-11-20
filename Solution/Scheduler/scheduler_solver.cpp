@@ -323,7 +323,10 @@ void SchedulerSolver::update() {
 
 
             // 如果方法是SA_square_current, 还要加上对拥堵启发式的估算
-
+            if(get_scheduler_type() == SchedulerType::SA_square_current)
+            {
+                
+            }
         }
     }
 
