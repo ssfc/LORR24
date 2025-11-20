@@ -155,6 +155,16 @@ void SchedulerSolver::remove(uint32_t r) {
     cur_score -= get_dist(r, t); // 总cost
     task_to_robot[t] = -1;
     desires[r] = -1;
+
+
+    if(get_scheduler_type() == SchedulerType::SA_square_current)
+    {
+        agent_task[r].task_id = -1;
+        agent_task[r].min_task_dist  = -1;
+        agent_task[r].task_heuristic = -1; // min_task_heuristic = dist + sum_jam_weight * jam_coefficient;
+        agent_task[r].assign_moment = -1; // assign task moment
+        // agent_task[i].jam_when_assign = corresponding_traffic_jam;
+    }
 }
 
 // 给机器人 r 分配任务 t
