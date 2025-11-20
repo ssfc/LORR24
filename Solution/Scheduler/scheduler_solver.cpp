@@ -356,6 +356,20 @@ void SchedulerSolver::update() {
                 }
                 cout << endl;
                  //*/
+
+                for (int t_id : env->new_tasks)
+                {
+                    int pickup_loc = env->task_pool[t_id].locations[0];
+                    int pickup_loc_x = pickup_loc % env->cols;
+                    int pickup_loc_y = pickup_loc / env->cols;
+
+                    int pickup_region_x = pickup_loc_x / region_column;
+                    int pickup_region_y = pickup_loc_y / region_row;
+
+                    task_region[t_id] = pickup_region_y * num_region_column + pickup_region_x;
+                }
+
+
             }
         }
     }
