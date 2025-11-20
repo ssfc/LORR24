@@ -41,6 +41,7 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
     if(agent_task.empty())
     {
         agent_task.resize(env->num_of_agents); // initialize all agents to free state
+        solver.agent_task.resize(env->num_of_agents); // initialize all agents to free state
     }
 
     for(auto const& element : env->new_freeagents)

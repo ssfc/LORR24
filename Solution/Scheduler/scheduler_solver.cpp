@@ -167,6 +167,16 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
     cur_score += get_dist(r, t); // 总cost
     task_to_robot[t] = r;
     desires[r] = t;
+
+    if(get_scheduler_type() == SchedulerType::SA_square_current)
+    {
+        agent_task[r].task_id = t;
+        agent_task[r].min_task_dist  = get_dist(r, t);
+        agent_task[r].task_heuristic = get_dist(r, t); // min_task_heuristic = dist + sum_jam_weight * jam_coefficient;
+        agent_task[r].assign_moment = env->curr_timestep; // assign task moment
+        // agent_task[i].jam_when_assign = corresponding_traffic_jam;
+    }
+
 }
 
 // 随机选择一个机器人 r 和一个任务 t，然后尝试让机器人 r 改执行任务 t（可能涉及任务交换），并通过一次“模拟退火式判断”决定是否接受这个变化。
