@@ -42,6 +42,8 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
         }
     });
 
+    cout << "get agent 74 dist to task 75: " << get_dist(74, 75) << endl;
+
     PRINT(
             uint32_t p = counter * 100 / order.size();
             ASSERT(0 <= p && p <= 100, "invalid p: " + std::to_string(p));
