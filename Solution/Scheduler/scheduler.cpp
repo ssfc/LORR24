@@ -69,6 +69,8 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
             cout << "complete task " << solver.agent_task[element].task_id
                  << " minDist " << solver.agent_task[element].min_task_dist
                  << " estimate time taken " << solver.agent_task[element].task_heuristic
+                 << " complete moment " << solver.agent_task[element].complete_moment
+                 << " assign moment " << solver.agent_task[element].assign_moment
                  << " real time taken " << solver.agent_task[element].complete_moment - solver.agent_task[element].assign_moment
                  << " jam " << solver.agent_task[element].jam_when_assign << endl;
         }
