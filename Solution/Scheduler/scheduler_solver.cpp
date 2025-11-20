@@ -325,7 +325,37 @@ void SchedulerSolver::update() {
             // 如果方法是SA_square_current, 还要加上对拥堵启发式的估算
             if(get_scheduler_type() == SchedulerType::SA_square_current)
             {
-                
+                int region_column = 12; // 每个region所占的列数
+                int region_row = 12; // 每个region所占的行数
+
+                // 地图有几列region
+                int num_region_column = std::ceil((double)env->cols / region_column);
+                // 地图有几行region
+                int num_region_row = std::ceil((double)env->rows / region_row);
+
+                // 将map分为若干区域, 统计每个区域agent的数量
+                vector<int> region_agent_num(num_region_column * num_region_row, 0);
+
+                for (int i=0;i<env->num_of_agents;i++)
+                {
+                    int agent_loc = env->curr_states.at(i).location;
+                    int agent_loc_x = agent_loc % env->cols;
+                    int agent_loc_y = agent_loc / env->cols;
+
+                    int agent_region_x = agent_loc_x / region_column;
+                    int agent_region_y = agent_loc_y / region_row;
+
+                    region_agent_num[agent_region_y * num_region_column + agent_region_x]++;
+                }
+
+                /*
+                cout << "region agent num: ";
+                for(int i : region_agent_num)
+                {
+                    cout << i << " ";
+                }
+                cout << endl;
+                 //*/
             }
         }
     }
