@@ -212,8 +212,8 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
     if(get_scheduler_type() == SchedulerType::SA_square_current)
     {
         agent_task[r].task_id = t;
-        agent_task[r].min_task_dist  = get_dist(r, t);
-        agent_task[r].task_heuristic = get_dist(r, t) + sum_jam_weight * jam_coefficient;
+        agent_task[r].min_task_dist  = get_dist(r, t) / 4;
+        agent_task[r].task_heuristic = get_dist(r, t) / 4 + sum_jam_weight * jam_coefficient;
         agent_task[r].assign_moment = env->curr_timestep; // assign task moment
         // agent_task[i].jam_when_assign = corresponding_traffic_jam;
     }
