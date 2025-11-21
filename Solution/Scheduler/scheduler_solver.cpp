@@ -194,7 +194,9 @@ void SchedulerSolver::remove(uint32_t r) {
         agent_task[r].assign_moment = -1; // assign task moment
         agent_task[r].jam_when_assign = -1;
 
-
+        int sum_jam_weight = region_agent_num[task_region[t]];
+        int corresponding_traffic_jam = sum_jam_weight;
+        cur_score -= sum_jam_weight * jam_coefficient;
     }
 }
 
@@ -221,7 +223,7 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
         agent_task[r].assign_moment = env->curr_timestep; // assign task moment
         agent_task[r].jam_when_assign = corresponding_traffic_jam;
 
-
+        cur_score += sum_jam_weight * jam_coefficient;
     }
 
     /*
@@ -452,6 +454,14 @@ void SchedulerSolver::update() {
     for (uint32_t r: free_robots) {
         desires[r] = -1;
         cur_score += get_dist(r, desires[r]);
+
+
+        if(get_scheduler_type() == SchedulerType::SA_square_current)
+        {
+            int sum_jam_weight = region_agent_num[task_region[desires[r]]];
+            int corresponding_traffic_jam = sum_jam_weight;
+            cur_score += sum_jam_weight * jam_coefficient;
+        }
     }
     validate();
 
