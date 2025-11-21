@@ -44,6 +44,12 @@ void MyScheduler::solver_schedule(TimePoint end_time, std::vector<int> &proposed
         solver.agent_task.resize(env->num_of_agents); // initialize all agents to free state
     }
 
+    if(solver.numTaskFinished > 0 && solver.total_jam > 0)
+    {
+        solver.jam_coefficient = (solver.total_real_duration - solver.total_min_span) / solver.total_jam;
+        cout << "current jam coefficient: " << solver.jam_coefficient << endl;
+    }
+
     for(auto const& element : env->new_freeagents)
     {
         // cout << "new free agent " << endl;

@@ -192,7 +192,7 @@ void SchedulerSolver::remove(uint32_t r) {
         agent_task[r].min_task_dist  = -1;
         agent_task[r].task_heuristic = -1; // min_task_heuristic = dist + sum_jam_weight * jam_coefficient;
         agent_task[r].assign_moment = -1; // assign task moment
-        // agent_task[i].jam_when_assign = corresponding_traffic_jam;
+        agent_task[r].jam_when_assign = -1;
     }
 }
 
@@ -208,6 +208,7 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
     desires[r] = t;
 
     int sum_jam_weight = region_agent_num[task_region[t]];
+    int corresponding_traffic_jam = sum_jam_weight;
 
     if(get_scheduler_type() == SchedulerType::SA_square_current)
     {
@@ -215,7 +216,7 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
         agent_task[r].min_task_dist  = get_dist(r, t) / 4;
         agent_task[r].task_heuristic = get_dist(r, t) / 4 + sum_jam_weight * jam_coefficient;
         agent_task[r].assign_moment = env->curr_timestep; // assign task moment
-        // agent_task[i].jam_when_assign = corresponding_traffic_jam;
+        agent_task[r].jam_when_assign = corresponding_traffic_jam;
     }
 
     /*
