@@ -136,6 +136,7 @@ struct SchedulerSolver {
 
     [[nodiscard]] uint64_t get_dist(uint32_t r, uint32_t t);
 
+    [[nodiscard]] uint64_t get_jam_dist(uint32_t r, uint32_t t); // 加入考虑拥堵时间的dist
 
     void remove(uint32_t r);
 

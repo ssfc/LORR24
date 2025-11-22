@@ -138,6 +138,61 @@ uint64_t SchedulerSolver::get_dist(uint32_t r, uint32_t t) {
 
 
 
+// 距离 = agent到task起点距离 *5 + 任务代价
+uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
+    if (t == -1) {
+        return 1e6;
+    }
+
+    uint32_t source = get_robots_handler().get_robot(r).node;
+    uint64_t dist_to_target = get_hm().get(source, task_target[t]);
+
+    uint64_t dist = 0;
+
+    if(get_scheduler_type() == SchedulerType::SA_square_current)
+    {
+        /*
+        if(r==74 && t==75)
+        {
+            int agent_loc = get_robots_handler().get_robot(r).pos;
+            int agent_loc_x = agent_loc % env->cols;
+            int agent_loc_y = agent_loc / env->cols;
+
+            cout << "dist 74 to target 75: " << dist_to_target << endl;
+            cout << "task metric 75: " << task_metric[75] << endl;
+
+            auto &task = env->task_pool[t];
+            cout << "task 75 num errands: " << task.locations.size() << endl;
+
+            int pickup_loc = env->task_pool[t].locations[0];
+            int pickup_loc_x = pickup_loc % env->cols;
+            int pickup_loc_y = pickup_loc / env->cols;
+
+            int delivery_loc = env->task_pool[t].locations[1];
+            int delivery_loc_x = delivery_loc % env->cols;
+            int delivery_loc_y = delivery_loc / env->cols;
+
+            cout << "agent loc: " << agent_loc_x << " " << agent_loc_y << endl;
+            cout << "pick loc: " << pickup_loc_x << " " << pickup_loc_y << endl;
+            cout << "delivery loc: " << delivery_loc_x << " " << delivery_loc_y << endl;
+        }
+        */
+
+        dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+    }
+    else
+    {
+        dist = dist_to_target * 5 + task_metric[t]; // agent到task起点距离占据最大权重
+    }
+
+    ASSERT(static_cast<uint32_t>(dist) == dist, "overflow");
+
+    return dist;
+}
+
+
+
+
 // compute pickup jam by counting whether other agent-task line intersect with this agent-task line
 [[nodiscard]] int SchedulerSolver::compute_jam_curr_pickup_intersect_curr_goal(int _agent_id,
                                                                              Point _agent_loc, Point _agent_end)
