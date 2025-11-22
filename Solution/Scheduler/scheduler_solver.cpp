@@ -15,7 +15,7 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
     dp[r].clear(); // 清空机器人 r 原来的 dp 列表（因为任务变化或时间变化，之前的计算失效）。
     // 遍历当前所有 未被分配（free）的任务 t
     for (uint32_t t: free_tasks) {
-        // 计算机器人 r 到任务 t 的距离（或代价）：get_dist(r, t)  将 (距离, t) 这个 pair 添加到 dp[r]
+        // 计算机器人 r 到任务 t 的距离（或代价）： 将 (距离, t) 这个 pair 添加到 dp[r]
         dp[r].emplace_back(get_dist(r, t), t);
     }
     std::sort(dp[r].begin(), dp[r].end()); // 排序后，dp[r][0] 就是 r 最适合执行的任务（最短距离/最便宜）。
@@ -51,7 +51,7 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
 }
 
 // 模拟退火（Simulated Annealing）风格的比较函数。
-// 用于判断是否接受一个新的候选解 cur_score。
+// 用于判断是否接受一个新的候选解 
 // 模拟退火思想：允许局部“坏解”，避免陷入局部最优。当 temp 高时，更容易接受坏解；temp 低时，逐渐趋向贪心。
 bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rnd) const {
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
@@ -151,7 +151,11 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
 
     if(get_scheduler_type() == SchedulerType::SA_square_current)
     {
-        dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
+
+        int sum_jam_weight = region_agent_num[task_region[t]];
+        int corresponding_traffic_jam = sum_jam_weight;
+
+        dist = dist_to_target + task_metric[t] + sum_jam_weight * jam_coefficient * 4; // agent到task起点距离占据最大权重
     }
     else
     {
@@ -247,7 +251,7 @@ void SchedulerSolver::add(uint32_t r, uint32_t t) {
 
         agent_task[r].task_id = t;
         agent_task[r].min_task_dist  = get_dist(r, t) / 4;
-        agent_task[r].task_heuristic = get_dist(r, t) / 4 + sum_jam_weight * jam_coefficient;
+        agent_task[r].task_heuristic = get_jam_dist(r, t) / 4;
         agent_task[r].assign_moment = env->curr_timestep; // assign task moment
         agent_task[r].jam_when_assign = corresponding_traffic_jam;
 
