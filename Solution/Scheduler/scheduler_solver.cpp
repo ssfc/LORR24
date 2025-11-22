@@ -16,7 +16,16 @@ void SchedulerSolver::rebuild_dp(uint32_t r) {
     // 遍历当前所有 未被分配（free）的任务 t
     for (uint32_t t: free_tasks) {
         // 计算机器人 r 到任务 t 的距离（或代价）： 将 (距离, t) 这个 pair 添加到 dp[r]
-        dp[r].emplace_back(get_dist(r, t), t);
+
+        if(get_scheduler_type() == SchedulerType::SA_square_current)
+        {
+            dp[r].emplace_back(get_jam_dist(r, t), t);
+        }
+        else
+        {
+            dp[r].emplace_back(get_dist(r, t), t);
+        }
+
     }
     std::sort(dp[r].begin(), dp[r].end()); // 排序后，dp[r][0] 就是 r 最适合执行的任务（最短距离/最便宜）。
     timestep_updated[r] = env->curr_timestep + 1;
@@ -51,7 +60,7 @@ void SchedulerSolver::rebuild_dp(TimePoint end_time) {
 }
 
 // 模拟退火（Simulated Annealing）风格的比较函数。
-// 用于判断是否接受一个新的候选解 
+// 用于判断是否接受一个新的候选解
 // 模拟退火思想：允许局部“坏解”，避免陷入局部最优。当 temp 高时，更容易接受坏解；temp 低时，逐渐趋向贪心。
 bool SchedulerSolver::compare(double cur_score, double old_score, Randomizer &rnd) const {
     return cur_score <= old_score || rnd.get_d() < std::exp(((old_score - cur_score) / old_score) / temp);
@@ -155,7 +164,7 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
         int sum_jam_weight = region_agent_num[task_region[t]];
         int corresponding_traffic_jam = sum_jam_weight;
 
-        dist = dist_to_target + task_metric[t] + sum_jam_weight * jam_coefficient * 4; // agent到task起点距离占据最大权重
+        dist = dist_to_target * 5 + task_metric[t] + sum_jam_weight * jam_coefficient * 4; // agent到task起点距离占据最大权重
     }
     else
     {
@@ -423,8 +432,8 @@ void SchedulerSolver::update() {
             // 如果方法是SA_square_current, 还要加上对拥堵启发式的估算
             if(get_scheduler_type() == SchedulerType::SA_square_current)
             {
-                int region_column = 12; // 每个region所占的列数
-                int region_row = 12; // 每个region所占的行数
+                int region_column = 8; // 每个region所占的列数
+                int region_row = 8; // 每个region所占的行数
 
                 // 地图有几列region
                 int num_region_column = std::ceil((double)env->cols / region_column);
@@ -711,6 +720,10 @@ void SchedulerSolver::lns_solve(TimePoint end_time) {
 
 // 它把调度器内部记录的“每个机器人/worker 的 desire 值”转换成 int，并返回结果数组。
 std::vector<int> SchedulerSolver::get_schedule() const {
+
+    // cout << "0 1 distance: " << get_hm().get(1, 6) << endl;
+
+
     std::vector<int> result(desires.size());
     for (uint32_t r = 0; r < desires.size(); r++) {
         result[r] = static_cast<int>(desires[r]);
