@@ -151,33 +151,6 @@ uint64_t SchedulerSolver::get_jam_dist(uint32_t r, uint32_t t) {
 
     if(get_scheduler_type() == SchedulerType::SA_square_current)
     {
-        /*
-        if(r==74 && t==75)
-        {
-            int agent_loc = get_robots_handler().get_robot(r).pos;
-            int agent_loc_x = agent_loc % env->cols;
-            int agent_loc_y = agent_loc / env->cols;
-
-            cout << "dist 74 to target 75: " << dist_to_target << endl;
-            cout << "task metric 75: " << task_metric[75] << endl;
-
-            auto &task = env->task_pool[t];
-            cout << "task 75 num errands: " << task.locations.size() << endl;
-
-            int pickup_loc = env->task_pool[t].locations[0];
-            int pickup_loc_x = pickup_loc % env->cols;
-            int pickup_loc_y = pickup_loc / env->cols;
-
-            int delivery_loc = env->task_pool[t].locations[1];
-            int delivery_loc_x = delivery_loc % env->cols;
-            int delivery_loc_y = delivery_loc / env->cols;
-
-            cout << "agent loc: " << agent_loc_x << " " << agent_loc_y << endl;
-            cout << "pick loc: " << pickup_loc_x << " " << pickup_loc_y << endl;
-            cout << "delivery loc: " << delivery_loc_x << " " << delivery_loc_y << endl;
-        }
-        */
-
         dist = dist_to_target + task_metric[t]; // agent到task起点距离占据最大权重
     }
     else
